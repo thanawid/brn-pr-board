@@ -1,0 +1,9 @@
+{
+  "name": "brn-pr-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ปฏิทินคอนเทนต์และคัมภีร์ทีมประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}
