@@ -1,397 +1,632 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BRN PR War Board V3</title>
-    <meta
-      name="description"
-      content="กระดานวางแผนคอนเทนต์ทีมประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย"
-    />
-    <link rel="icon" type="image/svg+xml" href="./assets/app-icon.svg" />
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <div class="app-shell">
-      <aside class="sidebar" aria-label="เมนูหลัก">
-        <div class="brand-lockup">
-          <div class="site-mark" aria-hidden="true">
-            <span>BRN</span>
-            <strong>PR</strong>
-          </div>
-          <div>
-            <p class="eyebrow">เทศบาลเมืองบางรักน้อย</p>
-            <h1>PR War Board</h1>
-          </div>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BRN PR Workspace 3D — เทศบาลเมืองบางรักน้อย</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700;800&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#241040; --bg2:#3d1a63; --bg3:#571f6e;
+  --purple:#7c3aed; --purple-d:#5b21b6; --purple-dd:#3f1387;
+  --orange:#ff7a3c; --orange-d:#d9541c;
+  --gold:#f6c667; --gold-d:#c99334;
+  --cream:#fff7ec; --cream-d:#e8d5bd; --ink:#33184f; --ink-soft:#6b4b8a;
+  --shadow-amb: 0 26px 50px rgba(15,4,35,.45);
+  --r:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Sarabun',sans-serif; color:var(--cream); min-height:100vh;
+  background:
+    radial-gradient(900px 500px at 85% -10%, rgba(255,122,60,.35), transparent 60%),
+    radial-gradient(700px 500px at -10% 30%, rgba(124,58,237,.5), transparent 60%),
+    radial-gradient(800px 600px at 50% 110%, rgba(246,198,103,.18), transparent 55%),
+    linear-gradient(160deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+h1,h2,h3,.disp{font-family:'Kanit',sans-serif}
+/* floating clay blobs */
+.blob{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(.5px);
+  animation:floaty 9s ease-in-out infinite}
+.blob.b1{width:120px;height:120px;top:12%;right:6%;
+  background:radial-gradient(circle at 32% 28%, #ffc59a, var(--orange) 55%, var(--orange-d));
+  box-shadow:0 30px 50px rgba(0,0,0,.35), inset -12px -16px 30px rgba(140,40,0,.45)}
+.blob.b2{width:80px;height:80px;bottom:14%;left:5%;animation-delay:-3s;
+  background:radial-gradient(circle at 32% 28%, #ffe9b8, var(--gold) 55%, var(--gold-d));
+  box-shadow:0 24px 40px rgba(0,0,0,.35), inset -10px -12px 24px rgba(150,95,10,.5)}
+.blob.b3{width:60px;height:60px;top:45%;right:12%;animation-delay:-6s;
+  background:radial-gradient(circle at 32% 28%, #c9a6ff, var(--purple) 55%, var(--purple-dd));
+  box-shadow:0 20px 36px rgba(0,0,0,.35), inset -8px -10px 20px rgba(40,5,90,.55)}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.blob{animation:none}.tilt{transform:none!important}}
+
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:20px 16px 90px}
+
+/* ===== top bar ===== */
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.logo3d{
+  font-family:'Kanit';font-weight:800;font-size:1.05rem;color:#fff;letter-spacing:.5px;
+  background:linear-gradient(145deg,var(--purple),var(--purple-d));
+  padding:12px 18px;border-radius:18px;
+  box-shadow:0 7px 0 var(--purple-dd), 0 18px 30px rgba(10,0,30,.5), inset 0 2px 0 rgba(255,255,255,.35);
+}
+.logo3d span{color:var(--gold)}
+.top .sub{font-size:.9rem;color:#e6d6ff;opacity:.9}
+/* ===== nav pills ===== */
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px;position:sticky;top:10px;z-index:5}
+.pill{
+  font-family:'Kanit';font-weight:600;font-size:.95rem;color:var(--ink);cursor:pointer;border:none;
+  background:linear-gradient(180deg,#fffdf7,var(--cream));
+  padding:11px 20px;border-radius:999px;
+  box-shadow:0 6px 0 var(--cream-d), 0 14px 24px rgba(10,0,30,.35), inset 0 2px 0 #fff;
+  transition:transform .12s, box-shadow .12s;
+}
+.pill:hover{transform:translateY(-2px)}
+.pill:active{transform:translateY(5px);box-shadow:0 1px 0 var(--cream-d), 0 6px 12px rgba(10,0,30,.3)}
+.pill.on{
+  color:#fff;background:linear-gradient(180deg,#ff9a5f,var(--orange));
+  box-shadow:0 6px 0 var(--orange-d), 0 14px 24px rgba(120,30,0,.45), inset 0 2px 0 rgba(255,255,255,.5);
+}
+.pill:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* ===== 3D hero ===== */
+.hero{display:grid;grid-template-columns:1fr auto;gap:26px;align-items:center;margin-bottom:30px}
+@media(max-width:760px){.hero{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(1.5rem,4vw,2.3rem);font-weight:800;line-height:1.25;
+  text-shadow:0 4px 0 rgba(30,5,60,.55)}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p{margin-top:10px;color:#efdffb;max-width:52ch}
+.scene{perspective:900px}
+.datecube{
+  width:190px;min-height:190px;border-radius:28px;padding:20px;text-align:center;
+  background:linear-gradient(160deg,#ffd98f,var(--gold) 60%,#e3a93f);color:var(--ink);
+  box-shadow:0 14px 0 var(--gold-d), 0 34px 60px rgba(10,0,30,.55), inset 0 3px 0 rgba(255,255,255,.6);
+  transform-style:preserve-3d;transition:transform .15s ease-out;will-change:transform;
+}
+.datecube .dow{font-family:'Kanit';font-weight:700;font-size:1rem;color:#7a4d00}
+.datecube .num{font-family:'Kanit';font-weight:800;font-size:4.2rem;line-height:1;
+  color:var(--ink);text-shadow:0 3px 0 rgba(255,255,255,.55)}
+.datecube .mon{font-family:'Kanit';font-weight:700;font-size:1.05rem;color:#5c2e91}
+.datecube .badge{margin-top:8px;display:inline-block;font-size:.78rem;font-weight:700;
+  background:var(--purple);color:#fff;padding:4px 12px;border-radius:999px;
+  box-shadow:0 3px 0 var(--purple-dd)}
+
+/* ===== stat chips ===== */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:30px}
+@media(max-width:600px){.stats{grid-template-columns:1fr 1fr 1fr;gap:8px}}
+.stat{
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06));
+  border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:14px 10px;text-align:center;
+  box-shadow:0 8px 0 rgba(20,5,45,.55), inset 0 1px 0 rgba(255,255,255,.25);backdrop-filter:blur(4px);
+}
+.stat b{font-family:'Kanit';font-size:1.7rem;color:var(--gold);display:block;line-height:1.1}
+.stat span{font-size:.8rem;color:#f0e3ff}
+
+/* ===== cards ===== */
+.card{
+  background:linear-gradient(180deg,#fffdf8,var(--cream));color:var(--ink);
+  border-radius:var(--r);padding:22px;margin-bottom:24px;
+  box-shadow:0 10px 0 var(--cream-d), var(--shadow-amb), inset 0 2px 0 #fff;
+}
+.card h2{font-size:1.25rem;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.card .eyebrow{font-family:'Kanit';font-weight:600;font-size:.72rem;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--orange-d);margin-bottom:2px}
+.card .hint{font-size:.88rem;color:var(--ink-soft);margin-bottom:14px}
+.cube-ico{width:34px;height:34px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:1.05rem;flex:none;
+  background:linear-gradient(160deg,#a479ff,var(--purple));
+  box-shadow:0 4px 0 var(--purple-dd), inset 0 2px 0 rgba(255,255,255,.45)}
+.cube-ico.or{background:linear-gradient(160deg,#ffab72,var(--orange));box-shadow:0 4px 0 var(--orange-d), inset 0 2px 0 rgba(255,255,255,.45)}
+.cube-ico.gd{background:linear-gradient(160deg,#ffe0a1,var(--gold));box-shadow:0 4px 0 var(--gold-d), inset 0 2px 0 rgba(255,255,255,.55)}
+
+/* buttons */
+.btn{font-family:'Kanit';font-weight:600;font-size:.95rem;border:none;cursor:pointer;color:#fff;
+  padding:12px 22px;border-radius:16px;
+  background:linear-gradient(180deg,#9d6bff,var(--purple));
+  box-shadow:0 6px 0 var(--purple-dd), 0 14px 22px rgba(20,0,60,.35), inset 0 2px 0 rgba(255,255,255,.4);
+  transition:transform .1s, box-shadow .1s;}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--purple-dd), 0 5px 10px rgba(20,0,60,.3)}
+.btn.orange{background:linear-gradient(180deg,#ff9a5f,var(--orange));box-shadow:0 6px 0 var(--orange-d),0 14px 22px rgba(120,30,0,.35), inset 0 2px 0 rgba(255,255,255,.45)}
+.btn.orange:active{box-shadow:0 1px 0 var(--orange-d),0 5px 10px rgba(120,30,0,.3)}
+.btn.gold{color:var(--ink);background:linear-gradient(180deg,#ffe3a6,var(--gold));box-shadow:0 6px 0 var(--gold-d),0 14px 22px rgba(120,80,0,.3), inset 0 2px 0 rgba(255,255,255,.6)}
+.btn.gold:active{box-shadow:0 1px 0 var(--gold-d),0 5px 10px rgba(120,80,0,.3)}
+.btn:focus-visible,.pill:focus-visible{outline:3px solid #fff;outline-offset:2px}
+
+/* forms */
+label.f{display:block;font-family:'Kanit';font-weight:600;font-size:.85rem;color:var(--ink);margin:12px 0 5px}
+input[type=text],input[type=date],select,textarea{
+  width:100%;font-family:'Sarabun';font-size:.95rem;color:var(--ink);
+  background:#fff;border:2px solid #eadbc4;border-radius:14px;padding:11px 14px;
+  box-shadow:inset 0 3px 6px rgba(120,80,20,.12);}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--purple);box-shadow:inset 0 3px 6px rgba(120,80,20,.12),0 0 0 3px rgba(124,58,237,.25)}
+textarea{min-height:96px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+
+/* view switching */
+.view{display:none}
+.view.on{display:block;animation:pop .35s ease}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.99)}to{opacity:1;transform:none}}
+
+/* today list */
+.tlist{list-style:none;display:flex;flex-direction:column;gap:10px}
+.tlist li{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:16px;padding:12px 14px;
+  box-shadow:0 5px 0 #eadfca, 0 10px 16px rgba(60,20,90,.08)}
+.tag{flex:none;font-family:'Kanit';font-weight:600;font-size:.72rem;color:#fff;padding:4px 10px;border-radius:999px;margin-top:2px}
+.tag.imp{background:var(--orange);box-shadow:0 3px 0 var(--orange-d)}
+.tag.job{background:var(--purple);box-shadow:0 3px 0 var(--purple-dd)}
+.tag.idea{background:var(--gold);color:var(--ink);box-shadow:0 3px 0 var(--gold-d)}
+.tlist .txt b{display:block;font-weight:700}
+.tlist .txt span{font-size:.85rem;color:var(--ink-soft)}
+.empty{background:#fff;border:2px dashed #e3cfae;border-radius:16px;padding:18px;text-align:center;color:var(--ink-soft);font-size:.9rem}
+
+/* calendar */
+.calhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.calhead h3{font-size:1.15rem;font-weight:700}
+.navbtn{width:44px;height:44px;border-radius:14px;border:none;cursor:pointer;font-size:1.2rem;color:#fff;
+  background:linear-gradient(180deg,#9d6bff,var(--purple));
+  box-shadow:0 5px 0 var(--purple-dd), inset 0 2px 0 rgba(255,255,255,.4);transition:transform .1s}
+.navbtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--purple-dd)}
+.dowrow,.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.dowrow div{text-align:center;font-family:'Kanit';font-weight:600;font-size:.75rem;color:var(--ink-soft);padding:4px 0}
+.day{min-height:64px;background:#fff;border-radius:14px;padding:6px;cursor:pointer;position:relative;
+  box-shadow:0 4px 0 #e9ddc6, 0 8px 12px rgba(60,20,90,.07);transition:transform .1s;border:2px solid transparent}
+.day:hover{transform:translateY(-2px)}
+.day .n{font-family:'Kanit';font-weight:600;font-size:.85rem}
+.day.dim{opacity:.35;box-shadow:none;background:rgba(255,255,255,.6)}
+.day.today{background:linear-gradient(160deg,#ffe0a1,var(--gold));border-color:#fff;
+  box-shadow:0 6px 0 var(--gold-d), 0 12px 18px rgba(120,80,0,.3)}
+.day.sel{border-color:var(--purple)}
+.dots{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.dot{width:8px;height:8px;border-radius:50%}
+.dot.imp{background:var(--orange)}.dot.job{background:var(--purple)}
+@media(max-width:600px){.day{min-height:52px;border-radius:11px}.dot{width:6px;height:6px}}
+
+/* board */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:820px){.board{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.board{grid-template-columns:1fr}}
+.col{background:rgba(124,58,237,.08);border:2px solid #eadbc4;border-radius:18px;padding:12px;min-height:120px}
+.col h4{font-size:.95rem;font-weight:700;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.col h4 .cnt{font-size:.75rem;background:var(--purple);color:#fff;border-radius:999px;padding:2px 9px}
+.task{background:#fff;border-radius:14px;padding:10px 12px;margin-bottom:9px;cursor:pointer;
+  box-shadow:0 4px 0 #e9ddc6, 0 8px 12px rgba(60,20,90,.08);transition:transform .1s;font-size:.9rem}
+.task:hover{transform:translateY(-2px)}
+.task b{display:block;font-weight:700}
+.task small{color:var(--ink-soft)}
+.task .next{display:inline-block;margin-top:6px;font-family:'Kanit';font-size:.72rem;font-weight:600;color:var(--orange-d)}
+.task .del{float:right;color:#c05050;font-weight:700;padding:0 4px}
+
+/* canon */
+.check{display:flex;flex-direction:column;gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:14px;padding:11px 14px;cursor:pointer;
+  box-shadow:0 4px 0 #e9ddc6;font-size:.92rem}
+.check input{width:20px;height:20px;accent-color:var(--purple);flex:none;margin-top:1px}
+.formula{background:linear-gradient(160deg,#3d1a63,#571f6e);color:#fff;border-radius:18px;padding:18px;
+  box-shadow:0 8px 0 #1e0b38, inset 0 2px 0 rgba(255,255,255,.15);margin-top:16px}
+.formula b{color:var(--gold);font-family:'Kanit'}
+.steps{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.step{font-family:'Kanit';font-weight:600;font-size:.85rem;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.25);padding:7px 14px;border-radius:999px}
+.step.hot{background:var(--orange);border-color:transparent;box-shadow:0 3px 0 var(--orange-d)}
+
+/* prompt output */
+.out{background:#2c1450;color:#ffe9c9;border-radius:18px;padding:18px;font-size:.92rem;white-space:pre-wrap;
+  box-shadow:inset 0 4px 12px rgba(0,0,0,.5), 0 6px 0 #180a30;min-height:120px;margin-top:14px}
+.rowbtns{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);z-index:50;
+  font-family:'Kanit';font-weight:600;color:var(--ink);background:linear-gradient(180deg,#ffe3a6,var(--gold));
+  padding:12px 22px;border-radius:999px;box-shadow:0 6px 0 var(--gold-d), 0 16px 30px rgba(0,0,0,.4);
+  transition:transform .3s;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.note{font-size:.8rem;color:var(--ink-soft);margin-top:10px}
+footer{text-align:center;color:#cdb4ee;font-size:.82rem;margin-top:36px}
+</style>
+</head>
+<body>
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+<div class="wrap">
+
+  <div class="top">
+    <div class="logo3d">BRN <span>PR</span> 3D</div>
+    <div>
+      <div class="disp" style="font-weight:700">โต๊ะทำงานทีมประชาสัมพันธ์</div>
+      <div class="sub">เทศบาลเมืองบางรักน้อย · เปิดทุกเช้า รู้ทันทีว่าวันนี้เล่าอะไร</div>
+    </div>
+  </div>
+
+  <nav class="nav" role="tablist">
+    <button class="pill on" data-v="today">🌅 วันนี้</button>
+    <button class="pill" data-v="cal">📅 ปฏิทิน</button>
+    <button class="pill" data-v="board">🧱 บอร์ดงาน</button>
+    <button class="pill" data-v="canon">📖 คัมภีร์ PR</button>
+    <button class="pill" data-v="prompt">✨ Prompt</button>
+  </nav>
+
+  <!-- ============ TODAY ============ -->
+  <section class="view on" id="v-today">
+    <div class="hero">
+      <div>
+        <h1>วันนี้ทีมต้อง<em>สื่อสาร</em>อะไร</h1>
+        <p>วันสำคัญ งานเทศบาล และไอเดียคอนเทนต์ประจำเดือน รวมอยู่ในหน้าเดียว — พัฒนาเมืองอย่างสมดุล สะอาด ปลอดภัย ใส่ใจสิ่งแวดล้อม และคุณภาพชีวิตทุกมิติ</p>
+        <div class="rowbtns">
+          <button class="btn orange" onclick="go('prompt')">✨ สร้าง Prompt งานวันนี้</button>
+          <button class="btn" onclick="go('cal')">ดูปฏิทินเดือนนี้</button>
         </div>
-
-        <nav class="nav-stack" aria-label="พื้นที่ทำงาน">
-          <button class="nav-item active" data-section="today">วันนี้</button>
-          <button class="nav-item" data-section="month">เดือนนี้</button>
-          <button class="nav-item" data-section="calendar">ปฏิทิน</button>
-          <button class="nav-item" data-section="board">บอร์ดงาน</button>
-          <button class="nav-item" data-section="canon">คัมภีร์ PR</button>
-          <button class="nav-item" data-section="prompts">Prompt</button>
-        </nav>
-
-        <div class="vision-card">
-          <span>วิสัยทัศน์</span>
-          <p>
-            พัฒนาเมืองอย่างสมดุล สะอาด ปลอดภัย ใส่ใจสิ่งแวดล้อม
-            และเสริมสร้างคุณภาพชีวิตของประชาชนทุกมิติ
-          </p>
-        </div>
-      </aside>
-
-      <main class="workspace">
-        <header class="topbar">
-          <div>
-            <p class="eyebrow">Bangraknoi PR Content Command</p>
-            <h2 id="page-title">วันนี้ทีมต้องสื่อสารอะไร</h2>
-          </div>
-          <div class="today-chip" id="today-chip">กำลังโหลดวันที่</div>
-        </header>
-
-        <section class="page-section active" id="today">
-          <div class="war-hero" aria-label="BRN PR War Board V3">
-            <canvas id="brn-3d-scene" aria-label="ฉาก 3D ห้องวางแผนคอนเทนต์ประชาสัมพันธ์"></canvas>
-            <div class="hero-vignette"></div>
-            <div class="hero-content">
-              <div class="hero-copy">
-                <div class="mini-brand">
-                  <span>BRN PR</span>
-                  <strong>V3</strong>
-                </div>
-                <p class="hero-kicker">Daily War Board</p>
-                <h3 id="hero-title">เปิดมาแล้วรู้เลย วันนี้ต้องเล่าอะไร</h3>
-                <p id="hero-summary">
-                  รวมวันสำคัญ งานเทศบาล โน้ตถ่ายทำ และมุมคอนเทนต์ให้ทีมเดินไปทางเดียวกัน
-                </p>
-                <div class="mission-actions">
-                  <button class="primary-action" data-section-target="calendar">เปิดปฏิทิน</button>
-                  <button class="secondary-action" data-section-target="prompts">สร้าง Prompt</button>
-                </div>
-              </div>
-
-              <div class="hero-brief">
-                <div class="brief-glass">
-                  <span>Focus</span>
-                  <strong id="focus-line">กำลังจัดลำดับงานวันนี้</strong>
-                </div>
-                <div class="signal-grid">
-                  <div>
-                    <span data-metric="events">0</span>
-                    <p>วัน/ประเด็นเดือนนี้</p>
-                  </div>
-                  <div>
-                    <span data-metric="tasks">0</span>
-                    <p>งานทีมเดือนนี้</p>
-                  </div>
-                  <div>
-                    <span data-metric="ready">0</span>
-                    <p>พร้อมเผยแพร่</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="section-grid">
-            <article class="panel span-2">
-              <div class="panel-title">
-                <div>
-                  <span class="eyebrow">Today Plan</span>
-                  <h3>แผนคอนเทนต์วันนี้</h3>
-                </div>
-                <button class="ghost-button" data-section-target="board">ดูบอร์ดงาน</button>
-              </div>
-              <div class="today-list" id="today-list"></div>
-            </article>
-
-            <article class="panel">
-              <div class="panel-title compact">
-                <div>
-                  <span class="eyebrow">Quick Add</span>
-                  <h3>เพิ่มงานเทศบาล</h3>
-                </div>
-              </div>
-              <form class="task-form" id="task-form">
-                <label>
-                  ชื่องาน
-                  <input required name="title" placeholder="เช่น ล้างท่อระบายน้ำ ซอย..." />
-                </label>
-                <label>
-                  วันที่
-                  <input required name="date" type="date" />
-                </label>
-                <div class="form-pair">
-                  <label>
-                    เสาหลัก
-                    <select name="pillar"></select>
-                  </label>
-                  <label>
-                    สถานะ
-                    <select name="status"></select>
-                  </label>
-                </div>
-                <label>
-                  ช่องทาง
-                  <select name="channel">
-                    <option>Facebook</option>
-                    <option>LINE @brn12345</option>
-                    <option>YouTube @BangraknoiNews</option>
-                    <option>หลายช่องทาง</option>
-                  </select>
-                </label>
-                <label>
-                  สิ่งที่ต้องถ่าย / โน้ตหน้างาน
-                  <textarea name="shot" rows="4" placeholder="ภาพก่อน-หลัง, คนรับผิดชอบ, จุดถ่าย, เสียงประชาชน, ข้อควรระวัง"></textarea>
-                </label>
-                <label>
-                  โน้ตทีม
-                  <textarea name="note" rows="3" placeholder="เช่น รอข้อมูลจากกองช่าง / ห้ามเห็นเลขบ้าน / ต้องส่งอนุมัติก่อน"></textarea>
-                </label>
-                <button class="primary-action full" type="submit">เพิ่มเข้าปฏิทิน</button>
-              </form>
-            </article>
-          </div>
-        </section>
-
-        <section class="page-section" id="day">
-          <article class="day-focus panel">
-            <div class="panel-title">
-              <div>
-                <span class="eyebrow">Day Board</span>
-                <h3 id="day-focus-title">แผนงานรายวัน</h3>
-              </div>
-              <div class="button-row">
-                <button class="ghost-button" data-section-target="calendar">กลับปฏิทิน</button>
-                <button class="primary-action" id="use-day-prompt">ส่งไป Prompt</button>
-              </div>
-            </div>
-
-            <div class="day-focus-grid">
-              <div class="day-main">
-                <div class="lane-title">ประเด็นของวันนี้</div>
-                <div id="day-items" class="day-items"></div>
-              </div>
-              <div class="day-side">
-                <div class="recommend-card">
-                  <span>Content Angle</span>
-                  <p id="day-angle">กำลังเตรียมมุมเล่าเรื่อง</p>
-                </div>
-                <div class="recommend-card">
-                  <span>Shot List</span>
-                  <ul id="day-shots"></ul>
-                </div>
-                <div class="recommend-card">
-                  <span>Caption Seed</span>
-                  <p id="day-caption">กำลังเตรียมแคปชันตั้งต้น</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="inline-add">
-              <div class="panel-title compact">
-                <div>
-                  <span class="eyebrow">Add To Day</span>
-                  <h3>เพิ่มโน้ตหรืองานในวันที่เลือก</h3>
-                </div>
-              </div>
-              <form class="task-form day-task-form" id="day-task-form">
-                <label>
-                  ชื่องาน / โน้ต
-                  <input required name="title" placeholder="เช่น นัดถ่ายคลิปตลาดสะอาด / รอภาพจากกองสาธารณสุข" />
-                </label>
-                <div class="form-pair three">
-                  <label>
-                    เสาหลัก
-                    <select name="pillar"></select>
-                  </label>
-                  <label>
-                    สถานะ
-                    <select name="status"></select>
-                  </label>
-                  <label>
-                    ช่องทาง
-                    <select name="channel">
-                      <option>Facebook</option>
-                      <option>LINE @brn12345</option>
-                      <option>YouTube @BangraknoiNews</option>
-                      <option>หลายช่องทาง</option>
-                    </select>
-                  </label>
-                </div>
-                <label>
-                  สิ่งที่ต้องถ่าย / โน้ตทีม
-                  <textarea name="shot" rows="4" placeholder="ภาพที่ต้องมี, คนที่ต้องสัมภาษณ์, ข้อมูลที่ต้องเช็ก"></textarea>
-                </label>
-                <button class="primary-action full" type="submit">เพิ่มลงวันนี้</button>
-              </form>
-            </div>
-          </article>
-        </section>
-
-        <section class="page-section" id="month">
-          <div class="section-grid">
-            <article class="panel span-2">
-              <div class="panel-title">
-                <div>
-                  <span class="eyebrow">Monthly Direction</span>
-                  <h3 id="month-title">เดือนนี้ควรเล่าเรื่องอะไร</h3>
-                </div>
-                <select id="month-select" class="soft-select" aria-label="เลือกเดือน"></select>
-              </div>
-              <div class="month-brief" id="month-brief"></div>
-              <div class="timeline" id="month-timeline"></div>
-            </article>
-
-            <article class="panel">
-              <div class="panel-title compact">
-                <div>
-                  <span class="eyebrow">Content Mix</span>
-                  <h3>สัดส่วนประเด็น</h3>
-                </div>
-              </div>
-              <div class="pillar-bars" id="pillar-bars"></div>
-            </article>
-          </div>
-        </section>
-
-        <section class="page-section" id="calendar">
-          <article class="panel calendar-panel">
-            <div class="panel-title">
-              <div>
-                <span class="eyebrow">Calendar</span>
-                <h3 id="calendar-title">ปฏิทินคอนเทนต์</h3>
-              </div>
-              <div class="calendar-controls">
-                <button class="icon-button" id="prev-month" aria-label="เดือนก่อนหน้า">‹</button>
-                <button class="icon-button" id="next-month" aria-label="เดือนถัดไป">›</button>
-              </div>
-            </div>
-            <div class="calendar-hint">กดวันที่เพื่อเปิด Day Board และเพิ่มงาน/โน้ตของวันนั้น</div>
-            <div class="calendar-weekdays">
-              <span>จันทร์</span><span>อังคาร</span><span>พุธ</span><span>พฤหัส</span>
-              <span>ศุกร์</span><span>เสาร์</span><span>อาทิตย์</span>
-            </div>
-            <div class="calendar-grid" id="calendar-grid"></div>
-          </article>
-        </section>
-
-        <section class="page-section" id="board">
-          <article class="panel">
-            <div class="panel-title">
-              <div>
-                <span class="eyebrow">Production Board</span>
-                <h3>สถานะงานของทีม</h3>
-              </div>
-              <button class="ghost-button" id="reset-demo">คืนค่างานตัวอย่าง</button>
-            </div>
-            <div class="kanban" id="kanban"></div>
-          </article>
-        </section>
-
-        <section class="page-section" id="canon">
-          <div class="section-grid">
-            <article class="panel span-2">
-              <div class="panel-title compact">
-                <div>
-                  <span class="eyebrow">BRN PR Canon</span>
-                  <h3>คัมภีร์ทีมประชาสัมพันธ์</h3>
-                </div>
-              </div>
-              <div class="canon-grid" id="canon-grid"></div>
-            </article>
-
-            <article class="panel">
-              <div class="panel-title compact">
-                <div>
-                  <span class="eyebrow">Before Publish</span>
-                  <h3>เช็กก่อนโพสต์</h3>
-                </div>
-              </div>
-              <ul class="checklist">
-                <li>วัน เวลา สถานที่ และช่องทางติดต่อถูกต้อง</li>
-                <li>ชื่อบุคคล ตำแหน่ง และหน่วยงานสะกดถูก</li>
-                <li>ไม่เห็นข้อมูลส่วนตัว เอกสารราชการ หรือเลขทะเบียนที่ไม่ควรเผยแพร่</li>
-                <li>ภาพเด็ก ผู้ป่วย ผู้เดือดร้อน ใช้อย่างระมัดระวัง</li>
-                <li>ภาษาสุภาพ เข้าใจง่าย และไม่แข็งแบบประกาศราชการ</li>
-              </ul>
-            </article>
-
-            <article class="panel span-3">
-              <div class="formula-strip">
-                <div>
-                  <span>สูตรเล่าเรื่องเทศบาล</span>
-                  <strong>ปัญหา → เทศบาลลงมือ → ผลลัพธ์ → ประชาชนช่วยอะไรได้</strong>
-                </div>
-                <p>
-                  ใช้กับงานภาคสนามทุกประเภท เพื่อให้คอนเทนต์เห็นประโยชน์จริง ไม่เป็นแค่รายงานกิจกรรม
-                </p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="page-section" id="prompts">
-          <div class="section-grid">
-            <article class="panel">
-              <div class="panel-title compact">
-                <div>
-                  <span class="eyebrow">AI Studio Helper</span>
-                  <h3>ตั้งโจทย์ให้ทันใจ AI Studio</h3>
-                </div>
-              </div>
-              <form class="prompt-form" id="prompt-form">
-                <label>
-                  ประเภทงาน
-                  <select name="workType" id="work-type"></select>
-                </label>
-                <label>
-                  ช่องทาง
-                  <select name="channel" id="prompt-channel">
-                    <option>Facebook</option>
-                    <option>LINE @brn12345</option>
-                    <option>YouTube Shorts</option>
-                    <option>คลิปข่าว Bangraknoi News</option>
-                  </select>
-                </label>
-                <label>
-                  ข้อมูลหน้างาน
-                  <textarea
-                    name="details"
-                    id="prompt-details"
-                    rows="7"
-                    placeholder="ใส่รายละเอียดจริง เช่น วัน เวลา สถานที่ ใครทำอะไร ประชาชนต้องรู้อะไร"
-                  ></textarea>
-                </label>
-                <button class="primary-action full" type="submit">สร้าง Prompt</button>
-              </form>
-            </article>
-
-            <article class="panel span-2">
-              <div class="panel-title">
-                <div>
-                  <span class="eyebrow">Ready Prompt</span>
-                  <h3>ข้อความสำหรับนำไปใช้ต่อ</h3>
-                </div>
-                <button class="ghost-button" id="copy-prompt">คัดลอก</button>
-              </div>
-              <textarea class="prompt-output" id="prompt-output" readonly></textarea>
-              <div class="prompt-tips">
-                <span>เติมข้อมูลจริงก่อนใช้</span>
-                <span>ให้หัวหน้าตรวจงานอ่อนไหว</span>
-                <span>ใช้ภาษาประชาชน</span>
-              </div>
-            </article>
-          </div>
-        </section>
-      </main>
+      </div>
+      <div class="scene"><div class="datecube tilt" id="datecube">
+        <div class="dow" id="dc-dow">—</div>
+        <div class="num" id="dc-num">—</div>
+        <div class="mon" id="dc-mon">—</div>
+        <div class="badge">Daily PR Room</div>
+      </div></div>
     </div>
 
-    <script src="./assets/vendor/three.min.js"></script>
-    <script src="./scene.js"></script>
-    <script src="./app.js"></script>
-  </body>
+    <div class="stats">
+      <div class="stat"><b id="st-imp">0</b><span>วันสำคัญเดือนนี้</span></div>
+      <div class="stat"><b id="st-job">0</b><span>งานทีมเดือนนี้</span></div>
+      <div class="stat"><b id="st-ready">0</b><span>พร้อมเผยแพร่</span></div>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Today Plan</div>
+      <h2><span class="cube-ico or">📣</span> แผนคอนเทนต์วันนี้</h2>
+      <div class="hint">วันสำคัญ + งานในปฏิทินของวันนี้ พร้อมไอเดียเล่าเรื่อง</div>
+      <ul class="tlist" id="todayList"></ul>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Monthly Direction</div>
+      <h2><span class="cube-ico">🧭</span> เดือนนี้ควรเล่าเรื่องอะไร</h2>
+      <div class="hint" id="mdHint"></div>
+      <ul class="tlist" id="mdList"></ul>
+    </div>
+
+    <div class="card">
+      <div class="eyebrow">Quick Add</div>
+      <h2><span class="cube-ico gd">➕</span> เพิ่มงานเทศบาลเข้าปฏิทิน</h2>
+      <div class="grid2">
+        <div><label class="f" for="qa-name">ชื่องาน</label><input type="text" id="qa-name" placeholder="เช่น ลงพื้นที่ลอกท่อ ซอย 4"></div>
+        <div><label class="f" for="qa-date">วันที่</label><input type="date" id="qa-date"></div>
+        <div><label class="f" for="qa-pillar">เสาหลัก</label>
+          <select id="qa-pillar"><option>สะอาด</option><option>ปลอดภัย</option><option>สิ่งแวดล้อม</option><option>คุณภาพชีวิต</option><option>เมืองสมดุล</option></select></div>
+        <div><label class="f" for="qa-ch">ช่องทาง</label>
+          <select id="qa-ch"><option>Facebook</option><option>LINE @brn12345</option><option>YouTube @BangraknoiNews</option><option>หลายช่องทาง</option></select></div>
+      </div>
+      <div class="rowbtns"><button class="btn orange" onclick="quickAdd()">เพิ่มเข้าปฏิทิน</button></div>
+    </div>
+  </section>
+
+  <!-- ============ CALENDAR ============ -->
+  <section class="view" id="v-cal">
+    <div class="card">
+      <div class="eyebrow">Calendar</div>
+      <h2><span class="cube-ico">📅</span> ปฏิทินคอนเทนต์</h2>
+      <div class="hint">🟠 วันสำคัญ · 🟣 งานทีม — แตะวันเพื่อดูรายละเอียด / เพิ่มงานลงวันนั้น</div>
+      <div class="calhead">
+        <button class="navbtn" onclick="mv(-1)" aria-label="เดือนก่อน">‹</button>
+        <h3 id="calTitle"></h3>
+        <button class="navbtn" onclick="mv(1)" aria-label="เดือนถัดไป">›</button>
+      </div>
+      <div class="dowrow"><div>จ.</div><div>อ.</div><div>พ.</div><div>พฤ.</div><div>ศ.</div><div>ส.</div><div>อา.</div></div>
+      <div class="calgrid" id="calGrid"></div>
+    </div>
+    <div class="card" id="dayCard" style="display:none">
+      <div class="eyebrow">Selected Day</div>
+      <h2><span class="cube-ico or">🔍</span> <span id="dayTitle"></span></h2>
+      <ul class="tlist" id="dayList"></ul>
+      <div class="rowbtns"><button class="btn gold" onclick="prefillDay()">➕ เพิ่มงานลงวันนี้</button></div>
+    </div>
+  </section>
+
+  <!-- ============ BOARD ============ -->
+  <section class="view" id="v-board">
+    <div class="card">
+      <div class="eyebrow">Production Board</div>
+      <h2><span class="cube-ico">🧱</span> สถานะงานของทีม</h2>
+      <div class="hint">แตะการ์ดเพื่อเลื่อนสถานะไปขั้นถัดไป · ✕ เพื่อลบ</div>
+      <div class="grid2">
+        <div><label class="f" for="bd-name">เพิ่มงานใหม่</label><input type="text" id="bd-name" placeholder="เช่น คลิปสรุปงานวันเด็ก"></div>
+        <div><label class="f" for="bd-ch">ช่องทาง</label>
+          <select id="bd-ch"><option>Facebook</option><option>LINE @brn12345</option><option>YouTube @BangraknoiNews</option><option>หลายช่องทาง</option></select></div>
+      </div>
+      <div class="rowbtns" style="margin-bottom:18px"><button class="btn orange" onclick="addTask()">เพิ่มลงบอร์ด</button></div>
+      <div class="board" id="board"></div>
+    </div>
+  </section>
+
+  <!-- ============ CANON ============ -->
+  <section class="view" id="v-canon">
+    <div class="card">
+      <div class="eyebrow">Before Publish</div>
+      <h2><span class="cube-ico gd">✅</span> เช็กก่อนโพสต์</h2>
+      <div class="hint">ติ๊กให้ครบทุกข้อก่อนกดเผยแพร่</div>
+      <div class="check" id="checkList"></div>
+      <div class="formula">
+        <b>สูตรเล่าเรื่องเทศบาล</b>
+        <div class="steps">
+          <span class="step hot">ปัญหา</span><span class="step">→</span>
+          <span class="step hot">เทศบาลลงมือ</span><span class="step">→</span>
+          <span class="step hot">ผลลัพธ์</span><span class="step">→</span>
+          <span class="step hot">ประชาชนช่วยอะไรได้</span>
+        </div>
+        ใช้สูตรนี้กับงานภาคสนามทุกประเภท เพื่อไม่ให้คอนเทนต์กลายเป็นรายงานราชการแข็ง ๆ
+      </div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Tone of Voice</div>
+      <h2><span class="cube-ico or">🗣️</span> น้ำเสียงของเพจ</h2>
+      <ul class="tlist">
+        <li><span class="tag idea">ภาษา</span><div class="txt"><b>ภาษาประชาชน ไม่ใช่ภาษาราชการ</b><span>"เทศบาลลงพื้นที่ซ่อมไฟซอย 3 แล้วครับ" ดีกว่า "ดำเนินการซ่อมแซมไฟฟ้าส่องสว่าง"</span></div></li>
+        <li><span class="tag idea">ภาพ</span><div class="txt"><b>ภาพหน้างานจริง คนทำงานจริง</b><span>ภาพเจ้าหน้าที่กำลังลงมือ สื่อสารได้มากกว่าภาพถ่ายรวมหน้าป้าย</span></div></li>
+        <li><span class="tag idea">จบโพสต์</span><div class="txt"><b>ปิดท้ายด้วยช่องทางแจ้งเรื่อง</b><span>ทุกโพสต์ควรบอกว่า ประชาชนแจ้งปัญหา/สอบถามได้ที่ไหน</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ PROMPT ============ -->
+  <section class="view" id="v-prompt">
+    <div class="card">
+      <div class="eyebrow">AI Studio Helper</div>
+      <h2><span class="cube-ico">✨</span> ตั้งโจทย์ให้ทันใจ</h2>
+      <div class="hint">เลือกประเภทงาน ใส่ข้อมูลหน้างาน แล้วรับ Prompt พร้อมใช้กับ AI</div>
+      <div class="grid2">
+        <div><label class="f" for="pr-type">ประเภทงาน</label>
+          <select id="pr-type">
+            <option>ข่าวกิจกรรม/ลงพื้นที่</option><option>ประกาศ/แจ้งเตือนประชาชน</option>
+            <option>ผลงานเทศบาล</option><option>วันสำคัญ</option>
+            <option>ภัยพิบัติ/เหตุฉุกเฉิน</option><option>สาระน่ารู้</option>
+          </select></div>
+        <div><label class="f" for="pr-ch">ช่องทาง</label>
+          <select id="pr-ch"><option>Facebook</option><option>LINE @brn12345</option><option>YouTube Shorts</option><option>คลิปข่าว Bangraknoi News</option></select></div>
+      </div>
+      <label class="f" for="pr-info">ข้อมูลหน้างาน (ใคร ทำอะไร ที่ไหน เมื่อไร ผลเป็นอย่างไร)</label>
+      <textarea id="pr-info" placeholder="เช่น วันนี้ 9.00 น. กองช่างลงพื้นที่ลอกท่อระบายน้ำ ซอยบางรักน้อย 4 ระยะ 200 เมตร เสร็จภายในวันเดียว ลดปัญหาน้ำท่วมขังหน้าฝน"></textarea>
+      <div class="rowbtns">
+        <button class="btn orange" onclick="genPrompt()">สร้าง Prompt</button>
+        <button class="btn gold" onclick="copyOut()">📋 คัดลอก</button>
+      </div>
+      <div class="out" id="out">Prompt จะแสดงตรงนี้…</div>
+      <div class="note">⚠️ อย่าลืมเติมข้อมูลจริง · งานอ่อนไหวให้หัวหน้าตรวจก่อน · ใช้ภาษาประชาชน</div>
+    </div>
+  </section>
+
+  <footer>BRN PR Workspace 3D · เทศบาลเมืองบางรักน้อย · ทำงานสนุกขึ้นทุกวัน 💜🧡</footer>
+</div>
+<div class="toast" id="toast">บันทึกแล้ว!</div>
+<script>
+/* ---------- safe storage (persists on GitHub Pages, in-memory in preview) ---------- */
+const mem={};
+const store={
+  get(k,f){ try{const v=localStorage.getItem(k);return v?JSON.parse(v):(mem[k]??f);}catch(e){return mem[k]??f;} },
+  set(k,v){ mem[k]=v; try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+};
+
+/* ---------- data ---------- */
+const THM=["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+const THD=["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"];
+function secondSatJan(y){const d=new Date(y,0,1);const off=(6-d.getDay()+7)%7;return 1+off+7;}
+function importantDays(y){
+  const F=(m,d,name,idea)=>({m,d,name,idea});
+  return [
+    F(1,1,"วันขึ้นปีใหม่","อวยพรปีใหม่จากนายกเทศมนตรี + สรุปผลงานเด่นปีที่ผ่านมา"),
+    F(1,secondSatJan(y),"วันเด็กแห่งชาติ","ภาพบรรยากาศงานวันเด็กเทศบาล + คำขวัญวันเด็ก"),
+    F(1,16,"วันครู","ขอบคุณครูในโรงเรียนสังกัดเทศบาล"),
+    F(2,14,"วันวาเลนไทน์","เชิญชวนจดทะเบียนสมรส + ภาพคู่รักที่สำนักทะเบียน"),
+    F(4,2,"วันอนุรักษ์มรดกไทย","ชวนรู้จักของดี/ประเพณีท้องถิ่นบางรักน้อย"),
+    F(4,6,"วันจักรี","โพสต์เทิดพระเกียรติ"),
+    F(4,13,"วันสงกรานต์ / วันผู้สูงอายุ","รดน้ำดำหัวผู้สูงอายุ + เตือนขับขี่ปลอดภัย 7 วันอันตราย"),
+    F(4,14,"วันครอบครัว","ชวนใช้เวลากับครอบครัว + กิจกรรมสงกรานต์ในพื้นที่"),
+    F(4,24,"วันเทศบาล","เล่าบทบาทเทศบาล + เปิดบ้านให้ประชาชนรู้จักงานแต่ละกอง"),
+    F(5,1,"วันแรงงานแห่งชาติ","ขอบคุณเจ้าหน้าที่ภาคสนาม พนักงานเก็บขยะ กวาดถนน"),
+    F(5,4,"วันฉัตรมงคล","โพสต์เทิดพระเกียรติ"),
+    F(6,3,"วันเฉลิมพระชนมพรรษา พระราชินี","โพสต์เทิดพระเกียรติ + กิจกรรมจิตอาสา"),
+    F(6,5,"วันสิ่งแวดล้อมโลก","แคมเปญแยกขยะ/ลดพลาสติกของเทศบาล"),
+    F(6,26,"วันต่อต้านยาเสพติดโลก / วันสุนทรภู่","กิจกรรมรณรงค์ในโรงเรียน + เกร็ดวรรณคดี"),
+    F(7,28,"วันเฉลิมพระชนมพรรษา ร.10","โพสต์เทิดพระเกียรติ + จิตอาสาพัฒนาเมือง"),
+    F(8,12,"วันแม่แห่งชาติ","กิจกรรมวันแม่ + เรื่องเล่าแม่คนเก่งในชุมชน"),
+    F(9,20,"วันเยาวชนแห่งชาติ","เปิดพื้นที่โชว์ผลงานเยาวชนบางรักน้อย"),
+    F(10,1,"วันผู้สูงอายุสากล","บริการเทศบาลเพื่อผู้สูงวัย + ชมรมผู้สูงอายุ"),
+    F(10,13,"วันนวมินทรมหาราช","โพสต์น้อมรำลึก ร.9"),
+    F(10,23,"วันปิยมหาราช","พิธีวางพวงมาลา + น้อมรำลึก ร.5"),
+    F(12,5,"วันพ่อแห่งชาติ / วันชาติ","โพสต์น้อมรำลึก + กิจกรรมวันพ่อ"),
+    F(12,10,"วันรัฐธรรมนูญ","เกร็ดความรู้หน้าที่พลเมือง"),
+    F(12,31,"วันสิ้นปี","ขอบคุณประชาชน + สรุปผลงานประจำปี + เตือน 7 วันอันตราย"),
+  ];
+}
+const MONTH_DIR=[
+ ["ต้อนรับปีใหม่ วันเด็ก วันครู","สรุปผลงานปีที่แล้วแบบอ่านง่าย","นับถอยหลังงานวันเด็กเทศบาล","ชวนตั้งเป้าเมืองสะอาดปีนี้"],
+ ["เฝ้าระวังฝุ่น PM2.5 และหน้าแล้ง","รายงานค่าฝุ่นรายสัปดาห์ + วิธีป้องกัน","ชวนจดทะเบียนสมรสวาเลนไทน์","เตือนประหยัดน้ำรับหน้าแล้ง"],
+ ["หน้าร้อน ป้องกันอัคคีภัย","เช็กลิสต์กันไฟไหม้บ้าน/ตลาด","กิจกรรมปิดเทอมสำหรับเด็ก","ประกาศจุดบริการน้ำ/แจ้งเหตุ"],
+ ["สงกรานต์ วันเทศบาล ผู้สูงอายุ","แผนที่จุดเล่นน้ำ + กติกาปลอดภัย","7 วันอันตราย เมาไม่ขับ","เปิดบ้านวันเทศบาล เล่างานแต่ละกอง"],
+ ["เปิดเทอม รับหน้าฝน","ตรวจความปลอดภัยหน้าโรงเรียน","ภารกิจลอกท่อ ก่อนฝนถล่ม","เริ่มรณรงค์กำจัดลูกน้ำยุงลาย"],
+ ["สิ่งแวดล้อมโลก แยกขยะ","แคมเปญแยกขยะเปียก-แห้งทั้งเมือง","โชว์เส้นทางขยะรีไซเคิลของเทศบาล","รณรงค์ต่อต้านยาเสพติดในโรงเรียน"],
+ ["หน้าฝนเต็มตัว เฝ้าระวังน้ำท่วมขัง","จุดเสี่ยงน้ำท่วม + เบอร์แจ้งเหตุ","งานเฉลิมพระเกียรติ ร.10 และจิตอาสา","เตือนไข้เลือดออกช่วงพีค"],
+ ["วันแม่ พลังชุมชน","กิจกรรมวันแม่ของเทศบาล","เรื่องเล่าแม่คนเก่งในชุมชน","อัปเดตภารกิจระบายน้ำต่อเนื่อง"],
+ ["ปลายฝน เตรียมรับน้ำเหนือ","แผนเตรียมพร้อมป้องกันน้ำท่วม","เวทีเยาวชนบางรักน้อย","สรุปผลงานไตรมาส 3 แบบภาพเดียวจบ"],
+ ["วันสำคัญของแผ่นดิน ผู้สูงวัย","พิธีวันนวมินทรฯ และวันปิยมหาราช","บริการเทศบาลเพื่อผู้สูงอายุ","เตรียมงานประเพณีออกพรรษา/กฐิน"],
+ ["ลอยกระทง ปลอดภัยทางน้ำ","งานลอยกระทงเทศบาล + จุดปลอดภัย","ชวนใช้กระทงวัสดุธรรมชาติ","สรุปเก็บกระทง เช้าวันรุ่งขึ้น"],
+ ["วันพ่อ ส่งท้ายปี","กิจกรรมวันพ่อ 5 ธันวา","สรุปผลงานเทศบาลตลอดปี","เคานต์ดาวน์ปลอดภัย 7 วันอันตราย"],
+];
+const CHECKS=["วันที่ เวลา สถานที่ เบอร์ติดต่อถูกต้อง","ชื่อบุคคลและตำแหน่งถูกต้อง","ไม่โชว์เอกสารส่วนตัวหรือข้อมูลอ่อนไหว","เด็ก ผู้ป่วย ผู้เดือดร้อน ใช้ภาพอย่างระมัดระวัง","ภาษาสุภาพ ชัดเจน ประชาชนเข้าใจ","ใส่ช่องทางติดต่อ/แจ้งเรื่องท้ายโพสต์"];
+const COLS=[["idea","💡 ไอเดีย"],["doing","✍️ กำลังทำ"],["review","👀 รอตรวจ"],["ready","🚀 พร้อมโพสต์"]];
+
+/* ---------- state ---------- */
+let events=store.get("brn3d_events",[]);
+let tasks=store.get("brn3d_tasks",[
+ {id:1,name:"คลิปแนะนำจุดทิ้งขยะใหม่",ch:"YouTube @BangraknoiNews",st:"doing"},
+ {id:2,name:"โพสต์เตือนพายุฤดูร้อน",ch:"Facebook",st:"ready"},
+]);
+const now=new Date();
+let cy=now.getFullYear(), cm=now.getMonth();
+let selDate=null;
+
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const key=(y,m,d)=>`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1800);}
+function impFor(y,m,d){return importantDays(y).filter(x=>x.m===m+1&&x.d===d);}
+function evFor(y,m,d){return events.filter(e=>e.date===key(y,m,d));}
+
+/* ---------- nav ---------- */
+function go(v){
+  document.querySelectorAll(".view").forEach(s=>s.classList.remove("on"));
+  document.querySelectorAll(".pill").forEach(p=>p.classList.toggle("on",p.dataset.v===v));
+  $("v-"+v).classList.add("on");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".pill").forEach(p=>p.addEventListener("click",()=>go(p.dataset.v)));
+
+/* ---------- today view ---------- */
+function renderToday(){
+  const y=now.getFullYear(),m=now.getMonth(),d=now.getDate();
+  $("dc-dow").textContent="วัน"+THD[now.getDay()];
+  $("dc-num").textContent=d;
+  $("dc-mon").textContent=THM[m]+" "+(y+543);
+  const imps=impFor(y,m,d), evs=evFor(y,m,d);
+  const L=$("todayList"); L.innerHTML="";
+  imps.forEach(x=>L.innerHTML+=`<li><span class="tag imp">วันสำคัญ</span><div class="txt"><b>${x.name}</b><span>💡 ${x.idea}</span></div></li>`);
+  evs.forEach(e=>L.innerHTML+=`<li><span class="tag job">งานทีม</span><div class="txt"><b>${e.name}</b><span>เสาหลัก: ${e.pillar} · ช่องทาง: ${e.ch}</span></div></li>`);
+  if(!imps.length&&!evs.length)L.innerHTML=`<div class="empty">วันนี้ไม่มีวันสำคัญหรืองานในปฏิทิน — โอกาสดีสำหรับคอนเทนต์สาระน่ารู้ หรือเก็บภาพหน้างานตุนไว้ 📸</div>`;
+  const md=MONTH_DIR[m];
+  $("mdHint").textContent="ธีมเดือน"+THM[m]+": "+md[0];
+  $("mdList").innerHTML=md.slice(1).map(t=>`<li><span class="tag idea">ไอเดีย</span><div class="txt"><b>${t}</b></div></li>`).join("");
+  const impM=importantDays(y).filter(x=>x.m===m+1).length;
+  const evM=events.filter(e=>e.date.startsWith(`${y}-${String(m+1).padStart(2,"0")}`)).length;
+  $("st-imp").textContent=impM; $("st-job").textContent=evM;
+  $("st-ready").textContent=tasks.filter(t=>t.st==="ready").length;
+}
+
+/* ---------- quick add ---------- */
+function quickAdd(){
+  const name=$("qa-name").value.trim(), date=$("qa-date").value;
+  if(!name||!date){toast("กรอกชื่องานและวันที่ก่อนนะ");return;}
+  events.push({name,date,pillar:$("qa-pillar").value,ch:$("qa-ch").value});
+  store.set("brn3d_events",events);
+  $("qa-name").value="";
+  toast("เพิ่มงานเข้าปฏิทินแล้ว 🎉");
+  renderToday(); renderCal();
+}
+
+/* ---------- calendar ---------- */
+function mv(n){cm+=n; if(cm<0){cm=11;cy--;} if(cm>11){cm=0;cy++;} selDate=null;$("dayCard").style.display="none"; renderCal();}
+function renderCal(){
+  $("calTitle").textContent=THM[cm]+" "+(cy+543);
+  const first=new Date(cy,cm,1);
+  const lead=(first.getDay()+6)%7; // monday first
+  const days=new Date(cy,cm+1,0).getDate();
+  const g=$("calGrid"); g.innerHTML="";
+  for(let i=0;i<lead;i++)g.innerHTML+=`<div class="day dim"></div>`;
+  const t=new Date();
+  for(let d=1;d<=days;d++){
+    const isT=(d===t.getDate()&&cm===t.getMonth()&&cy===t.getFullYear());
+    const imps=impFor(cy,cm,d), evs=evFor(cy,cm,d);
+    let dots="";
+    imps.forEach(()=>dots+=`<span class="dot imp"></span>`);
+    evs.forEach(()=>dots+=`<span class="dot job"></span>`);
+    const sel=selDate===key(cy,cm,d)?" sel":"";
+    g.innerHTML+=`<div class="day${isT?" today":""}${sel}" onclick="pick(${d})" role="button" tabindex="0"
+      onkeydown="if(event.key==='Enter')pick(${d})"><div class="n">${d}</div><div class="dots">${dots}</div></div>`;
+  }
+}
+function pick(d){
+  selDate=key(cy,cm,d); renderCal();
+  const imps=impFor(cy,cm,d), evs=evFor(cy,cm,d);
+  $("dayCard").style.display="block";
+  $("dayTitle").textContent=`${d} ${THM[cm]} ${cy+543}`;
+  const L=$("dayList"); L.innerHTML="";
+  imps.forEach(x=>L.innerHTML+=`<li><span class="tag imp">วันสำคัญ</span><div class="txt"><b>${x.name}</b><span>💡 ${x.idea}</span></div></li>`);
+  evs.forEach((e)=>L.innerHTML+=`<li><span class="tag job">งานทีม</span><div class="txt"><b>${e.name}</b><span>${e.pillar} · ${e.ch}</span></div></li>`);
+  if(!imps.length&&!evs.length)L.innerHTML=`<div class="empty">ยังไม่มีอะไรในวันนี้ — กดปุ่มด้านล่างเพื่อเพิ่มงานได้เลย</div>`;
+  $("dayCard").scrollIntoView({behavior:"smooth",block:"center"});
+}
+function prefillDay(){ if(selDate){$("qa-date").value=selDate;} go("today"); setTimeout(()=>$("qa-name").focus(),350); toast("เลือกวันให้แล้ว กรอกชื่องานได้เลย"); }
+
+/* ---------- board ---------- */
+function renderBoard(){
+  const B=$("board"); B.innerHTML="";
+  COLS.forEach(([st,label])=>{
+    const list=tasks.filter(t=>t.st===st);
+    let html=`<div class="col"><h4>${label}<span class="cnt">${list.length}</span></h4>`;
+    list.forEach(t=>{
+      const i=COLS.findIndex(c=>c[0]===st);
+      const next=i<3?`<span class="next">แตะเพื่อเลื่อน → ${COLS[i+1][1]}</span>`:`<span class="next">🎉 พร้อมเผยแพร่</span>`;
+      html+=`<div class="task" onclick="bump(${t.id})"><span class="del" onclick="event.stopPropagation();delTask(${t.id})" title="ลบ">✕</span><b>${t.name}</b><small>${t.ch}</small><br>${next}</div>`;
+    });
+    B.innerHTML+=html+`</div>`;
+  });
+  $("st-ready").textContent=tasks.filter(t=>t.st==="ready").length;
+}
+function addTask(){
+  const n=$("bd-name").value.trim(); if(!n){toast("ใส่ชื่องานก่อนนะ");return;}
+  tasks.push({id:Date.now(),name:n,ch:$("bd-ch").value,st:"idea"});
+  store.set("brn3d_tasks",tasks); $("bd-name").value=""; toast("เพิ่มลงบอร์ดแล้ว"); renderBoard();
+}
+function bump(id){
+  const t=tasks.find(x=>x.id===id); if(!t)return;
+  const i=COLS.findIndex(c=>c[0]===t.st);
+  if(i<3){t.st=COLS[i+1][0]; store.set("brn3d_tasks",tasks); renderBoard(); if(t.st==="ready")toast("🚀 พร้อมโพสต์แล้ว!");}
+}
+function delTask(id){tasks=tasks.filter(t=>t.id!==id);store.set("brn3d_tasks",tasks);renderBoard();}
+
+/* ---------- canon ---------- */
+$("checkList").innerHTML=CHECKS.map((c,i)=>`<label><input type="checkbox" onchange="chk()"> ${c}</label>`).join("");
+function chk(){const b=[...document.querySelectorAll('#checkList input')];if(b.every(x=>x.checked))toast("ครบทุกข้อ โพสต์ได้เลย ✅");}
+
+/* ---------- prompt ---------- */
+function genPrompt(){
+  const type=$("pr-type").value, ch=$("pr-ch").value, info=$("pr-info").value.trim();
+  const y=now.getFullYear(),m=now.getMonth(),d=now.getDate();
+  const imps=impFor(y,m,d).map(x=>x.name).join(", ");
+  const lenGuide=ch.includes("LINE")?"สั้นกระชับไม่เกิน 500 ตัวอักษร อ่านจบในแชต":
+    ch.includes("Shorts")?"เขียนเป็นสคริปต์คลิปสั้น 30–45 วินาที มี hook ใน 3 วินาทีแรก":
+    ch.includes("Bangraknoi")?"เขียนเป็นสคริปต์ข่าวสำหรับผู้ประกาศอ่าน มีพาดหัว เนื้อข่าว และปิดท้าย":
+    "ความยาว 3–5 ย่อหน้าสั้น มีอีโมจินำสายตาพอประมาณ";
+  const p=
+`คุณคือทีมประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย จ.นนทบุรี
+ช่วยเขียนคอนเทนต์ประเภท "${type}" สำหรับช่องทาง ${ch}
+
+ข้อมูลหน้างาน:
+${info||"(เติมข้อมูลจริงตรงนี้: ใคร ทำอะไร ที่ไหน เมื่อไร ผลเป็นอย่างไร)"}
+
+โครงเรื่องที่ต้องใช้: ปัญหา → เทศบาลลงมือ → ผลลัพธ์ → ประชาชนช่วยอะไรได้
+น้ำเสียง: ภาษาประชาชน เป็นกันเอง อบอุ่น น่าเชื่อถือ ไม่ใช่ภาษาราชการ
+รูปแบบ: ${lenGuide}
+ต้องมี: แฮชแท็ก #เทศบาลเมืองบางรักน้อย และปิดท้ายด้วยช่องทางแจ้งเรื่อง/สอบถามของเทศบาล
+${imps?`บริบทวันนี้: ตรงกับ${imps} สามารถโยงถึงได้ถ้าเหมาะสม`:""}
+วันที่โพสต์: ${d} ${THM[m]} ${y+543}`;
+  $("out").textContent=p;
+  toast("สร้าง Prompt แล้ว ✨");
+}
+function copyOut(){
+  const txt=$("out").textContent;
+  if(!txt||txt.startsWith("Prompt จะ")){toast("สร้าง Prompt ก่อนนะ");return;}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(()=>toast("คัดลอกแล้ว 📋"),()=>fallbackCopy(txt));
+  }else fallbackCopy(txt);
+}
+function fallbackCopy(t){const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("คัดลอกแล้ว 📋");}catch(e){toast("คัดลอกไม่สำเร็จ ลองกดค้างเลือกข้อความ");}ta.remove();}
+
+/* ---------- 3D tilt on the date cube ---------- */
+const cube=$("datecube");
+if(cube&&matchMedia("(prefers-reduced-motion: no-preference)").matches){
+  const sc=cube.parentElement;
+  sc.addEventListener("pointermove",e=>{
+    const r=sc.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+    cube.style.transform=`rotateY(${x*22}deg) rotateX(${-y*18}deg) translateZ(6px)`;
+  });
+  sc.addEventListener("pointerleave",()=>cube.style.transform="rotateY(-8deg) rotateX(6deg)");
+  cube.style.transform="rotateY(-8deg) rotateX(6deg)";
+}
+
+/* ---------- init ---------- */
+$("qa-date").value=key(now.getFullYear(),now.getMonth(),now.getDate());
+renderToday(); renderCal(); renderBoard();
+</script>
+</body>
 </html>
