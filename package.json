@@ -1,8 +1,8 @@
 {
   "name": "brn-pr-workspace",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "private": true,
-  "description": "BRN PR Calendar V2 พร้อมฉาก 3D สำหรับทีมประชาสัมพันธ์เทศบาลเมืองบางรักน้อย",
+  "description": "BRN PR War Board V3 สำหรับทีมประชาสัมพันธ์เทศบาลเมืองบางรักน้อย",
   "scripts": {
     "start": "node server.mjs"
   }

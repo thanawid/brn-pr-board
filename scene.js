@@ -1,12 +1,12 @@
 const canvas = document.getElementById("brn-3d-scene");
 
-if (canvas) {
+if (canvas && window.THREE) {
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x21172e, 8, 24);
+  scene.fog = new THREE.Fog(0x160f22, 9, 28);
 
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 80);
-  camera.position.set(7.8, 6.4, 9.5);
-  camera.lookAt(0, 0.8, 0);
+  const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 80);
+  camera.position.set(5.8, 3.45, 6.25);
+  camera.lookAt(0.45, 1.55, -2.45);
 
   const renderer = new THREE.WebGLRenderer({
     canvas,
@@ -18,124 +18,233 @@ if (canvas) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.08;
+  if (THREE.sRGBEncoding) renderer.outputEncoding = THREE.sRGBEncoding;
 
   const root = new THREE.Group();
   scene.add(root);
 
-  const ambient = new THREE.HemisphereLight(0xfff3d1, 0x2b1740, 1.8);
+  const palette = {
+    ink: 0x160f22,
+    purple: 0x32155f,
+    purpleSoft: 0x623293,
+    gold: 0xd8b24c,
+    orange: 0xff781f,
+    teal: 0x0f766e,
+    glass: 0xe9ddff,
+    white: 0xfff7dc,
+  };
+
+  const materials = {
+    floor: new THREE.MeshStandardMaterial({ color: 0x211734, roughness: 0.28, metalness: 0.42 }),
+    wall: new THREE.MeshStandardMaterial({ color: 0x23172f, roughness: 0.46, metalness: 0.18 }),
+    metal: new THREE.MeshStandardMaterial({ color: 0x1b1326, roughness: 0.22, metalness: 0.72 }),
+    purple: new THREE.MeshStandardMaterial({ color: palette.purple, roughness: 0.34, metalness: 0.2 }),
+    gold: new THREE.MeshStandardMaterial({ color: palette.gold, roughness: 0.28, metalness: 0.36 }),
+    orange: new THREE.MeshStandardMaterial({ color: palette.orange, roughness: 0.3, metalness: 0.12, emissive: 0x3b1200, emissiveIntensity: 0.35 }),
+    teal: new THREE.MeshStandardMaterial({ color: palette.teal, roughness: 0.36, metalness: 0.16, emissive: 0x00231f, emissiveIntensity: 0.18 }),
+    glass: new THREE.MeshPhysicalMaterial({
+      color: palette.glass,
+      roughness: 0.06,
+      metalness: 0.04,
+      transparent: true,
+      opacity: 0.32,
+      transmission: 0.35,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.08,
+    }),
+    screen: new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.98 }),
+    lightGold: new THREE.MeshBasicMaterial({ color: 0xffd66f }),
+    lightOrange: new THREE.MeshBasicMaterial({ color: 0xff8b33 }),
+  };
+
+  const ambient = new THREE.HemisphereLight(0xfff4d5, 0x1a1030, 1.2);
   scene.add(ambient);
 
-  const key = new THREE.DirectionalLight(0xffd86a, 2.4);
-  key.position.set(4, 7, 4);
+  const key = new THREE.DirectionalLight(0xffe2a5, 2.25);
+  key.position.set(4.5, 6.8, 4.2);
   key.castShadow = true;
-  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.mapSize.set(1536, 1536);
+  key.shadow.camera.near = 0.5;
+  key.shadow.camera.far = 18;
   scene.add(key);
 
-  const rim = new THREE.PointLight(0xff7a1a, 4.5, 18);
-  rim.position.set(-4.5, 3, 4);
+  const rim = new THREE.PointLight(0xff781f, 3.6, 16);
+  rim.position.set(-4.2, 2.8, 2.6);
   scene.add(rim);
 
-  const violet = new THREE.MeshStandardMaterial({ color: 0x3b1b72, roughness: 0.55, metalness: 0.12 });
-  const violetDark = new THREE.MeshStandardMaterial({ color: 0x21172e, roughness: 0.62, metalness: 0.1 });
-  const gold = new THREE.MeshStandardMaterial({ color: 0xd9b24c, roughness: 0.35, metalness: 0.25 });
-  const orange = new THREE.MeshStandardMaterial({ color: 0xff7a1a, roughness: 0.42, metalness: 0.08 });
-  const teal = new THREE.MeshStandardMaterial({ color: 0x0f766e, roughness: 0.5, metalness: 0.06 });
-  const glass = new THREE.MeshPhysicalMaterial({
-    color: 0xeadfff,
-    roughness: 0.16,
-    metalness: 0.05,
-    transparent: true,
-    opacity: 0.42,
-    transmission: 0.2,
-  });
+  const wallGlow = new THREE.PointLight(0x9066ff, 2.1, 12);
+  wallGlow.position.set(2.6, 2.5, -3.1);
+  scene.add(wallGlow);
 
-  function mesh(geometry, material, position, scale = [1, 1, 1]) {
+  function mesh(geometry, material, position, rotation = [0, 0, 0], scale = [1, 1, 1]) {
     const item = new THREE.Mesh(geometry, material);
     item.position.set(...position);
+    item.rotation.set(...rotation);
     item.scale.set(...scale);
     item.castShadow = true;
     item.receiveShadow = true;
     return item;
   }
 
-  const base = mesh(new THREE.BoxGeometry(9.5, 0.22, 5.8), violetDark, [0, -0.18, 0]);
-  base.receiveShadow = true;
-  root.add(base);
+  function box(size, material, position, rotation) {
+    return mesh(new THREE.BoxGeometry(...size), material, position, rotation);
+  }
 
-  const road = mesh(new THREE.BoxGeometry(9.5, 0.05, 0.56), new THREE.MeshStandardMaterial({ color: 0x5e4b81 }), [0, 0.02, 0.15]);
-  root.add(road);
+  function makeLabelTexture(title, subtitle, accent = "#ff781f") {
+    const c = document.createElement("canvas");
+    c.width = 1024;
+    c.height = 512;
+    const ctx = c.getContext("2d");
+    const grad = ctx.createLinearGradient(0, 0, c.width, c.height);
+    grad.addColorStop(0, "rgba(27, 18, 44, 0.96)");
+    grad.addColorStop(0.58, "rgba(50, 21, 95, 0.92)");
+    grad.addColorStop(1, "rgba(255, 120, 31, 0.78)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
+    ctx.lineWidth = 3;
+    for (let x = 72; x < c.width; x += 88) {
+      ctx.beginPath();
+      ctx.moveTo(x, 54);
+      ctx.lineTo(x, c.height - 54);
+      ctx.stroke();
+    }
+    for (let y = 86; y < c.height; y += 78) {
+      ctx.beginPath();
+      ctx.moveTo(54, y);
+      ctx.lineTo(c.width - 54, y);
+      ctx.stroke();
+    }
+    ctx.fillStyle = accent;
+    ctx.fillRect(64, 64, 168, 12);
+    ctx.fillStyle = "#fff7dc";
+    ctx.font = '900 70px "Segoe UI", Arial, sans-serif';
+    ctx.fillText(title, 64, 176);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.78)";
+    ctx.font = '700 34px "Segoe UI", Arial, sans-serif';
+    wrapText(ctx, subtitle, 66, 244, 820, 44);
+    ctx.fillStyle = "#d8b24c";
+    ctx.font = '900 28px "Segoe UI", Arial, sans-serif';
+    ctx.fillText("BRN PR WAR BOARD", 64, 450);
+    const texture = new THREE.CanvasTexture(c);
+    texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    if (THREE.sRGBEncoding) texture.encoding = THREE.sRGBEncoding;
+    return texture;
+  }
 
-  const river = mesh(new THREE.BoxGeometry(9.5, 0.04, 0.5), new THREE.MeshStandardMaterial({ color: 0x2da9d7, roughness: 0.18, metalness: 0.05 }), [0, 0.035, -1.9]);
-  root.add(river);
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(" ");
+    let line = "";
+    words.forEach((word, index) => {
+      const test = `${line}${word} `;
+      if (ctx.measureText(test).width > maxWidth && index > 0) {
+        ctx.fillText(line, x, y);
+        line = `${word} `;
+        y += lineHeight;
+      } else {
+        line = test;
+      }
+    });
+    ctx.fillText(line, x, y);
+  }
 
-  const pulseObjects = [];
+  const floor = mesh(new THREE.PlaneGeometry(16, 10), materials.floor, [0, 0, 0], [-Math.PI / 2, 0, 0]);
+  floor.receiveShadow = true;
+  root.add(floor);
+
+  const backWall = mesh(new THREE.PlaneGeometry(15.5, 5.6), materials.wall, [0, 2.8, -4.65]);
+  root.add(backWall);
+
+  for (let i = 0; i < 8; i += 1) {
+    const x = -6.2 + i * 1.78;
+    const rail = box([0.025, 5.35, 0.035], materials.metal, [x, 2.7, -4.58]);
+    root.add(rail);
+  }
+
+  const ceilingStrip = box([9.4, 0.06, 0.06], materials.lightGold, [1.2, 5.12, -4.5]);
+  const sideStrip = box([0.07, 2.7, 0.05], materials.lightOrange, [-4.6, 2.85, -4.45]);
+  root.add(ceilingStrip, sideStrip);
+
+  const wallBoard = new THREE.Group();
+  wallBoard.position.set(1.35, 2.52, -4.22);
+  wallBoard.rotation.y = -0.12;
+  root.add(wallBoard);
+
+  const boardGlass = box([5.55, 2.85, 0.07], materials.glass, [0, 0, 0]);
+  boardGlass.castShadow = false;
+  wallBoard.add(boardGlass);
+  wallBoard.add(box([5.68, 0.08, 0.1], materials.gold, [0, 1.48, 0.03]));
+  wallBoard.add(box([0.08, 2.92, 0.1], materials.gold, [-2.84, 0, 0.03]));
+
   const calendarTiles = [];
-
-  for (let i = 0; i < 11; i += 1) {
-    const h = 0.32 + (i % 4) * 0.24;
-    const b = mesh(
-      new THREE.BoxGeometry(0.48, h, 0.48),
-      i % 3 === 0 ? violet : i % 3 === 1 ? gold : teal,
-      [-4.1 + i * 0.75, h / 2, -0.78 + (i % 2) * 0.42]
-    );
-    root.add(b);
-    pulseObjects.push(b);
-  }
-
-  for (let i = 0; i < 5; i += 1) {
-    const trunk = mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.42, 10), violetDark, [-3.8 + i * 1.25, 0.24, -2.25]);
-    const leaf = mesh(new THREE.SphereGeometry(0.22, 18, 12), teal, [-3.8 + i * 1.25, 0.58, -2.25]);
-    root.add(trunk, leaf);
-  }
-
-  const board = new THREE.Group();
-  board.position.set(1.75, 1.08, 1.92);
-  board.rotation.x = -0.18;
-  board.rotation.y = -0.28;
-  root.add(board);
-  board.add(mesh(new THREE.BoxGeometry(3.6, 2.05, 0.08), glass, [0, 0, 0]));
-  board.add(mesh(new THREE.BoxGeometry(3.72, 0.12, 0.12), gold, [0, 1.08, 0.02]));
-
-  for (let row = 0; row < 3; row += 1) {
-    for (let col = 0; col < 6; col += 1) {
-      const tile = mesh(
-        new THREE.BoxGeometry(0.38, 0.28, 0.05),
-        (row + col) % 4 === 0 ? orange : (row + col) % 3 === 0 ? gold : violet,
-        [-1.38 + col * 0.55, 0.55 - row * 0.48, 0.08]
-      );
-      tile.userData.phase = row * 0.7 + col * 0.33;
-      board.add(tile);
+  for (let row = 0; row < 5; row += 1) {
+    for (let col = 0; col < 7; col += 1) {
+      const colorIndex = (row * 7 + col) % 5;
+      const material = colorIndex === 0 ? materials.orange : colorIndex === 1 ? materials.gold : colorIndex === 2 ? materials.teal : materials.purple;
+      const tile = box([0.54, 0.28, 0.055], material, [-2.1 + col * 0.68, 0.92 - row * 0.43, 0.08]);
+      tile.userData.phase = row * 0.52 + col * 0.23;
+      wallBoard.add(tile);
       calendarTiles.push(tile);
     }
   }
 
-  const mascot = new THREE.Group();
-  mascot.position.set(-2.2, 0.02, 1.35);
-  root.add(mascot);
+  const todayTexture = makeLabelTexture("TODAY", "Calendar, field notes, shots and captions in one view", "#d8b24c");
+  const todayPanel = mesh(
+    new THREE.PlaneGeometry(2.7, 1.35),
+    new THREE.MeshBasicMaterial({ map: todayTexture, transparent: true }),
+    [-3.5, 2.72, -4.18],
+    [0, 0.18, 0]
+  );
+  root.add(todayPanel);
 
-  const body = mesh(new THREE.CapsuleGeometry(0.26, 0.58, 8, 18), orange, [0, 0.72, 0]);
-  const head = mesh(new THREE.SphereGeometry(0.26, 24, 16), gold, [0, 1.25, 0]);
-  const visor = mesh(new THREE.BoxGeometry(0.32, 0.08, 0.04), violetDark, [0, 1.28, 0.24]);
-  const cameraBox = mesh(new THREE.BoxGeometry(0.32, 0.2, 0.18), violet, [0.38, 0.78, 0.03]);
-  const lens = mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.08, 18), gold, [0.56, 0.78, 0.03]);
-  lens.rotation.z = Math.PI / 2;
-  const armL = mesh(new THREE.CapsuleGeometry(0.06, 0.36, 5, 10), gold, [-0.3, 0.82, 0]);
-  const armR = mesh(new THREE.CapsuleGeometry(0.06, 0.34, 5, 10), gold, [0.3, 0.86, 0]);
-  armL.rotation.z = 0.55;
-  armR.rotation.z = -0.8;
-  const legL = mesh(new THREE.CapsuleGeometry(0.065, 0.34, 5, 10), violetDark, [-0.12, 0.26, 0]);
-  const legR = mesh(new THREE.CapsuleGeometry(0.065, 0.34, 5, 10), violetDark, [0.12, 0.26, 0]);
-  mascot.add(body, head, visor, cameraBox, lens, armL, armR, legL, legR);
+  const promptTexture = makeLabelTexture("READY", "Turn daily municipal work into clear public content", "#ff781f");
+  const promptPanel = mesh(
+    new THREE.PlaneGeometry(2.2, 1.1),
+    new THREE.MeshBasicMaterial({ map: promptTexture, transparent: true }),
+    [4.55, 2.02, -3.45],
+    [0, -0.42, 0]
+  );
+  root.add(promptPanel);
 
-  const signal = new THREE.Group();
-  signal.position.set(-3.9, 1.05, 1.55);
-  root.add(signal);
-  for (let i = 0; i < 3; i += 1) {
-    const ring = mesh(new THREE.TorusGeometry(0.24 + i * 0.2, 0.012, 8, 40), gold, [0, i * 0.03, 0]);
-    ring.rotation.x = Math.PI / 2;
-    ring.userData.phase = i * 0.65;
-    signal.add(ring);
-    pulseObjects.push(ring);
+  const table = new THREE.Group();
+  table.position.set(1.15, 0.38, -0.82);
+  table.rotation.y = -0.14;
+  root.add(table);
+  table.add(box([5.25, 0.24, 1.75], materials.metal, [0, 0.42, 0]));
+  table.add(box([5.1, 0.045, 1.55], materials.glass, [0, 0.58, 0]));
+  table.add(box([4.8, 0.035, 0.04], materials.lightOrange, [0, 0.62, 0.78]));
+
+  const monitorTexture = makeLabelTexture("ON AIR", "Facebook  LINE  YouTube", "#ff781f");
+  const screenMat = new THREE.MeshBasicMaterial({ map: monitorTexture, transparent: true });
+  const monitorA = mesh(new THREE.PlaneGeometry(1.35, 0.72), screenMat, [-0.95, 1.04, -0.22], [-0.2, 0.18, 0]);
+  const monitorB = mesh(new THREE.PlaneGeometry(1.16, 0.62), screenMat, [0.78, 1.02, 0.05], [-0.22, -0.16, 0]);
+  table.add(monitorA, monitorB);
+  table.add(box([1.18, 0.035, 0.09], materials.metal, [-0.95, 0.66, -0.22]));
+  table.add(box([1.02, 0.035, 0.09], materials.metal, [0.78, 0.66, 0.05]));
+
+  const cameraRig = new THREE.Group();
+  cameraRig.position.set(-3.15, 0.05, -0.65);
+  cameraRig.rotation.y = 0.42;
+  root.add(cameraRig);
+  cameraRig.add(mesh(new THREE.CylinderGeometry(0.035, 0.035, 1.05, 16), materials.metal, [0, 0.55, 0]));
+  cameraRig.add(mesh(new THREE.CylinderGeometry(0.028, 0.028, 1.0, 16), materials.metal, [-0.35, 0.22, 0.18], [0.62, 0.18, 0.35]));
+  cameraRig.add(mesh(new THREE.CylinderGeometry(0.028, 0.028, 1.0, 16), materials.metal, [0.35, 0.22, 0.18], [0.62, -0.18, -0.35]));
+  cameraRig.add(mesh(new THREE.CylinderGeometry(0.028, 0.028, 1.0, 16), materials.metal, [0, 0.22, -0.38], [-0.72, 0, 0]));
+  cameraRig.add(box([0.62, 0.34, 0.34], materials.purple, [0, 1.18, 0]));
+  const lens = mesh(new THREE.CylinderGeometry(0.16, 0.2, 0.34, 32), materials.metal, [0.38, 1.18, 0], [0, Math.PI / 2, 0]);
+  cameraRig.add(lens);
+  const lensGlass = mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.035, 32), materials.glass, [0.56, 1.18, 0], [0, Math.PI / 2, 0]);
+  lensGlass.castShadow = false;
+  cameraRig.add(lensGlass);
+
+  const floatingPanels = [];
+  for (let i = 0; i < 4; i += 1) {
+    const panel = box([1.15, 0.12, 0.035], i % 2 ? materials.gold : materials.orange, [-2.3 + i * 0.72, 1.45 + (i % 2) * 0.22, -2.35 + i * 0.05]);
+    panel.userData.phase = i * 0.8;
+    root.add(panel);
+    floatingPanels.push(panel);
   }
 
   const clock = new THREE.Clock();
@@ -151,26 +260,29 @@ if (canvas) {
 
   function animate() {
     const t = clock.getElapsedTime();
-    root.rotation.y = Math.sin(t * 0.26) * 0.08 - 0.14;
-    mascot.position.x = -2.25 + Math.sin(t * 0.78) * 0.32;
-    mascot.position.z = 1.25 + Math.cos(t * 0.78) * 0.12;
-    mascot.rotation.y = Math.sin(t * 0.78) * 0.24 + 0.28;
-    legL.rotation.x = Math.sin(t * 4.2) * 0.28;
-    legR.rotation.x = Math.sin(t * 4.2 + Math.PI) * 0.28;
-    armR.rotation.z = -0.8 + Math.sin(t * 2.8) * 0.22;
-    board.position.y = 1.08 + Math.sin(t * 1.2) * 0.05;
+    const drift = Math.sin(t * 0.28) * 0.08;
+    camera.position.x = 5.8 + drift;
+    camera.position.y = 3.45 + Math.sin(t * 0.2) * 0.035;
+    camera.lookAt(0.45 + Math.sin(t * 0.18) * 0.08, 1.55, -2.45);
+
+    wallBoard.rotation.y = -0.12 + Math.sin(t * 0.35) * 0.018;
+    todayPanel.position.y = 2.72 + Math.sin(t * 0.8) * 0.035;
+    promptPanel.position.y = 2.02 + Math.cos(t * 0.75) * 0.035;
+    rim.intensity = 3.2 + Math.sin(t * 1.4) * 0.45;
+    wallGlow.intensity = 1.9 + Math.sin(t * 1.1) * 0.35;
 
     calendarTiles.forEach((tile) => {
-      const pulse = (Math.sin(t * 2.1 + tile.userData.phase) + 1) * 0.5;
-      tile.position.z = 0.08 + pulse * 0.055;
-      tile.scale.setScalar(1 + pulse * 0.035);
+      const pulse = (Math.sin(t * 1.75 + tile.userData.phase) + 1) * 0.5;
+      tile.position.z = 0.08 + pulse * 0.025;
+      tile.scale.y = 1 + pulse * 0.03;
+      if (tile.material.emissive) tile.material.emissiveIntensity = 0.12 + pulse * 0.22;
     });
 
-    pulseObjects.forEach((item, index) => {
-      item.position.y += Math.sin(t * 1.4 + index) * 0.0008;
+    floatingPanels.forEach((panel) => {
+      panel.position.y += Math.sin(t * 1.2 + panel.userData.phase) * 0.0009;
+      panel.rotation.y = Math.sin(t * 0.6 + panel.userData.phase) * 0.08;
     });
 
-    rim.intensity = 3.6 + Math.sin(t * 1.8) * 0.9;
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
   }
@@ -180,9 +292,13 @@ if (canvas) {
   window.addEventListener("resize", resize);
 
   document.addEventListener("brn:data", (event) => {
-    const count = Math.min(8, (event.detail?.todayCount || 1) + 1);
+    const count = Math.min(calendarTiles.length, Math.max(4, (event.detail?.todayCount || 1) * 4));
     calendarTiles.forEach((tile, index) => {
-      tile.material = index < count ? orange : index % 3 === 0 ? gold : violet;
+      if (index < count) {
+        tile.material = index % 3 === 0 ? materials.orange : index % 3 === 1 ? materials.gold : materials.teal;
+      } else {
+        tile.material = materials.purple;
+      }
     });
   });
 }

@@ -3,26 +3,29 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>BRN PR Calendar V2</title>
+    <title>BRN PR War Board V3</title>
     <meta
       name="description"
-      content="ปฏิทินคอนเทนต์และคัมภีร์ทีมประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย"
+      content="กระดานวางแผนคอนเทนต์ทีมประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย"
     />
-    <link rel="icon" href="data:," />
+    <link rel="icon" type="image/svg+xml" href="./assets/app-icon.svg" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar" aria-label="เมนูหลัก">
         <div class="brand-lockup">
-          <img src="./assets/bangraknoi-news.jpg" alt="Bangraknoi News" />
+          <div class="site-mark" aria-hidden="true">
+            <span>BRN</span>
+            <strong>PR</strong>
+          </div>
           <div>
             <p class="eyebrow">เทศบาลเมืองบางรักน้อย</p>
-            <h1>BRN Content Calendar</h1>
+            <h1>PR War Board</h1>
           </div>
         </div>
 
-        <nav class="nav-stack">
+        <nav class="nav-stack" aria-label="พื้นที่ทำงาน">
           <button class="nav-item active" data-section="today">วันนี้</button>
           <button class="nav-item" data-section="month">เดือนนี้</button>
           <button class="nav-item" data-section="calendar">ปฏิทิน</button>
@@ -43,46 +46,42 @@
       <main class="workspace">
         <header class="topbar">
           <div>
-            <p class="eyebrow">พื้นที่ทำงานทีมประชาสัมพันธ์</p>
+            <p class="eyebrow">Bangraknoi PR Content Command</p>
             <h2 id="page-title">วันนี้ทีมต้องสื่อสารอะไร</h2>
           </div>
           <div class="today-chip" id="today-chip">กำลังโหลดวันที่</div>
         </header>
 
         <section class="page-section active" id="today">
-          <div class="command-hero" aria-label="BRN PR Calendar V2">
-            <canvas id="brn-3d-scene" aria-label="ฉาก 3D เมืองและมาสคอตทีมประชาสัมพันธ์"></canvas>
-            <div class="hero-overlay">
+          <div class="war-hero" aria-label="BRN PR War Board V3">
+            <canvas id="brn-3d-scene" aria-label="ฉาก 3D ห้องวางแผนคอนเทนต์ประชาสัมพันธ์"></canvas>
+            <div class="hero-vignette"></div>
+            <div class="hero-content">
               <div class="hero-copy">
-                <div class="app-logo-mark" aria-label="BRN PR Calendar logo">
-                  <span>BRN</span>
-                  <strong>PR</strong>
-                  <i></i>
+                <div class="mini-brand">
+                  <span>BRN PR</span>
+                  <strong>V3</strong>
                 </div>
-                <p class="hero-kicker">BRN PR Calendar V2</p>
-                <h3 id="v2-today-heading">วันนี้ทีมต้องสื่อสารอะไร</h3>
-                <p id="v2-today-summary">
-                  ปฏิทินคอนเทนต์สำหรับทีมประชาสัมพันธ์ เปิดแล้วรู้ทิศทางวันนี้ทันที
+                <p class="hero-kicker">Daily War Board</p>
+                <h3 id="hero-title">เปิดมาแล้วรู้เลย วันนี้ต้องเล่าอะไร</h3>
+                <p id="hero-summary">
+                  รวมวันสำคัญ งานเทศบาล โน้ตถ่ายทำ และมุมคอนเทนต์ให้ทีมเดินไปทางเดียวกัน
                 </p>
                 <div class="mission-actions">
-                  <button class="primary-action" data-section-target="prompts">
-                    สร้าง Prompt งานวันนี้
-                  </button>
-                  <button class="secondary-action" data-section-target="calendar">
-                    ดูปฏิทินเดือนนี้
-                  </button>
+                  <button class="primary-action" data-section-target="calendar">เปิดปฏิทิน</button>
+                  <button class="secondary-action" data-section-target="prompts">สร้าง Prompt</button>
                 </div>
               </div>
 
               <div class="hero-brief">
-                <div class="mascot-cue">
-                  <span>น้องคอนเทนต์</span>
-                  <strong id="mascot-caption">กำลังชี้งานที่ควรเล่าวันนี้</strong>
+                <div class="brief-glass">
+                  <span>Focus</span>
+                  <strong id="focus-line">กำลังจัดลำดับงานวันนี้</strong>
                 </div>
                 <div class="signal-grid">
                   <div>
                     <span data-metric="events">0</span>
-                    <p>วันสำคัญเดือนนี้</p>
+                    <p>วัน/ประเด็นเดือนนี้</p>
                   </div>
                   <div>
                     <span data-metric="tasks">0</span>
@@ -95,48 +94,6 @@
                 </div>
               </div>
             </div>
-          </div>
-
-          <div class="hero-grid">
-            <article class="mission-panel">
-              <div class="mission-kicker">Daily PR Room</div>
-              <h3 id="today-heading">วันนี้</h3>
-              <p id="today-summary">
-                เปิดหน้านี้ทุกเช้าเพื่อดูวันสำคัญ งานเทศบาล และทางเดินคอนเทนต์ของทีม
-              </p>
-              <div class="mission-actions">
-                <button class="primary-action" data-section-target="prompts">
-                  สร้าง Prompt งานวันนี้
-                </button>
-                <button class="secondary-action" data-section-target="calendar">
-                  ดูปฏิทินเดือนนี้
-                </button>
-              </div>
-            </article>
-
-            <article class="news-desk">
-              <div class="desk-header">
-                <img src="./assets/bangraknoi-news.jpg" alt="" />
-                <div>
-                  <span>Bangraknoi News Desk</span>
-                  <strong>ข่าวภาคสนามพร้อมเล่า</strong>
-                </div>
-              </div>
-              <div class="desk-metrics">
-                <div>
-                  <span id="metric-events">0</span>
-                  <p>วันสำคัญเดือนนี้</p>
-                </div>
-                <div>
-                  <span id="metric-tasks">0</span>
-                  <p>งานทีมเดือนนี้</p>
-                </div>
-                <div>
-                  <span id="metric-ready">0</span>
-                  <p>พร้อมเผยแพร่</p>
-                </div>
-              </div>
-            </article>
           </div>
 
           <div class="section-grid">
@@ -167,16 +124,16 @@
                   วันที่
                   <input required name="date" type="date" />
                 </label>
-                <label>
-                  เสาหลัก
-                  <select name="pillar">
-                    <option>สะอาด</option>
-                    <option>ปลอดภัย</option>
-                    <option>สิ่งแวดล้อม</option>
-                    <option>คุณภาพชีวิต</option>
-                    <option>เมืองสมดุล</option>
-                  </select>
-                </label>
+                <div class="form-pair">
+                  <label>
+                    เสาหลัก
+                    <select name="pillar"></select>
+                  </label>
+                  <label>
+                    สถานะ
+                    <select name="status"></select>
+                  </label>
+                </div>
                 <label>
                   ช่องทาง
                   <select name="channel">
@@ -186,10 +143,93 @@
                     <option>หลายช่องทาง</option>
                   </select>
                 </label>
+                <label>
+                  สิ่งที่ต้องถ่าย / โน้ตหน้างาน
+                  <textarea name="shot" rows="4" placeholder="ภาพก่อน-หลัง, คนรับผิดชอบ, จุดถ่าย, เสียงประชาชน, ข้อควรระวัง"></textarea>
+                </label>
+                <label>
+                  โน้ตทีม
+                  <textarea name="note" rows="3" placeholder="เช่น รอข้อมูลจากกองช่าง / ห้ามเห็นเลขบ้าน / ต้องส่งอนุมัติก่อน"></textarea>
+                </label>
                 <button class="primary-action full" type="submit">เพิ่มเข้าปฏิทิน</button>
               </form>
             </article>
           </div>
+        </section>
+
+        <section class="page-section" id="day">
+          <article class="day-focus panel">
+            <div class="panel-title">
+              <div>
+                <span class="eyebrow">Day Board</span>
+                <h3 id="day-focus-title">แผนงานรายวัน</h3>
+              </div>
+              <div class="button-row">
+                <button class="ghost-button" data-section-target="calendar">กลับปฏิทิน</button>
+                <button class="primary-action" id="use-day-prompt">ส่งไป Prompt</button>
+              </div>
+            </div>
+
+            <div class="day-focus-grid">
+              <div class="day-main">
+                <div class="lane-title">ประเด็นของวันนี้</div>
+                <div id="day-items" class="day-items"></div>
+              </div>
+              <div class="day-side">
+                <div class="recommend-card">
+                  <span>Content Angle</span>
+                  <p id="day-angle">กำลังเตรียมมุมเล่าเรื่อง</p>
+                </div>
+                <div class="recommend-card">
+                  <span>Shot List</span>
+                  <ul id="day-shots"></ul>
+                </div>
+                <div class="recommend-card">
+                  <span>Caption Seed</span>
+                  <p id="day-caption">กำลังเตรียมแคปชันตั้งต้น</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="inline-add">
+              <div class="panel-title compact">
+                <div>
+                  <span class="eyebrow">Add To Day</span>
+                  <h3>เพิ่มโน้ตหรืองานในวันที่เลือก</h3>
+                </div>
+              </div>
+              <form class="task-form day-task-form" id="day-task-form">
+                <label>
+                  ชื่องาน / โน้ต
+                  <input required name="title" placeholder="เช่น นัดถ่ายคลิปตลาดสะอาด / รอภาพจากกองสาธารณสุข" />
+                </label>
+                <div class="form-pair three">
+                  <label>
+                    เสาหลัก
+                    <select name="pillar"></select>
+                  </label>
+                  <label>
+                    สถานะ
+                    <select name="status"></select>
+                  </label>
+                  <label>
+                    ช่องทาง
+                    <select name="channel">
+                      <option>Facebook</option>
+                      <option>LINE @brn12345</option>
+                      <option>YouTube @BangraknoiNews</option>
+                      <option>หลายช่องทาง</option>
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  สิ่งที่ต้องถ่าย / โน้ตทีม
+                  <textarea name="shot" rows="4" placeholder="ภาพที่ต้องมี, คนที่ต้องสัมภาษณ์, ข้อมูลที่ต้องเช็ก"></textarea>
+                </label>
+                <button class="primary-action full" type="submit">เพิ่มลงวันนี้</button>
+              </form>
+            </div>
+          </article>
         </section>
 
         <section class="page-section" id="month">
@@ -209,8 +249,8 @@
             <article class="panel">
               <div class="panel-title compact">
                 <div>
-                  <span class="eyebrow">Content Pillars</span>
-                  <h3>สัดส่วนเดือนนี้</h3>
+                  <span class="eyebrow">Content Mix</span>
+                  <h3>สัดส่วนประเด็น</h3>
                 </div>
               </div>
               <div class="pillar-bars" id="pillar-bars"></div>
@@ -230,6 +270,7 @@
                 <button class="icon-button" id="next-month" aria-label="เดือนถัดไป">›</button>
               </div>
             </div>
+            <div class="calendar-hint">กดวันที่เพื่อเปิด Day Board และเพิ่มงาน/โน้ตของวันนั้น</div>
             <div class="calendar-weekdays">
               <span>จันทร์</span><span>อังคาร</span><span>พุธ</span><span>พฤหัส</span>
               <span>ศุกร์</span><span>เสาร์</span><span>อาทิตย์</span>
@@ -271,11 +312,11 @@
                 </div>
               </div>
               <ul class="checklist">
-                <li>วันที่ เวลา สถานที่ เบอร์ติดต่อถูกต้อง</li>
-                <li>ชื่อบุคคลและตำแหน่งถูกต้อง</li>
-                <li>ไม่โชว์เอกสารส่วนตัวหรือข้อมูลอ่อนไหว</li>
-                <li>เด็ก ผู้ป่วย ผู้เดือดร้อน ใช้ภาพอย่างระมัดระวัง</li>
-                <li>ภาษาสุภาพ ชัดเจน และประชาชนเข้าใจ</li>
+                <li>วัน เวลา สถานที่ และช่องทางติดต่อถูกต้อง</li>
+                <li>ชื่อบุคคล ตำแหน่ง และหน่วยงานสะกดถูก</li>
+                <li>ไม่เห็นข้อมูลส่วนตัว เอกสารราชการ หรือเลขทะเบียนที่ไม่ควรเผยแพร่</li>
+                <li>ภาพเด็ก ผู้ป่วย ผู้เดือดร้อน ใช้อย่างระมัดระวัง</li>
+                <li>ภาษาสุภาพ เข้าใจง่าย และไม่แข็งแบบประกาศราชการ</li>
               </ul>
             </article>
 
@@ -286,7 +327,7 @@
                   <strong>ปัญหา → เทศบาลลงมือ → ผลลัพธ์ → ประชาชนช่วยอะไรได้</strong>
                 </div>
                 <p>
-                  ใช้สูตรนี้กับงานภาคสนามทุกประเภท เพื่อไม่ให้คอนเทนต์กลายเป็นรายงานราชการแข็ง ๆ
+                  ใช้กับงานภาคสนามทุกประเภท เพื่อให้คอนเทนต์เห็นประโยชน์จริง ไม่เป็นแค่รายงานกิจกรรม
                 </p>
               </div>
             </article>
@@ -321,8 +362,8 @@
                   <textarea
                     name="details"
                     id="prompt-details"
-                    rows="6"
-                    placeholder="ใส่รายละเอียด เช่น วันที่ สถานที่ ใครทำอะไร ประชาชนต้องรู้อะไร"
+                    rows="7"
+                    placeholder="ใส่รายละเอียดจริง เช่น วัน เวลา สถานที่ ใครทำอะไร ประชาชนต้องรู้อะไร"
                   ></textarea>
                 </label>
                 <button class="primary-action full" type="submit">สร้าง Prompt</button>
@@ -339,7 +380,7 @@
               </div>
               <textarea class="prompt-output" id="prompt-output" readonly></textarea>
               <div class="prompt-tips">
-                <span>อย่าลืมเติมข้อมูลจริง</span>
+                <span>เติมข้อมูลจริงก่อนใช้</span>
                 <span>ให้หัวหน้าตรวจงานอ่อนไหว</span>
                 <span>ใช้ภาษาประชาชน</span>
               </div>
