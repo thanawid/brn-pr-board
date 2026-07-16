@@ -354,7 +354,7 @@ const contentBlueprints = [
 ];
 
 const pageTitles = {
-  today: "ปฏิทินไทยนำทีม PR",
+  today: "ปฏิทินคอนเทนต์",
   day: "Day Board รายวัน",
   month: "เดือนนี้ควรเล่าเรื่องอะไร",
   calendar: "ปฏิทินคอนเทนต์",
