@@ -20,7 +20,7 @@ const types = {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url || "/", `http://localhost:${port}`);
   const safePath = path.normalize(decodeURIComponent(url.pathname)).replace(/^(\.\.[/\\])+/, "");
-  const requested = safePath === "/" ? "index.html" : safePath.replace(/^[/\\]/, "");
+  const requested = safePath === "/" || safePath === "\\" ? "index.html" : safePath.replace(/^[/\\]/, "");
   const filePath = path.join(root, requested);
 
   try {
