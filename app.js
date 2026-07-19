@@ -223,6 +223,7 @@ const defaultEntries = [
     time: "09.00 น.",
     location: "จุดเสี่ยงน้ำขังในพื้นที่เทศบาล",
     owner: "งานประชาสัมพันธ์ + กองช่าง",
+    responsible: "ทีมถ่ายภาพ + แอดมินเพจ",
     title: "สำรวจจุดน้ำขังหลังฝนและท่อระบายน้ำ",
     type: "งานเทศบาล",
     pillar: "ปลอดภัย",
@@ -236,6 +237,7 @@ const defaultEntries = [
     time: "14.00 น.",
     location: "ถนน/ซอยที่มีไฟสาธารณะดับ",
     owner: "งานประชาสัมพันธ์",
+    responsible: "ทีมวิดีโอสั้น",
     title: "คลิปสั้นแนะนำการแจ้งไฟสาธารณะดับ",
     type: "คอนเทนต์ไอเดีย",
     pillar: "ปลอดภัย",
@@ -249,6 +251,7 @@ const defaultEntries = [
     time: "10.00 น.",
     location: "คลองและจุดเก็บขยะตกค้าง",
     owner: "งานประชาสัมพันธ์ + งานรักษาความสะอาด",
+    responsible: "ทีมภาพข่าว",
     title: "สรุปงานเก็บขยะตกค้างและคลองสะอาด",
     type: "งานเทศบาล",
     pillar: "สะอาด",
@@ -372,6 +375,14 @@ function displayOwner(item) {
   if (item.owner) return item.owner;
   if (item.source === "event") return "ทีม PR + หน่วยงานที่เกี่ยวข้อง";
   if (item.source === "buddhist") return "ทีม PR";
+  return "รอระบุเจ้าของงาน";
+}
+
+function displayResponsible(item) {
+  if (!item) return "ทีม PR";
+  if (item.responsible) return item.responsible;
+  if (item.source === "event") return "ทีม PR";
+  if (item.source === "buddhist") return "ทีมภาพข่าว/แอดมินเพจ";
   return "รอระบุผู้รับผิดชอบ";
 }
 
@@ -431,6 +442,7 @@ function adviceForDate(iso) {
     item: target,
     location: displayLocation(target),
     owner: displayOwner(target),
+    responsible: displayResponsible(target),
     action: displayAction(target),
     channel: displayChannel(target),
     time: displayTime(target),
@@ -496,7 +508,7 @@ function renderCalendar() {
       .join(" ");
 
     cells.push(`
-      <button class="${classes}" type="button" data-open-date="${iso}" aria-label="เปิดวันที่ ${thaiDate(date)}">
+      <button class="${classes}" type="button" data-open-date="${iso}" aria-label="เปิดวันที่ ${thaiDate(date)}" title="คลิกเพื่อดูงาน ดับเบิ้ลคลิกเพื่อเพิ่มงาน">
         <span class="day-number">
           <span>${date.getDate()}</span>
           ${iso === todayIso ? '<span class="today-tag">วันนี้</span>' : ""}
@@ -524,8 +536,10 @@ function renderDay() {
   document.getElementById("pulse-channel").textContent = advice.channel;
   document.getElementById("command-title").textContent = advice.title;
   document.getElementById("command-subtitle").textContent = daySummary;
+  document.getElementById("command-time").textContent = `เวลา: ${advice.time}`;
   document.getElementById("command-location").textContent = `สถานที่: ${advice.location}`;
-  document.getElementById("command-owner").textContent = `ผู้รับผิดชอบ: ${advice.owner}`;
+  document.getElementById("command-owner").textContent = `เจ้าของงาน: ${advice.owner}`;
+  document.getElementById("command-responsible").textContent = `ผู้รับผิดชอบ: ${advice.responsible}`;
   document.getElementById("advice-title").textContent = advice.title;
   document.getElementById("advice-angle").textContent = `${advice.angle} | เสาหลัก: ${advice.pillar}`;
   document.getElementById("shot-list").innerHTML = advice.shots.map((shot) => `<li>${escapeHtml(shot)}</li>`).join("");
@@ -542,7 +556,7 @@ function renderDay() {
             </div>
             <h3>${escapeHtml(item.title)}</h3>
             ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ""}
-            <small>${escapeHtml([displayTime(item), displayLocation(item), displayChannel(item), item.status].filter(Boolean).join(" · "))}</small>
+            <small>${escapeHtml([displayTime(item), displayLocation(item), displayOwner(item), displayResponsible(item), displayChannel(item), item.status].filter(Boolean).join(" · "))}</small>
           </article>
         `
         )
@@ -644,7 +658,8 @@ function renderBoard() {
                     <article class="board-task">
                       <strong>${escapeHtml(item.title)}</strong>
                       <small>${thaiDate(parseISO(item.date))} · ${escapeHtml(displayTime(item))} · ${escapeHtml(displayLocation(item))}</small>
-                      <small>${escapeHtml(item.type)} · ${escapeHtml(displayChannel(item))} · ${escapeHtml(displayOwner(item))}</small>
+                      <small>${escapeHtml(item.type)} · ${escapeHtml(displayChannel(item))} · เจ้าของงาน: ${escapeHtml(displayOwner(item))}</small>
+                      <small>ผู้รับผิดชอบ: ${escapeHtml(displayResponsible(item))}</small>
                       <small>${escapeHtml(item.note || "ยังไม่มีโน้ต")}</small>
                       <div class="board-actions">
                         <button type="button" data-open-date="${item.date}">เปิด</button>
@@ -699,7 +714,8 @@ function promptDetailsForSelectedDay() {
     `ประเด็นหลัก: ${advice.title}`,
     `เวลา: ${advice.time}`,
     `สถานที่: ${advice.location}`,
-    `ผู้รับผิดชอบ: ${advice.owner}`,
+    `เจ้าของงาน: ${advice.owner}`,
+    `ผู้รับผิดชอบ: ${advice.responsible}`,
     `ช่องทางที่เหมาะ: ${advice.channel}`,
     `สิ่งที่ต้องทำ: ${advice.action}`,
     `มุมเล่าเรื่อง: ${advice.angle}`,
@@ -748,7 +764,8 @@ function applyAiAction(action) {
     `ประเด็น: ${advice.title}`,
     `เวลา: ${advice.time}`,
     `สถานที่: ${advice.location}`,
-    `ผู้รับผิดชอบ: ${advice.owner}`,
+    `เจ้าของงาน: ${advice.owner}`,
+    `ผู้รับผิดชอบ: ${advice.responsible}`,
     `ช่องทาง: ${advice.channel}`,
     `สิ่งที่ต้องทำ: ${advice.action}`,
     `มุมเล่าเรื่อง: ${advice.angle}`,
@@ -760,7 +777,34 @@ function applyAiAction(action) {
   toast(`เตรียม Prompt: ${config.label}`);
 }
 
+function formValue(data, key, fallback = "") {
+  return data.get(key)?.toString().trim() || fallback;
+}
+
+function entryFromForm(form, date = selectedDate) {
+  const data = new FormData(form);
+  const title = formValue(data, "title");
+  const noteParts = [formValue(data, "noteQuick"), formValue(data, "note")].filter(Boolean);
+  if (!title) return null;
+
+  return {
+    id: `entry-${Date.now()}-${Math.round(Math.random() * 1000)}`,
+    date,
+    time: formValue(data, "time", "ยังไม่ระบุเวลา"),
+    location: formValue(data, "location", "รอระบุสถานที่"),
+    owner: formValue(data, "owner", "รอระบุเจ้าของงาน"),
+    responsible: formValue(data, "responsible", "ทีม PR"),
+    title,
+    type: formValue(data, "type", "งานเทศบาล"),
+    pillar: formValue(data, "pillar", "เมืองสมดุล"),
+    channel: formValue(data, "channel", "Facebook"),
+    status: formValue(data, "status", "ไอเดีย"),
+    note: noteParts.join(" | "),
+  };
+}
+
 function addEntry(entry) {
+  if (!entry) return;
   entries = [...entries, entry];
   saveEntries();
   selectedDate = entry.date;
@@ -779,6 +823,7 @@ function addIdeaToDate(ideaIndex, iso) {
     time: "ตามแผนทีม",
     location: "พื้นที่ตามแผนคอนเทนต์",
     owner: "ทีม PR",
+    responsible: "ทีม PR",
     title: item.title,
     type: "คอนเทนต์ไอเดีย",
     pillar: item.pillar,
@@ -806,6 +851,43 @@ function rerender() {
   renderPromptOutput();
 }
 
+function setSelectValue(select, value) {
+  if (!select || !value) return;
+  const option = [...select.options].find((item) => item.value === value || item.textContent === value);
+  if (option) select.value = option.value;
+}
+
+function openWorkModal(iso = selectedDate) {
+  const modal = document.getElementById("work-modal");
+  const form = document.getElementById("modal-work-form");
+  if (!modal || !form) return;
+
+  selectedDate = iso;
+  activeMonth = parseISO(iso).getMonth();
+  const advice = adviceForDate(iso);
+  form.reset();
+  document.getElementById("modal-date-title").textContent = thaiDate(parseISO(iso));
+  form.elements.dateText.value = thaiDate(parseISO(iso));
+  form.elements.location.value = advice.location === "พื้นที่เทศบาลเมืองบางรักน้อย" ? "" : advice.location;
+  form.elements.owner.value = advice.owner === "ทีม PR" ? "" : advice.owner;
+  form.elements.responsible.value = advice.responsible;
+  form.elements.noteQuick.value = advice.shots.slice(0, 3).join(", ");
+  setSelectValue(form.elements.channel, advice.channel);
+  setSelectValue(form.elements.pillar, advice.pillar);
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+  setTimeout(() => form.elements.title.focus(), 40);
+}
+
+function closeWorkModal() {
+  const modal = document.getElementById("work-modal");
+  if (!modal) return;
+  modal.classList.remove("active");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
 function bindEvents() {
   document.querySelectorAll(".nav-link").forEach((link) => {
     link.addEventListener("click", () => {
@@ -814,12 +896,16 @@ function bindEvents() {
     });
   });
 
-  document.getElementById("go-today").addEventListener("click", () => {
+  const goToday = () => {
     selectedDate = toISO(safeToday());
     activeMonth = parseISO(selectedDate).getMonth();
     rerender();
     document.getElementById("calendar").scrollIntoView({ behavior: "smooth" });
-  });
+  };
+
+  [document.getElementById("go-today"), document.getElementById("go-today-inline")]
+    .filter(Boolean)
+    .forEach((button) => button.addEventListener("click", goToday));
 
   document.getElementById("prev-month").addEventListener("click", () => {
     activeMonth = (activeMonth + 11) % 12;
@@ -845,7 +931,9 @@ function bindEvents() {
       selectedDate = openButton.dataset.openDate;
       activeMonth = parseISO(selectedDate).getMonth();
       rerender();
-      document.getElementById("calendar").scrollIntoView({ behavior: "smooth", block: "start" });
+      if (!openButton.closest("#calendar-grid")) {
+        document.getElementById("calendar").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
       return;
     }
 
@@ -901,25 +989,39 @@ function bindEvents() {
     }
   });
 
+  document.body.addEventListener("dblclick", (event) => {
+    const dayButton = event.target.closest("#calendar-grid [data-open-date]");
+    if (!dayButton) return;
+    event.preventDefault();
+    selectedDate = dayButton.dataset.openDate;
+    activeMonth = parseISO(selectedDate).getMonth();
+    rerender();
+    openWorkModal(selectedDate);
+  });
+
+  document.body.addEventListener("click", (event) => {
+    if (event.target.closest("[data-close-modal]")) {
+      closeWorkModal();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeWorkModal();
+  });
+
   document.getElementById("quick-form").addEventListener("submit", (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-    const data = new FormData(form);
-    const title = data.get("title").toString().trim();
-    if (!title) return;
-    addEntry({
-      id: `entry-${Date.now()}-${Math.round(Math.random() * 1000)}`,
-      date: selectedDate,
-      time: data.get("time")?.toString().trim() || "ยังไม่ระบุเวลา",
-      location: data.get("location")?.toString().trim() || "รอระบุสถานที่",
-      owner: data.get("owner")?.toString().trim() || "ทีม PR",
-      title,
-      type: data.get("type").toString(),
-      pillar: data.get("pillar").toString(),
-      channel: data.get("channel").toString(),
-      status: data.get("status").toString(),
-      note: data.get("note").toString().trim(),
-    });
+    addEntry(entryFromForm(form, selectedDate));
+    form.reset();
+  });
+
+  document.getElementById("modal-work-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const entry = entryFromForm(form, selectedDate);
+    addEntry(entry);
+    if (entry) closeWorkModal();
     form.reset();
   });
 

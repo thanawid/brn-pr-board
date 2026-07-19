@@ -86,9 +86,19 @@
                 <p class="eyebrow">Main calendar</p>
                 <h2 id="calendar-title">ปฏิทิน</h2>
               </div>
-              <div class="month-controls">
-                <button class="icon-button" id="prev-month" type="button" aria-label="เดือนก่อนหน้า">‹</button>
-                <button class="icon-button" id="next-month" type="button" aria-label="เดือนถัดไป">›</button>
+              <div class="calendar-head-actions">
+                <div class="calendar-assist" aria-label="วิธีใช้ปฏิทิน">
+                  <span class="assist-mascot" aria-hidden="true"><i></i></span>
+                  <span>
+                    <strong>คลิกดูงาน ดับเบิ้ลคลิกเพิ่ม</strong>
+                    <small>AI ช่วยคิดโพสต์ ภาพที่ต้องถ่าย และ Prompt ในแผงข้าง</small>
+                  </span>
+                </div>
+                <div class="month-controls">
+                  <button class="soft-button today-inline" id="go-today-inline" type="button">วันนี้</button>
+                  <button class="icon-button" id="prev-month" type="button" aria-label="เดือนก่อนหน้า">‹</button>
+                  <button class="icon-button" id="next-month" type="button" aria-label="เดือนถัดไป">›</button>
+                </div>
               </div>
             </div>
 
@@ -125,8 +135,10 @@
                 <p id="command-subtitle">ระบบจะสรุปว่า วันนี้มีงานอะไร อยู่ที่ไหน และทีมควรทำคอนเทนต์แบบไหน</p>
               </div>
               <div class="command-facts">
+                <span id="command-time">เวลา: -</span>
                 <span id="command-location">สถานที่: -</span>
-                <span id="command-owner">ผู้รับผิดชอบ: ทีม PR</span>
+                <span id="command-owner">เจ้าของงาน: ทีม PR</span>
+                <span id="command-responsible">ผู้รับผิดชอบ: ทีม PR</span>
               </div>
             </div>
 
@@ -161,7 +173,7 @@
                 ชื่องาน
                 <input name="title" required placeholder="เช่น สำรวจจุดน้ำขัง / ประชุมชุมชน / นัดถ่ายคลิป" />
               </label>
-              <div class="form-row three">
+              <div class="form-row four">
                 <label>
                   เวลา
                   <input name="time" placeholder="เช่น 09.00 น." />
@@ -171,8 +183,12 @@
                   <input name="location" placeholder="เช่น ซอยบางรักน้อย 12 / วัด / ชุมชน..." />
                 </label>
                 <label>
+                  เจ้าของงาน
+                  <input name="owner" placeholder="เช่น กองช่าง / สำนักปลัด" />
+                </label>
+                <label>
                   ผู้รับผิดชอบ
-                  <input name="owner" placeholder="เช่น งานประชาสัมพันธ์ / กองช่าง" />
+                  <input name="responsible" placeholder="เช่น งานประชาสัมพันธ์ / ช่างภาพ" />
                 </label>
               </div>
               <div class="form-row">
@@ -301,6 +317,83 @@
           </article>
         </section>
       </main>
+    </div>
+
+    <div class="work-modal" id="work-modal" aria-hidden="true">
+      <button class="modal-backdrop" type="button" data-close-modal aria-label="ปิดกระดานเพิ่มงาน"></button>
+      <section class="modal-board" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Double-click day board</p>
+            <h2 id="modal-title">เพิ่มงานลงปฏิทิน</h2>
+            <p id="modal-date-title">เลือกวันที่จากปฏิทิน</p>
+          </div>
+          <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        </div>
+
+        <form class="modal-form" id="modal-work-form">
+          <label class="wide">
+            ชื่องาน / ภารกิจ
+            <input name="title" required placeholder="เช่น ลงพื้นที่ลอกท่อ / งานประชุมชุมชน / นัดถ่ายคลิปแจ้งข่าว" />
+          </label>
+          <div class="form-row four">
+            <label>
+              วัน
+              <input name="dateText" readonly />
+            </label>
+            <label>
+              เวลา
+              <input name="time" placeholder="เช่น 09.00 น." />
+            </label>
+            <label>
+              สถานที่
+              <input name="location" placeholder="เช่น ชุมชน... / ซอย... / วัด..." />
+            </label>
+            <label>
+              ช่องทาง
+              <select name="channel">
+                <option>Facebook</option>
+                <option>LINE @brn12345</option>
+                <option>YouTube @BangraknoiNews</option>
+                <option>หลายช่องทาง</option>
+              </select>
+            </label>
+          </div>
+          <div class="form-row four">
+            <label>
+              เจ้าของงาน
+              <input name="owner" placeholder="เช่น กองช่าง / กองสาธารณสุข / สำนักปลัด" />
+            </label>
+            <label>
+              ผู้รับผิดชอบ
+              <input name="responsible" placeholder="เช่น งานประชาสัมพันธ์ / ผู้ถ่ายภาพ / ผู้ประสาน" />
+            </label>
+            <label>
+              ประเภท
+              <select name="type"></select>
+            </label>
+            <label>
+              สถานะ
+              <select name="status"></select>
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              เสาหลัก
+              <select name="pillar"></select>
+            </label>
+            <label>
+              ต้องเก็บภาพ/วิดีโออะไร
+              <input name="noteQuick" placeholder="เช่น ภาพก่อน-หลัง คนทำงาน จุดปัญหา ผลลัพธ์" />
+            </label>
+          </div>
+          <label class="wide">
+            โน้ตเพิ่มเติม
+            <textarea name="note" rows="4" placeholder="รายละเอียดหน้างาน ข้อควรระวัง ข้อมูลที่ต้องเช็กก่อนโพสต์"></textarea>
+          </label>
+          <button class="primary-button" type="submit">เพิ่มขึ้นกระดาน</button>
+        </form>
+      </section>
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
