@@ -38,11 +38,11 @@
       <main>
         <section class="hero">
           <div class="hero-copy">
-            <p class="eyebrow">Thai calendar first</p>
-            <h1>ปฏิทินไทยนำทีม PR ให้เดินทางเดียวกัน</h1>
+            <p class="eyebrow">Daily PR Command Center</p>
+            <h1>เปิดมาแล้วรู้เลย วันนี้ต้องสื่อสารอะไร</h1>
             <p>
-              วันสำคัญ วันพระ งานเทศบาล และโน้ตทีม อยู่บนปฏิทินเดียวกัน เลือกวันแล้วเพิ่มงาน
-              พร้อมให้ผู้ช่วย PR แนะนำมุมเล่าเรื่อง ช็อตที่ควรถ่าย และ Prompt สำหรับใช้งานต่อ
+              วันที่ วันสำคัญ งานเทศบาล สถานที่ สิ่งที่ต้องถ่าย และ Prompt อยู่ในทางเดียวกัน
+              ให้ทีม PR เห็นแผนวันนี้ก่อน แล้วค่อยขยายเป็นรายสัปดาห์หรือรายเดือน
             </p>
           </div>
           <div class="today-card" aria-label="สรุปวันนี้">
@@ -57,6 +57,26 @@
             </div>
             <p>จิ้มวันก่อน เดี๋ยวช่วยคิดคอนเทนต์ให้</p>
           </div>
+        </section>
+
+        <section class="daily-strip" aria-label="สรุปงานประชาสัมพันธ์ของวันที่เลือก">
+          <article class="daily-main">
+            <span>วันนี้ทีมต้องรู้</span>
+            <strong id="pulse-title">กำลังโหลดประเด็น</strong>
+            <p id="pulse-date">เลือกวันในปฏิทินเพื่อดูแผนของวันนั้น</p>
+          </article>
+          <article>
+            <span>ที่ไหน</span>
+            <strong id="pulse-location">-</strong>
+          </article>
+          <article>
+            <span>ทำอะไร</span>
+            <strong id="pulse-action">-</strong>
+          </article>
+          <article>
+            <span>ช่องทาง</span>
+            <strong id="pulse-channel">-</strong>
+          </article>
         </section>
 
         <section id="calendar" class="work-grid">
@@ -98,6 +118,18 @@
               </div>
             </div>
 
+            <div class="day-command-card">
+              <div>
+                <span class="mini-label">Mission today</span>
+                <strong id="command-title">เลือกวันเพื่อดูภารกิจ</strong>
+                <p id="command-subtitle">ระบบจะสรุปว่า วันนี้มีงานอะไร อยู่ที่ไหน และทีมควรทำคอนเทนต์แบบไหน</p>
+              </div>
+              <div class="command-facts">
+                <span id="command-location">สถานที่: -</span>
+                <span id="command-owner">ผู้รับผิดชอบ: ทีม PR</span>
+              </div>
+            </div>
+
             <div id="day-items" class="day-items"></div>
 
             <div class="assistant-card">
@@ -114,6 +146,12 @@
                 <strong>คลิปสั้น 30-45 วิ</strong>
                 <ol id="video-plan"></ol>
               </div>
+              <div class="ai-actions" aria-label="คำสั่งผู้ช่วย PR">
+                <button type="button" data-ai-action="post">คิดโพสต์</button>
+                <button type="button" data-ai-action="short">สคริปต์คลิป</button>
+                <button type="button" data-ai-action="shots">Shot list</button>
+                <button type="button" data-ai-action="field">เช็กลิสต์หน้างาน</button>
+              </div>
               <button class="soft-button full-button" id="use-day-prompt" type="button">ส่งโจทย์วันนี้ไป Prompt</button>
             </div>
 
@@ -123,6 +161,20 @@
                 ชื่องาน
                 <input name="title" required placeholder="เช่น สำรวจจุดน้ำขัง / ประชุมชุมชน / นัดถ่ายคลิป" />
               </label>
+              <div class="form-row three">
+                <label>
+                  เวลา
+                  <input name="time" placeholder="เช่น 09.00 น." />
+                </label>
+                <label>
+                  สถานที่
+                  <input name="location" placeholder="เช่น ซอยบางรักน้อย 12 / วัด / ชุมชน..." />
+                </label>
+                <label>
+                  ผู้รับผิดชอบ
+                  <input name="owner" placeholder="เช่น งานประชาสัมพันธ์ / กองช่าง" />
+                </label>
+              </div>
               <div class="form-row">
                 <label>
                   ประเภท

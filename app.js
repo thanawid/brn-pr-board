@@ -220,6 +220,9 @@ const defaultEntries = [
   {
     id: "sample-drainage",
     date: "2026-07-16",
+    time: "09.00 น.",
+    location: "จุดเสี่ยงน้ำขังในพื้นที่เทศบาล",
+    owner: "งานประชาสัมพันธ์ + กองช่าง",
     title: "สำรวจจุดน้ำขังหลังฝนและท่อระบายน้ำ",
     type: "งานเทศบาล",
     pillar: "ปลอดภัย",
@@ -230,6 +233,9 @@ const defaultEntries = [
   {
     id: "sample-light",
     date: "2026-07-17",
+    time: "14.00 น.",
+    location: "ถนน/ซอยที่มีไฟสาธารณะดับ",
+    owner: "งานประชาสัมพันธ์",
     title: "คลิปสั้นแนะนำการแจ้งไฟสาธารณะดับ",
     type: "คอนเทนต์ไอเดีย",
     pillar: "ปลอดภัย",
@@ -240,6 +246,9 @@ const defaultEntries = [
   {
     id: "sample-clean",
     date: "2026-07-20",
+    time: "10.00 น.",
+    location: "คลองและจุดเก็บขยะตกค้าง",
+    owner: "งานประชาสัมพันธ์ + งานรักษาความสะอาด",
     title: "สรุปงานเก็บขยะตกค้างและคลองสะอาด",
     type: "งานเทศบาล",
     pillar: "สะอาด",
@@ -350,6 +359,41 @@ function preferredItem(items) {
   return items.find((item) => item.source === "user") || items.find((item) => item.source === "event") || items[0] || null;
 }
 
+function displayLocation(item) {
+  if (!item) return "พื้นที่เทศบาลเมืองบางรักน้อย";
+  if (item.location) return item.location;
+  if (item.source === "buddhist") return "วัดและชุมชนในพื้นที่";
+  if (item.source === "event") return "พื้นที่เทศบาลเมืองบางรักน้อย";
+  return "รอระบุสถานที่";
+}
+
+function displayOwner(item) {
+  if (!item) return "ทีม PR";
+  if (item.owner) return item.owner;
+  if (item.source === "event") return "ทีม PR + หน่วยงานที่เกี่ยวข้อง";
+  if (item.source === "buddhist") return "ทีม PR";
+  return "รอระบุผู้รับผิดชอบ";
+}
+
+function displayAction(item) {
+  if (!item) return "เลือกไอเดียสำรองของเดือน";
+  if (item.source === "user") return item.status || item.type || "เตรียมคอนเทนต์";
+  if (item.source === "buddhist") return "เก็บภาพบรรยากาศวัด/ชุมชน";
+  return "เตรียมโพสต์และเก็บภาพประกอบ";
+}
+
+function displayChannel(item) {
+  if (!item) return "Facebook";
+  if (item.channel) return item.channel;
+  if (item.source === "event") return "Facebook + LINE";
+  return "Facebook";
+}
+
+function displayTime(item) {
+  if (!item) return "ตามแผนทีม";
+  return item.time || "ยังไม่ระบุเวลา";
+}
+
 function adviceForDate(iso) {
   const date = parseISO(iso);
   const items = allItemsForDate(iso);
@@ -376,7 +420,21 @@ function adviceForDate(iso) {
     "ปิดด้วยผลลัพธ์ ประโยชน์กับประชาชน และช่องทางแจ้งเหตุ/ติดตามข่าว",
   ];
 
-  return { title, pillar, note, angle, shots, video, pillarData };
+  return {
+    title,
+    pillar,
+    note,
+    angle,
+    shots,
+    video,
+    pillarData,
+    item: target,
+    location: displayLocation(target),
+    owner: displayOwner(target),
+    action: displayAction(target),
+    channel: displayChannel(target),
+    time: displayTime(target),
+  };
 }
 
 function itemClass(item) {
@@ -456,8 +514,18 @@ function renderDay() {
   const date = parseISO(selectedDate);
   const items = allItemsForDate(selectedDate);
   const advice = adviceForDate(selectedDate);
+  const daySummary = `${advice.time} · ${advice.location} · ${advice.channel}`;
 
   document.getElementById("selected-date-title").textContent = thaiDate(date);
+  document.getElementById("pulse-title").textContent = advice.title;
+  document.getElementById("pulse-date").textContent = thaiDate(date);
+  document.getElementById("pulse-location").textContent = advice.location;
+  document.getElementById("pulse-action").textContent = advice.action;
+  document.getElementById("pulse-channel").textContent = advice.channel;
+  document.getElementById("command-title").textContent = advice.title;
+  document.getElementById("command-subtitle").textContent = daySummary;
+  document.getElementById("command-location").textContent = `สถานที่: ${advice.location}`;
+  document.getElementById("command-owner").textContent = `ผู้รับผิดชอบ: ${advice.owner}`;
   document.getElementById("advice-title").textContent = advice.title;
   document.getElementById("advice-angle").textContent = `${advice.angle} | เสาหลัก: ${advice.pillar}`;
   document.getElementById("shot-list").innerHTML = advice.shots.map((shot) => `<li>${escapeHtml(shot)}</li>`).join("");
@@ -474,7 +542,7 @@ function renderDay() {
             </div>
             <h3>${escapeHtml(item.title)}</h3>
             ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ""}
-            ${item.channel || item.status ? `<small>${escapeHtml([item.channel, item.status].filter(Boolean).join(" · "))}</small>` : ""}
+            <small>${escapeHtml([displayTime(item), displayLocation(item), displayChannel(item), item.status].filter(Boolean).join(" · "))}</small>
           </article>
         `
         )
@@ -575,7 +643,8 @@ function renderBoard() {
                     (item) => `
                     <article class="board-task">
                       <strong>${escapeHtml(item.title)}</strong>
-                      <small>${thaiDate(parseISO(item.date))} · ${escapeHtml(item.type)} · ${escapeHtml(item.channel)}</small>
+                      <small>${thaiDate(parseISO(item.date))} · ${escapeHtml(displayTime(item))} · ${escapeHtml(displayLocation(item))}</small>
+                      <small>${escapeHtml(item.type)} · ${escapeHtml(displayChannel(item))} · ${escapeHtml(displayOwner(item))}</small>
                       <small>${escapeHtml(item.note || "ยังไม่มีโน้ต")}</small>
                       <div class="board-actions">
                         <button type="button" data-open-date="${item.date}">เปิด</button>
@@ -628,6 +697,11 @@ function promptDetailsForSelectedDay() {
   const lines = [
     `วันที่: ${thaiDate(parseISO(selectedDate))}`,
     `ประเด็นหลัก: ${advice.title}`,
+    `เวลา: ${advice.time}`,
+    `สถานที่: ${advice.location}`,
+    `ผู้รับผิดชอบ: ${advice.owner}`,
+    `ช่องทางที่เหมาะ: ${advice.channel}`,
+    `สิ่งที่ต้องทำ: ${advice.action}`,
     `มุมเล่าเรื่อง: ${advice.angle}`,
     items.length ? `รายการในปฏิทิน: ${items.map((item) => item.title).join(", ")}` : "รายการในปฏิทิน: ยังไม่มีงานเฉพาะ ใช้เป็นไอเดียสำรองของเดือน",
     `ควรถ่าย: ${advice.shots.join(", ")}`,
@@ -640,6 +714,50 @@ function renderPromptOutput() {
   const type = document.getElementById("prompt-type").value;
   const details = document.getElementById("prompt-details").value.trim();
   document.getElementById("prompt-output").value = createPromptFromDetails(type, details);
+}
+
+function applyAiAction(action) {
+  const advice = adviceForDate(selectedDate);
+  const actionMap = {
+    post: {
+      type: "โพสต์ Facebook",
+      label: "คิดโพสต์ประชาสัมพันธ์",
+      ask: "ช่วยคิดโพสต์ Facebook ให้ประชาชนอ่านแล้วเข้าใจทันที",
+    },
+    short: {
+      type: "YouTube Shorts",
+      label: "ทำสคริปต์คลิปสั้น",
+      ask: "ช่วยทำสคริปต์คลิปสั้น 30-45 วินาที พร้อม Hook และลำดับภาพ",
+    },
+    shots: {
+      type: "ข่าวประชาสัมพันธ์",
+      label: "แตก Shot list",
+      ask: "ช่วยแตก Shot list แบบละเอียดสำหรับทีมลงพื้นที่ถ่ายภาพและวิดีโอ",
+    },
+    field: {
+      type: "ข่าวประชาสัมพันธ์",
+      label: "เช็กลิสต์หน้างาน",
+      ask: "ช่วยทำเช็กลิสต์ก่อนลงพื้นที่ ระหว่างถ่าย และก่อนเผยแพร่",
+    },
+  };
+  const config = actionMap[action] || actionMap.post;
+  document.getElementById("prompt-type").value = config.type;
+  document.getElementById("prompt-details").value = [
+    `คำสั่ง: ${config.ask}`,
+    `วันที่: ${thaiDate(parseISO(selectedDate))}`,
+    `ประเด็น: ${advice.title}`,
+    `เวลา: ${advice.time}`,
+    `สถานที่: ${advice.location}`,
+    `ผู้รับผิดชอบ: ${advice.owner}`,
+    `ช่องทาง: ${advice.channel}`,
+    `สิ่งที่ต้องทำ: ${advice.action}`,
+    `มุมเล่าเรื่อง: ${advice.angle}`,
+    `ควรถ่าย: ${advice.shots.join(", ")}`,
+    `แนวคลิป: ${advice.video.join(" | ")}`,
+  ].join("\n");
+  renderPromptOutput();
+  document.getElementById("prompt").scrollIntoView({ behavior: "smooth" });
+  toast(`เตรียม Prompt: ${config.label}`);
 }
 
 function addEntry(entry) {
@@ -658,6 +776,9 @@ function addIdeaToDate(ideaIndex, iso) {
   addEntry({
     id: `entry-${Date.now()}-${Math.round(Math.random() * 1000)}`,
     date: iso,
+    time: "ตามแผนทีม",
+    location: "พื้นที่ตามแผนคอนเทนต์",
+    owner: "ทีม PR",
     title: item.title,
     type: "คอนเทนต์ไอเดีย",
     pillar: item.pillar,
@@ -749,6 +870,12 @@ function bindEvents() {
       return;
     }
 
+    const aiActionButton = event.target.closest("[data-ai-action]");
+    if (aiActionButton) {
+      applyAiAction(aiActionButton.dataset.aiAction);
+      return;
+    }
+
     const nextButton = event.target.closest("[data-next-status]");
     if (nextButton) {
       const id = nextButton.dataset.nextStatus;
@@ -783,6 +910,9 @@ function bindEvents() {
     addEntry({
       id: `entry-${Date.now()}-${Math.round(Math.random() * 1000)}`,
       date: selectedDate,
+      time: data.get("time")?.toString().trim() || "ยังไม่ระบุเวลา",
+      location: data.get("location")?.toString().trim() || "รอระบุสถานที่",
+      owner: data.get("owner")?.toString().trim() || "ทีม PR",
       title,
       type: data.get("type").toString(),
       pillar: data.get("pillar").toString(),
