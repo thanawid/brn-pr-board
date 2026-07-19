@@ -557,6 +557,12 @@ function renderDay() {
             <h3>${escapeHtml(item.title)}</h3>
             ${item.note ? `<p>${escapeHtml(item.note)}</p>` : ""}
             <small>${escapeHtml([displayTime(item), displayLocation(item), displayOwner(item), displayResponsible(item), displayChannel(item), item.status].filter(Boolean).join(" · "))}</small>
+            <div class="card-actions work-ai-actions">
+              <button class="mini-button primary" type="button" data-ai-action="post">คิดโพสต์</button>
+              <button class="mini-button" type="button" data-ai-action="shots">ภาพที่ต้องถ่าย</button>
+              <button class="mini-button" type="button" data-ai-action="short">สคริปต์คลิป</button>
+              <button class="mini-button" type="button" data-ai-action="field">เช็กลิสต์</button>
+            </div>
           </article>
         `
         )

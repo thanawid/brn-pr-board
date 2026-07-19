@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&family=Anuphan:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -24,18 +24,31 @@
           <span class="brand-mark" aria-hidden="true"><b>BRN</b><em>PR</em></span>
           <span>
             <small>เทศบาลเมืองบางรักน้อย</small>
-            <strong>PR Content Calendar</strong>
+            <strong>Municipal PR Calendar</strong>
           </span>
         </a>
         <nav class="nav-tabs" aria-label="เมนูหลัก">
           <a href="#calendar" class="nav-link active">ปฏิทิน</a>
-          <a href="#ideas" class="nav-link">คิดคอนเทนต์</a>
-          <a href="#board" class="nav-link">บอร์ดงาน</a>
+          <a href="#ideas" class="nav-link">ไอเดียคอนเทนต์</a>
+          <a href="#board" class="nav-link">งานที่จดไว้</a>
           <a href="#prompt" class="nav-link">Prompt</a>
         </nav>
       </header>
 
       <main>
+        <section class="creator-stage" aria-label="พื้นที่นำปฏิทินงานประชาสัมพันธ์">
+          <div class="stage-copy">
+            <p class="eyebrow">Bangraknoi PR command calendar</p>
+            <h1>PR Calendar</h1>
+            <p>จดงานเทศบาลลงปฏิทินก่อน แล้วให้ผู้ช่วย PR แนะนำมุมคอนเทนต์ ภาพที่ควรถ่าย และ Prompt สำหรับเอาไปทำงานต่อ</p>
+          </div>
+          <div class="stage-objects" aria-hidden="true">
+            <span class="media-slab slab-one"></span>
+            <span class="media-slab slab-two"></span>
+            <span class="creator-mascot"><i></i></span>
+          </div>
+        </section>
+
         <section class="hero">
           <div class="hero-copy">
             <p class="eyebrow">Daily PR Command Center</p>
@@ -83,15 +96,15 @@
           <article class="panel calendar-panel">
             <div class="panel-head">
               <div>
-                <p class="eyebrow">Main calendar</p>
-                <h2 id="calendar-title">ปฏิทิน</h2>
+                <p class="eyebrow">Municipal work calendar</p>
+                <h2 id="calendar-title">ปฏิทินงานเทศบาล</h2>
               </div>
               <div class="calendar-head-actions">
                 <div class="calendar-assist" aria-label="วิธีใช้ปฏิทิน">
                   <span class="assist-mascot" aria-hidden="true"><i></i></span>
                   <span>
-                    <strong>คลิกดูงาน ดับเบิ้ลคลิกเพิ่ม</strong>
-                    <small>AI ช่วยคิดโพสต์ ภาพที่ต้องถ่าย และ Prompt ในแผงข้าง</small>
+                    <strong>จดงานเทศบาลลงวันที่</strong>
+                    <small>คลิกเพื่อดูงาน ดับเบิ้ลคลิกเพื่อเพิ่ม แล้วให้ AI ช่วยคิดคอนเทนต์ต่อ</small>
                   </span>
                 </div>
                 <div class="month-controls">
@@ -123,16 +136,16 @@
           <aside class="panel day-panel" aria-label="รายละเอียดของวันที่เลือก">
             <div class="panel-head tight">
               <div>
-                <p class="eyebrow">Day board</p>
+                <p class="eyebrow">Selected day</p>
                 <h2 id="selected-date-title">เลือกวันในปฏิทิน</h2>
               </div>
             </div>
 
             <div class="day-command-card">
               <div>
-                <span class="mini-label">Mission today</span>
-                <strong id="command-title">เลือกวันเพื่อดูภารกิจ</strong>
-                <p id="command-subtitle">ระบบจะสรุปว่า วันนี้มีงานอะไร อยู่ที่ไหน และทีมควรทำคอนเทนต์แบบไหน</p>
+                <span class="mini-label">งานของวันนี้</span>
+                <strong id="command-title">เลือกวันเพื่อดูงานเทศบาล</strong>
+                <p id="command-subtitle">ดูว่าวันนี้มีงานอะไร เวลาไหน ที่ไหน ใครเป็นเจ้าของงาน และทีม PR ควรเก็บภาพอะไรกลับมา</p>
               </div>
               <div class="command-facts">
                 <span id="command-time">เวลา: -</span>
@@ -146,7 +159,7 @@
 
             <div class="assistant-card">
               <div class="assistant-title">
-                <span class="mini-label">ผู้ช่วย PR</span>
+                <span class="mini-label">แนะนำคอนเทนต์จากงานนี้</span>
                 <h3 id="advice-title">วันนี้ควรเล่าอะไร</h3>
               </div>
               <p id="advice-angle"></p>
@@ -168,7 +181,7 @@
             </div>
 
             <form class="quick-form" id="quick-form">
-              <h3>เพิ่มงาน / โน้ตในวันนี้</h3>
+              <h3>จดงานเทศบาลลงวันนี้</h3>
               <label>
                 ชื่องาน
                 <input name="title" required placeholder="เช่น สำรวจจุดน้ำขัง / ประชุมชุมชน / นัดถ่ายคลิป" />
@@ -220,7 +233,7 @@
                 สิ่งที่ต้องเก็บ / หมายเหตุ
                 <textarea name="note" rows="3" placeholder="ภาพก่อน-หลัง, คนทำงาน, จุดที่แก้ไข, ข้อควรระวัง"></textarea>
               </label>
-              <button class="primary-button" type="submit">เพิ่มลงปฏิทิน</button>
+              <button class="primary-button" type="submit">จดลงปฏิทิน</button>
             </form>
           </aside>
         </section>
@@ -270,8 +283,8 @@
         <section id="board" class="panel board-panel">
           <div class="panel-head">
             <div>
-              <p class="eyebrow">Production board</p>
-              <h2>บอร์ดงานของทีม</h2>
+              <p class="eyebrow">Saved municipal work</p>
+              <h2>งานเทศบาลที่จดไว้</h2>
             </div>
             <button class="soft-button danger" id="reset-demo" type="button">คืนค่างานตัวอย่าง</button>
           </div>
@@ -320,12 +333,12 @@
     </div>
 
     <div class="work-modal" id="work-modal" aria-hidden="true">
-      <button class="modal-backdrop" type="button" data-close-modal aria-label="ปิดกระดานเพิ่มงาน"></button>
+      <button class="modal-backdrop" type="button" data-close-modal aria-label="ปิดหน้าต่างเพิ่มงาน"></button>
       <section class="modal-board" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="modal-head">
           <div>
-            <p class="eyebrow">Double-click day board</p>
-            <h2 id="modal-title">เพิ่มงานลงปฏิทิน</h2>
+            <p class="eyebrow">Add municipal work</p>
+            <h2 id="modal-title">จดงานเทศบาลลงปฏิทิน</h2>
             <p id="modal-date-title">เลือกวันที่จากปฏิทิน</p>
           </div>
           <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
@@ -391,7 +404,7 @@
             โน้ตเพิ่มเติม
             <textarea name="note" rows="4" placeholder="รายละเอียดหน้างาน ข้อควรระวัง ข้อมูลที่ต้องเช็กก่อนโพสต์"></textarea>
           </label>
-          <button class="primary-button" type="submit">เพิ่มขึ้นกระดาน</button>
+          <button class="primary-button" type="submit">จดงานลงวันนี้</button>
         </form>
       </section>
     </div>
