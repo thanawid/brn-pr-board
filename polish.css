@@ -1,0 +1,121 @@
+/* ============================================================
+   POLISH LAYER — ปรับสวย เพิ่มลูกเล่นมืออาชีพ (วางทับ ไม่แก้ของเดิม)
+   ============================================================ */
+
+/* ---------- 1) Design tokens ยกระดับ ---------- */
+:root{
+  --radius: 14px;
+  --font-display: "Kanit", "Anuphan", "Noto Sans Thai", sans-serif;
+  --shadow: 0 10px 24px rgba(43,13,70,.08), 0 28px 60px rgba(43,13,70,.1);
+  --grad-brand: linear-gradient(92deg, var(--purple) 5%, var(--purple-2) 42%, var(--orange) 100%);
+  --ring: 0 0 0 3px rgba(81,36,122,.22);
+}
+::selection{background:var(--purple-2);color:#fff}
+
+/* scrollbar มือโปร */
+*{scrollbar-width:thin;scrollbar-color:var(--purple-2) transparent}
+*::-webkit-scrollbar{width:9px;height:9px}
+*::-webkit-scrollbar-thumb{background:linear-gradient(var(--purple-2),var(--orange));border-radius:99px}
+*::-webkit-scrollbar-track{background:transparent}
+
+/* focus ให้เท่าเทียมทุกปุ่ม */
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:none!important;box-shadow:var(--ring)!important;border-radius:10px;
+}
+
+/* ---------- 2) Topbar กระจกลอย ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(247,244,250,.72);
+  transition:box-shadow .3s,background .3s;
+}
+.topbar.is-scrolled{box-shadow:0 10px 30px rgba(43,13,70,.12);background:rgba(255,255,255,.85)}
+
+/* ---------- 3) Hero / Stage: หัวเรื่องไล่เฉดแบรนด์ ---------- */
+.stage-copy h1,.hero h1{
+  background:var(--grad-brand);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  letter-spacing:-0.01em;
+}
+.stage-copy .eyebrow,.hero .eyebrow{color:var(--orange-dark);letter-spacing:.3em}
+.brand-banner,.brand-badge{
+  filter:drop-shadow(0 18px 30px rgba(43,13,70,.22));
+  animation:pl-float 6s ease-in-out infinite;
+}
+.brand-badge{animation-delay:-2.6s}
+@keyframes pl-float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(1.2deg)}}
+
+/* ---------- 4) ปุ่มหลัก: gradient + สปริง ---------- */
+.primary-button{
+  background:var(--grad-brand)!important;border:none!important;color:#fff!important;
+  box-shadow:0 6px 16px rgba(81,36,122,.35), inset 0 1px 0 rgba(255,255,255,.25)!important;
+  transition:transform .15s cubic-bezier(.2,.9,.3,1.4), box-shadow .15s, filter .15s!important;
+}
+.primary-button:hover{transform:translateY(-2px) scale(1.015);filter:brightness(1.07);
+  box-shadow:0 12px 26px rgba(81,36,122,.4), inset 0 1px 0 rgba(255,255,255,.25)!important}
+.primary-button:active{transform:translateY(1px) scale(.99)}
+.soft-button,.icon-button,.mini-button,.ai-actions button{
+  transition:transform .15s, box-shadow .15s, background .15s!important;
+}
+.soft-button:hover,.icon-button:hover,.mini-button:hover,.ai-actions button:hover{
+  transform:translateY(-2px);box-shadow:0 8px 18px rgba(43,13,70,.14);
+}
+.soft-button:active,.icon-button:active,.mini-button:active,.ai-actions button:active{transform:translateY(1px)}
+
+/* ---------- 5) ปฏิทิน: ลูกเล่นชัด ใช้งานจริง ---------- */
+.day-cell{transition:transform .16s, box-shadow .16s, border-color .16s!important}
+.day-cell:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(43,13,70,.14)}
+.day-cell.today{
+  box-shadow:0 0 0 2px var(--orange), 0 10px 24px rgba(255,111,34,.22)!important;
+  background:linear-gradient(180deg,#fff,#fff6ee)!important;
+}
+.day-cell.selected{
+  box-shadow:0 0 0 2.5px var(--purple-2), 0 12px 26px rgba(81,36,122,.2)!important;
+}
+.event-pill{border-radius:9px!important;font-weight:600!important}
+.today-tag{background:var(--grad-brand)!important;color:#fff!important}
+
+/* ---------- 6) การ์ดทุกใบ: ยกตัวนุ่ม ๆ ---------- */
+.panel{transition:box-shadow .25s}
+.day-item,.week-card,.focus-card,.board-task{
+  transition:transform .16s, box-shadow .16s, border-color .16s!important;
+}
+.day-item:hover,.week-card:hover,.focus-card:hover,.board-task:hover{
+  transform:translateY(-3px);box-shadow:0 14px 30px rgba(43,13,70,.13);
+}
+.day-command-card{
+  background:linear-gradient(150deg,#f6edff, #fdf3ff 45%, #fff3e6)!important;
+  border:1.5px solid rgba(81,36,122,.25)!important;
+}
+
+/* ---------- 7) ตัวเลขสรุป: gradient + นับวิ่ง (js) ---------- */
+.summary-strip span{
+  font-family:var(--font-display);font-weight:800;
+  background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+/* ---------- 8) Modal + Toast ---------- */
+.modal-backdrop{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.modal-board{animation:pl-pop .32s cubic-bezier(.2,.9,.3,1.25)}
+@keyframes pl-pop{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
+.toast{background:var(--grad-brand)!important;color:#fff!important;
+ box-shadow:0 16px 40px rgba(43,13,70,.35)!important}
+
+/* ---------- 9) Reveal ตอนเลื่อนถึง (js เติมคลาส) ---------- */
+.pl-fx{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.25,.1,.25,1),transform .7s cubic-bezier(.25,.1,.25,1)}
+.pl-fx.pl-in{opacity:1;transform:none}
+
+/* ---------- 10) เก็บงานเล็ก ๆ ---------- */
+img{max-width:100%}
+.panel-head h2,.assistant-title h3,.quick-form-head h3{font-family:var(--font-display)}
+input,select,textarea{transition:border-color .15s, box-shadow .15s}
+
+@media (prefers-reduced-motion:reduce){
+  .pl-fx{opacity:1;transform:none;transition:none}
+  .brand-banner,.brand-badge{animation:none}
+  .day-cell:hover,.day-item:hover,.week-card:hover,.focus-card:hover,.board-task:hover,
+  .primary-button:hover,.soft-button:hover,.icon-button:hover,.mini-button:hover{transform:none}
+}
