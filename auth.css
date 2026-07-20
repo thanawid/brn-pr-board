@@ -465,3 +465,153 @@ html[data-user-role="staff"] [data-admin-only] {
 .account-menu[hidden] {
   display: none !important;
 }
+
+/* V8 — compact login, no visible email autofill */
+.auth-card {
+  width: min(100%, 440px);
+  padding: clamp(20px, 4.5vw, 30px);
+  border-radius: 24px;
+}
+
+.auth-brand {
+  gap: 11px;
+  margin-bottom: 18px;
+}
+
+.auth-brand img {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+}
+
+.auth-brand strong {
+  font-size: clamp(18px, 4vw, 22px);
+}
+
+.auth-copy-compact {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.auth-copy-compact .auth-eyebrow {
+  margin-bottom: 4px;
+  font-size: 10px;
+  letter-spacing: .2em;
+}
+
+.auth-copy-compact h1 {
+  font-size: clamp(28px, 7vw, 36px);
+}
+
+.auth-login-options-compact {
+  gap: 14px;
+}
+
+.staff-login-form-compact {
+  gap: 11px;
+}
+
+.compact-login-field > span:first-child {
+  color: #5a4862;
+  font-family: "Kanit", sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.staff-login-form-compact input {
+  min-height: 50px;
+  border-radius: 13px;
+  background: #fbf9fc;
+}
+
+.staff-login-form-compact input::placeholder {
+  color: #aaa0ae;
+}
+
+.staff-login-form-compact .staff-signin-button {
+  min-height: 50px;
+  margin-top: 2px;
+}
+
+.auth-autofill-trap {
+  position: fixed;
+  left: -10000px;
+  top: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.compact-admin-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding-top: 12px;
+  border-top: 1px solid #ece5ef;
+}
+
+.compact-admin-login > span {
+  color: #8a7e90;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.google-signin-button-compact {
+  width: auto;
+  min-height: 36px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  box-shadow: none;
+  font-size: 11px;
+}
+
+.google-signin-button-compact svg {
+  width: 17px;
+  height: 17px;
+}
+
+.google-signin-button-compact:hover {
+  transform: none;
+  box-shadow: 0 6px 16px rgba(43,13,70,.1);
+}
+
+.auth-note {
+  margin-top: 12px;
+  font-size: 10px;
+}
+
+.account-menu-profile span {
+  color: #776b7d;
+}
+
+@media (max-width: 420px) {
+  .auth-card {
+    padding: 18px 16px;
+    border-radius: 20px;
+  }
+
+  .auth-brand {
+    margin-bottom: 14px;
+  }
+
+  .auth-brand img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .compact-admin-login {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .google-signin-button-compact {
+    width: 100%;
+  }
+}

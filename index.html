@@ -35,27 +35,42 @@
           </div>
         </div>
 
-        <div class="auth-copy">
-          <p class="auth-eyebrow">พื้นที่ทำงานประชาสัมพันธ์</p>
-          <h1 id="auth-title">เข้าสู่ระบบก่อนเริ่มงาน</h1>
-          <p>ผู้ดูแลระบบเข้าสู่ระบบด้วย Google ส่วนเจ้าหน้าที่ใช้ชื่อผู้ใช้ PR และรหัสผ่านที่ได้รับ</p>
+        <div class="auth-copy auth-copy-compact">
+          <p class="auth-eyebrow">BRN PR WORKSPACE</p>
+          <h1 id="auth-title">เข้าสู่ระบบ</h1>
         </div>
 
         <div class="auth-status" id="auth-status" role="status" aria-live="polite">
           <span class="auth-spinner" aria-hidden="true"></span>
-          <span id="auth-status-text">กำลังเชื่อมต่อ Firebase…</span>
+          <span id="auth-status-text">กำลังเชื่อมต่อระบบ…</span>
         </div>
 
-        <div class="auth-login-options" id="auth-login-options" hidden>
-          <section class="auth-login-section" aria-labelledby="admin-login-title">
-            <div class="auth-section-heading">
-              <span class="auth-section-icon" aria-hidden="true">A</span>
-              <div>
-                <strong id="admin-login-title">ผู้ดูแลระบบ</strong>
-                <small>สำหรับบัญชี Google ของแอดมิน</small>
-              </div>
+        <div class="auth-login-options auth-login-options-compact" id="auth-login-options" hidden>
+          <form class="staff-login-form staff-login-form-compact" id="staff-login-form" autocomplete="off" novalidate>
+            <div class="auth-autofill-trap" aria-hidden="true">
+              <input type="text" name="email" tabindex="-1" autocomplete="username" />
+              <input type="password" name="password" tabindex="-1" autocomplete="current-password" />
             </div>
-            <button class="google-signin-button" id="google-signin-button" type="button">
+
+            <label class="compact-login-field">
+              <span>USER</span>
+              <input id="staff-username" name="brn_user_code" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="pr01" maxlength="20" data-lpignore="true" data-1p-ignore="true" readonly required />
+            </label>
+
+            <label class="compact-login-field">
+              <span>PASSWORD</span>
+              <span class="password-field">
+                <input id="staff-password" name="brn_access_code" type="password" autocomplete="new-password" placeholder="••••••••" minlength="6" data-lpignore="true" data-1p-ignore="true" readonly required />
+                <button id="toggle-password" type="button" aria-label="แสดงรหัสผ่าน" aria-pressed="false">แสดง</button>
+              </span>
+            </label>
+
+            <button class="staff-signin-button" id="staff-signin-button" type="submit">เข้าสู่ระบบ</button>
+          </form>
+
+          <div class="compact-admin-login">
+            <span>สำหรับผู้ดูแลระบบ</span>
+            <button class="google-signin-button google-signin-button-compact" id="google-signin-button" type="button">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path fill="#4285F4" d="M21.6 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.39a4.61 4.61 0 0 1-2 3.02v2.52h3.24c1.9-1.75 2.97-4.33 2.97-7.37Z"/>
                 <path fill="#34A853" d="M12 22c2.7 0 4.97-.9 6.63-2.4l-3.24-2.52c-.9.6-2.05.96-3.39.96-2.61 0-4.82-1.76-5.61-4.13H3.04v2.6A10 10 0 0 0 12 22Z"/>
@@ -64,33 +79,7 @@
               </svg>
               <span>เข้าสู่ระบบด้วย Google</span>
             </button>
-          </section>
-
-          <div class="auth-divider" role="separator"><span>หรือ</span></div>
-
-          <section class="auth-login-section" aria-labelledby="staff-login-title">
-            <div class="auth-section-heading">
-              <span class="auth-section-icon staff" aria-hidden="true">PR</span>
-              <div>
-                <strong id="staff-login-title">เจ้าหน้าที่ประชาสัมพันธ์</strong>
-                <small>ใช้ชื่อผู้ใช้ pr01–pr05</small>
-              </div>
-            </div>
-            <form class="staff-login-form" id="staff-login-form" novalidate>
-              <label>
-                <span>ชื่อผู้ใช้</span>
-                <input id="staff-username" name="username" type="text" inputmode="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="เช่น pr01" maxlength="20" required />
-              </label>
-              <label>
-                <span>รหัสผ่าน</span>
-                <span class="password-field">
-                  <input id="staff-password" name="password" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่าน" minlength="6" required />
-                  <button id="toggle-password" type="button" aria-label="แสดงรหัสผ่าน" aria-pressed="false">แสดง</button>
-                </span>
-              </label>
-              <button class="staff-signin-button" id="staff-signin-button" type="submit">เข้าสู่ระบบเจ้าหน้าที่</button>
-            </form>
-          </section>
+          </div>
         </div>
 
         <button class="auth-secondary-button" id="auth-retry-button" type="button" hidden>ลองเชื่อมต่ออีกครั้ง</button>
@@ -137,7 +126,7 @@
           <div class="account-menu" id="account-menu" hidden>
             <div class="account-menu-profile">
               <strong id="account-menu-name">ผู้ใช้งาน</strong>
-              <span id="account-email"></span>
+              <span id="account-email">บทบาทผู้ใช้งาน</span>
             </div>
             <button id="signout-button" type="button">ออกจากระบบ</button>
           </div>

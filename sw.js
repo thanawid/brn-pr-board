@@ -1,4 +1,4 @@
-const CACHE = "brn-pr-v7-dual-auth";
+const CACHE = "brn-pr-v8-compact-login";
 const CORE = [
   "./",
   "./index.html",
