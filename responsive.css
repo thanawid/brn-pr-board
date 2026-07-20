@@ -1,0 +1,873 @@
+/* ============================================================
+   RESPONSIVE FOUNDATION — final layout layer
+   Loaded last to normalize the accumulated desktop/mobile rules.
+   ============================================================ */
+
+:root {
+  --tap-size: 44px;
+  --page-gutter: clamp(10px, 2vw, 24px);
+}
+
+html {
+  min-width: 0;
+  overflow-x: clip;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 92px;
+}
+
+body {
+  min-width: 0;
+  overflow-x: clip;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+svg,
+canvas,
+video {
+  max-width: 100%;
+}
+
+button,
+a,
+select,
+summary,
+input[type="file"] {
+  touch-action: manipulation;
+}
+
+button,
+.nav-link,
+input,
+select,
+textarea,
+summary {
+  min-height: var(--tap-size);
+}
+
+.app-shell {
+  width: min(1560px, calc(100% - (var(--page-gutter) * 2))) !important;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-bottom: max(38px, env(safe-area-inset-bottom));
+}
+
+main,
+section,
+article,
+aside,
+.panel,
+.panel-head > *,
+.calendar-head-actions,
+.day-panel,
+.prompt-grid > *,
+.ideas-grid > * {
+  min-width: 0;
+}
+
+/* Header */
+.topbar {
+  width: 100%;
+  max-width: 100%;
+}
+
+.brand {
+  min-width: 0 !important;
+}
+
+.brand > span:last-child {
+  min-width: 0;
+}
+
+.brand strong {
+  max-width: none !important;
+}
+
+.nav-tabs {
+  min-width: 0;
+}
+
+.nav-link {
+  display: inline-grid;
+  place-items: center;
+}
+
+/* Hero stage */
+.creator-stage {
+  width: 100%;
+  min-width: 0;
+}
+
+.stage-copy {
+  min-width: 0;
+}
+
+.stage-copy h1 {
+  overflow-wrap: anywhere;
+}
+
+.stage-copy p {
+  max-width: 68ch !important;
+}
+
+/* Calendar desktop/tablet normalization */
+.work-grid {
+  min-width: 0;
+}
+
+.calendar-scroll {
+  width: 100%;
+  max-width: 100%;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+.weekdays,
+.calendar-grid {
+  width: max(100%, 896px);
+}
+
+.day-cell {
+  min-width: 0;
+}
+
+.event-pill,
+.day-item h3,
+.board-task strong,
+.week-card h3,
+.focus-card h3 {
+  overflow-wrap: anywhere;
+}
+
+.calendar-toolbar,
+.panel-head,
+.quick-form-head,
+.modal-head {
+  min-width: 0;
+}
+
+#month-select {
+  max-width: 100%;
+}
+
+/* Cards and forms */
+.form-row,
+.form-row.three,
+.form-row.four,
+.advice-grid,
+.command-facts,
+.ai-actions {
+  min-width: 0;
+}
+
+input,
+select,
+textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.prompt-output {
+  min-height: 340px;
+}
+
+.board-grid {
+  max-width: 100%;
+}
+
+/* Modal is usable with browser chrome and virtual keyboards */
+.work-modal {
+  height: 100dvh;
+  min-height: 100vh;
+  padding:
+    max(10px, env(safe-area-inset-top))
+    max(10px, env(safe-area-inset-right))
+    max(10px, env(safe-area-inset-bottom))
+    max(10px, env(safe-area-inset-left));
+}
+
+.modal-board {
+  width: min(980px, 100%);
+  max-height: calc(100dvh - 20px);
+  overscroll-behavior: contain;
+}
+
+/* Wide tablets and compact laptops */
+@media (max-width: 1320px) {
+  .work-grid,
+  .ideas-grid,
+  .prompt-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .calendar-panel,
+  .day-panel {
+    min-height: auto !important;
+    max-height: none !important;
+  }
+
+  .day-panel {
+    position: static !important;
+  }
+
+  .calendar-scroll {
+    max-height: none !important;
+  }
+}
+
+@media (max-width: 980px) {
+  :root {
+    --page-gutter: 12px;
+  }
+
+  .topbar {
+    gap: 10px;
+  }
+
+  .brand strong {
+    font-size: clamp(16px, 2.5vw, 20px);
+  }
+
+  .creator-stage {
+    grid-template-columns: minmax(0, 1fr) 190px !important;
+    min-height: 210px;
+    padding: 22px;
+  }
+
+  .mascot-hero {
+    width: min(210px, 28vw);
+  }
+
+  .daily-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .calendar-panel .panel-head,
+  .calendar-head-actions {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    justify-items: stretch !important;
+  }
+
+  .month-controls {
+    width: 100%;
+  }
+
+  .today-inline {
+    flex: 1;
+  }
+
+  .weekdays,
+  .calendar-grid {
+    width: max(100%, 700px);
+    min-width: 700px !important;
+    grid-template-columns: repeat(7, minmax(100px, 1fr)) !important;
+  }
+
+  .day-cell {
+    min-height: 104px !important;
+  }
+
+  .summary-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Phones and small portrait tablets: compact calendar, no page overflow */
+@media (max-width: 760px) {
+  :root {
+    --page-gutter: 6px;
+    --tap-size: 44px;
+  }
+
+  html {
+    scroll-padding-top: 8px;
+  }
+
+  body {
+    background-size: 28px 28px, 28px 28px, auto !important;
+  }
+
+  .app-shell {
+    width: calc(100% - 12px) !important;
+    padding-top: 6px !important;
+  }
+
+  .topbar {
+    position: relative !important;
+    top: auto !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px;
+    padding: 9px !important;
+    border-radius: 16px !important;
+  }
+
+  .brand {
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+    gap: 9px;
+  }
+
+  .brand .brand-mark,
+  .brand .brand-mark-image {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 12px;
+  }
+
+  .brand small {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .brand strong {
+    font-size: clamp(15px, 4.6vw, 18px) !important;
+    line-height: 1.2;
+    white-space: normal !important;
+  }
+
+  .nav-tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    gap: 6px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 2px 1px 5px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    flex: 0 0 auto;
+    min-width: max-content;
+    min-height: 40px;
+    padding: 8px 13px !important;
+    font-size: 12.5px !important;
+    scroll-snap-align: start;
+  }
+
+  main {
+    gap: 10px !important;
+  }
+
+  .creator-stage {
+    display: block !important;
+    min-height: auto !important;
+    padding: 18px 16px !important;
+    border-radius: 18px !important;
+    box-shadow: 0 9px 0 #180723, 0 22px 46px rgba(43, 13, 70, 0.22) !important;
+  }
+
+  #stage3d,
+  .creator-stage .stage-objects {
+    display: none !important;
+  }
+
+  .creator-stage::after {
+    background: linear-gradient(100deg, rgba(22, 8, 40, 0.78), rgba(43, 13, 70, 0.28)) !important;
+  }
+
+  .stage-copy .eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    letter-spacing: 0.06em !important;
+    font-size: 10px !important;
+    line-height: 1.45;
+  }
+
+  .onair {
+    margin-right: 0;
+    padding: 4px 9px;
+    letter-spacing: 0.12em;
+    font-size: 10px;
+  }
+
+  .stage-copy h1 {
+    margin: 8px 0 7px !important;
+    font-size: clamp(34px, 12vw, 46px) !important;
+    line-height: 1 !important;
+  }
+
+  .stage-copy p {
+    margin: 0;
+    font-size: clamp(13px, 3.8vw, 15px) !important;
+    line-height: 1.65 !important;
+  }
+
+  .panel,
+  .calendar-panel,
+  .day-panel,
+  .content-advice-panel,
+  .weekly-panel,
+  .monthly-panel,
+  .board-panel,
+  .prompt-grid .panel {
+    border-radius: 14px !important;
+  }
+
+  .calendar-panel,
+  .day-panel,
+  .weekly-panel,
+  .monthly-panel,
+  .board-panel,
+  .prompt-grid .panel,
+  .content-advice-panel {
+    padding: 12px !important;
+  }
+
+  .panel-head {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 9px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .panel-head h2 {
+    font-size: clamp(21px, 6vw, 27px) !important;
+  }
+
+  .panel-head > button,
+  .day-add-button {
+    width: 100%;
+  }
+
+  .calendar-assist {
+    grid-template-columns: 36px minmax(0, 1fr) !important;
+    padding: 8px !important;
+  }
+
+  .assist-mascot-img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .calendar-assist small {
+    display: none;
+  }
+
+  .month-controls {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 44px 44px;
+    gap: 7px;
+  }
+
+  .calendar-toolbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 9px;
+    padding: 9px !important;
+  }
+
+  .legend {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5px !important;
+    font-size: 10px !important;
+  }
+
+  .legend span {
+    align-items: flex-start;
+    line-height: 1.35;
+  }
+
+  .dot {
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    margin-top: 2px;
+  }
+
+  #month-select {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 16px;
+  }
+
+  .month-pulse {
+    grid-template-columns: repeat(16, minmax(0, 1fr)) !important;
+    gap: 3px !important;
+    padding: 6px !important;
+  }
+
+  .pulse-dot {
+    min-height: 10px !important;
+    height: 10px !important;
+  }
+
+  .calendar-scroll {
+    overflow-x: hidden !important;
+    border-radius: 11px !important;
+    scrollbar-gutter: auto;
+  }
+
+  .weekdays,
+  .calendar-grid {
+    width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  }
+
+  .weekdays span {
+    min-width: 0;
+    padding: 8px 1px !important;
+    font-size: 0 !important;
+  }
+
+  .weekdays span::after {
+    font-size: 10px;
+  }
+
+  .weekdays span:nth-child(1)::after { content: "จ."; }
+  .weekdays span:nth-child(2)::after { content: "อ."; }
+  .weekdays span:nth-child(3)::after { content: "พ."; }
+  .weekdays span:nth-child(4)::after { content: "พฤ."; }
+  .weekdays span:nth-child(5)::after { content: "ศ."; }
+  .weekdays span:nth-child(6)::after { content: "ส."; }
+  .weekdays span:nth-child(7)::after { content: "อา."; }
+
+  .calendar-grid {
+    grid-auto-rows: minmax(62px, auto) !important;
+  }
+
+  .day-cell {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-content: flex-start !important;
+    align-items: flex-start;
+    gap: 3px !important;
+    min-height: 62px !important;
+    padding: 5px 4px !important;
+    border-radius: 0 !important;
+    box-shadow: none;
+  }
+
+  .day-cell:hover {
+    transform: none !important;
+  }
+
+  .day-number {
+    flex: 0 0 100%;
+    width: 100%;
+    font-size: 12px !important;
+    line-height: 1.1;
+  }
+
+  .today-tag {
+    display: none;
+  }
+
+  .day-cell .event-pill {
+    display: inline-block !important;
+    flex: 0 0 7px;
+    width: 7px;
+    height: 7px;
+    min-height: 7px;
+    margin: 0;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    -webkit-line-clamp: unset !important;
+  }
+
+  .day-cell .event-pill.more {
+    flex-basis: auto;
+    width: auto;
+    height: auto;
+    min-height: 14px;
+    padding: 1px 3px !important;
+    border-radius: 4px !important;
+    font-size: 8px !important;
+    line-height: 1.2 !important;
+  }
+
+  .day-command-card {
+    padding: 12px !important;
+  }
+
+  .command-facts,
+  .advice-grid,
+  .ai-actions,
+  .form-row,
+  .form-row.three,
+  .form-row.four,
+  .modal-form .form-row,
+  .modal-form .form-row.four {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .ai-actions {
+    display: grid !important;
+    gap: 7px;
+  }
+
+  .ai-actions button {
+    width: 100%;
+  }
+
+  .summary-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .summary-strip article {
+    padding: 12px !important;
+  }
+
+  .summary-strip span {
+    font-size: 28px !important;
+  }
+
+  .summary-strip p {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .ideas-grid,
+  .prompt-grid {
+    gap: 10px !important;
+  }
+
+  .week-card {
+    grid-template-columns: 62px minmax(0, 1fr) !important;
+    gap: 9px;
+    align-items: start;
+  }
+
+  .week-date {
+    min-height: 62px;
+  }
+
+  .week-card .card-actions {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mini-button {
+    min-height: 40px;
+  }
+
+  .board-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    overflow-x: visible !important;
+    gap: 9px !important;
+  }
+
+  .board-column {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .prompt-output {
+    min-height: 300px;
+    font-size: 15px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* prevents automatic zoom on iOS */
+  }
+
+  .work-modal {
+    align-items: end !important;
+    padding: 0 !important;
+  }
+
+  .modal-board {
+    width: 100% !important;
+    max-height: 94dvh !important;
+    border-radius: 18px 18px 0 0 !important;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .modal-head,
+  .modal-form {
+    padding: 14px !important;
+  }
+
+  .modal-close {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .toast {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    max-width: none !important;
+    text-align: center;
+  }
+
+  .site-footer {
+    margin-top: 22px;
+    padding: 20px 10px max(24px, env(safe-area-inset-bottom));
+    font-size: 11px;
+    line-height: 1.65;
+  }
+
+  /* Never leave content invisible if an observer is throttled on mobile. */
+  .pl-fx {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .app-shell {
+    width: calc(100% - 8px) !important;
+  }
+
+  .topbar {
+    padding: 7px !important;
+  }
+
+  .nav-link {
+    padding-inline: 11px !important;
+  }
+
+  .creator-stage {
+    padding: 15px 13px !important;
+  }
+
+  .stage-copy h1 {
+    font-size: 34px !important;
+  }
+
+  .calendar-panel,
+  .day-panel,
+  .weekly-panel,
+  .monthly-panel,
+  .board-panel,
+  .prompt-grid .panel,
+  .content-advice-panel {
+    padding: 10px !important;
+  }
+
+  .legend {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calendar-grid {
+    grid-auto-rows: minmax(58px, auto) !important;
+  }
+
+  .day-cell {
+    min-height: 58px !important;
+    padding-inline: 3px !important;
+  }
+
+  .day-number {
+    font-size: 11px !important;
+  }
+
+  .summary-strip {
+    gap: 6px !important;
+  }
+}
+
+/* Landscape phones: keep controls reachable without an oversized hero. */
+@media (max-width: 900px) and (orientation: landscape) {
+  .creator-stage {
+    min-height: auto !important;
+    padding-block: 14px !important;
+  }
+
+  .stage-copy h1 {
+    font-size: 38px !important;
+  }
+
+  .stage-copy p {
+    line-height: 1.5 !important;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .day-cell:hover,
+  .day-item:hover,
+  .week-card:hover,
+  .focus-card:hover,
+  .board-task:hover,
+  .primary-button:hover,
+  .soft-button:hover,
+  .icon-button:hover,
+  .mini-button:hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  .topbar,
+  .creator-stage,
+  .work-modal,
+  .toast,
+  button,
+  .quick-form,
+  .prompt-form {
+    display: none !important;
+  }
+
+  body,
+  .app-shell {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .panel,
+  .summary-strip article {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}
+
+/* Portrait tablets: use two clean header rows instead of squeezing the brand. */
+@media (min-width: 761px) and (max-width: 840px) {
+  .topbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px;
+  }
+
+  .brand strong {
+    white-space: normal !important;
+  }
+
+  .nav-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .nav-link {
+    min-width: 0;
+    padding-inline: 8px;
+    text-align: center;
+  }
+}

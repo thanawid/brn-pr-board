@@ -5,8 +5,17 @@
   const stage=canvas && canvas.parentElement;
   if(!canvas||!stage) return;
   const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const compact=matchMedia("(max-width: 760px)").matches;
+  const saveData=Boolean(navigator.connection && navigator.connection.saveData);
+  if(compact || saveData){ canvas.hidden=true; return; }
 
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  let renderer;
+  try {
+    renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  } catch {
+    canvas.hidden=true;
+    return;
+  }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));
   const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(55,1,0.1,100);
