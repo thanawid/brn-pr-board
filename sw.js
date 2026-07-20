@@ -1,4 +1,4 @@
-const CACHE = "brn-pr-v6-firebase-auth";
+const CACHE = "brn-pr-v7-dual-auth";
 const CORE = [
   "./",
   "./index.html",

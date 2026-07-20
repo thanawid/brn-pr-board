@@ -294,3 +294,174 @@ html.auth-authenticated .auth-gate {
   .auth-spinner { animation: none; }
   .google-signin-button { transition: none; }
 }
+
+/* Dual login: Google admin + internal PR staff */
+.auth-login-options {
+  display: grid;
+  gap: 18px;
+}
+
+.auth-login-section {
+  display: grid;
+  gap: 13px;
+}
+
+.auth-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.auth-section-heading > div,
+.auth-section-heading strong,
+.auth-section-heading small {
+  display: block;
+}
+
+.auth-section-heading strong {
+  color: #321044;
+  font: 700 15px "Kanit", sans-serif;
+}
+
+.auth-section-heading small {
+  margin-top: 1px;
+  color: #7c7181;
+  font-size: 11px;
+}
+
+.auth-section-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 11px;
+  color: #fff;
+  background: #51247a;
+  font: 800 15px "Kanit", sans-serif;
+  box-shadow: 0 7px 18px rgba(81,36,122,.18);
+}
+
+.auth-section-icon.staff {
+  background: linear-gradient(135deg, #ff6f22, #d84c12);
+  font-size: 11px;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #9a8fa0;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: #e8e1eb;
+}
+
+.staff-login-form {
+  display: grid;
+  gap: 12px;
+}
+
+.staff-login-form label {
+  display: grid;
+  gap: 6px;
+  color: #4e4055;
+  font: 600 12px "Kanit", sans-serif;
+}
+
+.staff-login-form input {
+  width: 100%;
+  min-height: 48px;
+  box-sizing: border-box;
+  border: 1px solid #d9d0dd;
+  border-radius: 13px;
+  padding: 10px 13px;
+  outline: none;
+  color: #2e2135;
+  background: #fff;
+  font: 500 15px "Noto Sans Thai", sans-serif;
+  transition: border-color .16s ease, box-shadow .16s ease;
+}
+
+.staff-login-form input:focus {
+  border-color: #755092;
+  box-shadow: 0 0 0 3px rgba(81,36,122,.12);
+}
+
+.staff-login-form input:disabled {
+  opacity: .65;
+  cursor: wait;
+}
+
+.password-field {
+  position: relative;
+  display: block;
+}
+
+.password-field input {
+  padding-right: 65px;
+}
+
+.password-field button {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  min-width: 51px;
+  min-height: 34px;
+  border: 0;
+  border-radius: 9px;
+  transform: translateY(-50%);
+  color: #613c79;
+  background: #f1ebf4;
+  font: 700 11px "Kanit", sans-serif;
+  cursor: pointer;
+}
+
+.staff-signin-button {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(100deg, #51247a, #ff6f22);
+  box-shadow: 0 10px 24px rgba(81,36,122,.17);
+  font: 700 15px "Kanit", sans-serif;
+  cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.staff-signin-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(81,36,122,.23);
+}
+
+.staff-signin-button:disabled {
+  opacity: .62;
+  cursor: wait;
+  transform: none;
+}
+
+html[data-user-role="staff"] [data-admin-only] {
+  display: none !important;
+}
+
+@media (max-width: 420px) {
+  .auth-card { padding: 20px 17px; }
+  .auth-copy > p:last-child { font-size: 13px; }
+  .auth-login-options { gap: 15px; }
+}
+
+.auth-login-options[hidden],
+.auth-user-blocked[hidden],
+.auth-status[hidden],
+.account-area[hidden],
+.account-menu[hidden] {
+  display: none !important;
+}

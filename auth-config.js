@@ -1,23 +1,23 @@
 /*
  * BRN PR Workspace — Firebase Authentication configuration
  *
- * accessMode:
- *   "google-only" = บัญชี Google ทุกบัญชีเข้าสู่หน้าเว็บได้
- *   "allowlist"   = เข้าได้เฉพาะอีเมลใน allowedEmails
- *
- * เมื่อต้องการจำกัดผู้ใช้ ให้เปลี่ยน accessMode เป็น "allowlist"
- * แล้วเพิ่มอีเมลลงใน allowedEmails ด้านล่าง
+ * ผู้ดูแลระบบเข้าใช้งานด้วย Google
+ * เจ้าหน้าที่เข้าใช้งานด้วยชื่อผู้ใช้ pr01–pr05 และรหัสผ่านที่ตั้งใน Firebase
  */
 window.BRN_AUTH_CONFIG = {
   appName: "BRN PR Workspace",
-  accessMode: "allowlist",
-
-  allowedEmails: [
-    "thanawid@gmail.com",
-  ],
+  internalEmailDomain: "brn.local",
 
   adminEmails: [
     "thanawid@gmail.com",
+  ],
+
+  staffAccounts: [
+    { username: "pr01", displayName: "เจ้าหน้าที่ PR 01" },
+    { username: "pr02", displayName: "เจ้าหน้าที่ PR 02" },
+    { username: "pr03", displayName: "เจ้าหน้าที่ PR 03" },
+    { username: "pr04", displayName: "เจ้าหน้าที่ PR 04" },
+    { username: "pr05", displayName: "เจ้าหน้าที่ PR 05" },
   ],
 
   firebaseConfig: {

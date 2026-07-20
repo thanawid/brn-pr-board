@@ -38,7 +38,7 @@
         <div class="auth-copy">
           <p class="auth-eyebrow">พื้นที่ทำงานประชาสัมพันธ์</p>
           <h1 id="auth-title">เข้าสู่ระบบก่อนเริ่มงาน</h1>
-          <p>ใช้บัญชี Google เพื่อเปิดปฏิทิน งานที่จดไว้ และเครื่องมือสร้าง Prompt บนอุปกรณ์นี้</p>
+          <p>ผู้ดูแลระบบเข้าสู่ระบบด้วย Google ส่วนเจ้าหน้าที่ใช้ชื่อผู้ใช้ PR และรหัสผ่านที่ได้รับ</p>
         </div>
 
         <div class="auth-status" id="auth-status" role="status" aria-live="polite">
@@ -46,15 +46,52 @@
           <span id="auth-status-text">กำลังเชื่อมต่อ Firebase…</span>
         </div>
 
-        <button class="google-signin-button" id="google-signin-button" type="button" hidden>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="#4285F4" d="M21.6 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.39a4.61 4.61 0 0 1-2 3.02v2.52h3.24c1.9-1.75 2.97-4.33 2.97-7.37Z"/>
-            <path fill="#34A853" d="M12 22c2.7 0 4.97-.9 6.63-2.4l-3.24-2.52c-.9.6-2.05.96-3.39.96-2.61 0-4.82-1.76-5.61-4.13H3.04v2.6A10 10 0 0 0 12 22Z"/>
-            <path fill="#FBBC05" d="M6.39 13.91A6.01 6.01 0 0 1 6.08 12c0-.66.11-1.3.31-1.91v-2.6H3.04A10 10 0 0 0 2 12c0 1.61.39 3.14 1.04 4.51l3.35-2.6Z"/>
-            <path fill="#EA4335" d="M12 5.96c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.63 9.63 0 0 0 12 2a10 10 0 0 0-8.96 5.49l3.35 2.6C7.18 7.72 9.39 5.96 12 5.96Z"/>
-          </svg>
-          <span>เข้าสู่ระบบด้วย Google</span>
-        </button>
+        <div class="auth-login-options" id="auth-login-options" hidden>
+          <section class="auth-login-section" aria-labelledby="admin-login-title">
+            <div class="auth-section-heading">
+              <span class="auth-section-icon" aria-hidden="true">A</span>
+              <div>
+                <strong id="admin-login-title">ผู้ดูแลระบบ</strong>
+                <small>สำหรับบัญชี Google ของแอดมิน</small>
+              </div>
+            </div>
+            <button class="google-signin-button" id="google-signin-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M21.6 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.39a4.61 4.61 0 0 1-2 3.02v2.52h3.24c1.9-1.75 2.97-4.33 2.97-7.37Z"/>
+                <path fill="#34A853" d="M12 22c2.7 0 4.97-.9 6.63-2.4l-3.24-2.52c-.9.6-2.05.96-3.39.96-2.61 0-4.82-1.76-5.61-4.13H3.04v2.6A10 10 0 0 0 12 22Z"/>
+                <path fill="#FBBC05" d="M6.39 13.91A6.01 6.01 0 0 1 6.08 12c0-.66.11-1.3.31-1.91v-2.6H3.04A10 10 0 0 0 2 12c0 1.61.39 3.14 1.04 4.51l3.35-2.6Z"/>
+                <path fill="#EA4335" d="M12 5.96c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.63 9.63 0 0 0 12 2a10 10 0 0 0-8.96 5.49l3.35 2.6C7.18 7.72 9.39 5.96 12 5.96Z"/>
+              </svg>
+              <span>เข้าสู่ระบบด้วย Google</span>
+            </button>
+          </section>
+
+          <div class="auth-divider" role="separator"><span>หรือ</span></div>
+
+          <section class="auth-login-section" aria-labelledby="staff-login-title">
+            <div class="auth-section-heading">
+              <span class="auth-section-icon staff" aria-hidden="true">PR</span>
+              <div>
+                <strong id="staff-login-title">เจ้าหน้าที่ประชาสัมพันธ์</strong>
+                <small>ใช้ชื่อผู้ใช้ pr01–pr05</small>
+              </div>
+            </div>
+            <form class="staff-login-form" id="staff-login-form" novalidate>
+              <label>
+                <span>ชื่อผู้ใช้</span>
+                <input id="staff-username" name="username" type="text" inputmode="text" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="เช่น pr01" maxlength="20" required />
+              </label>
+              <label>
+                <span>รหัสผ่าน</span>
+                <span class="password-field">
+                  <input id="staff-password" name="password" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่าน" minlength="6" required />
+                  <button id="toggle-password" type="button" aria-label="แสดงรหัสผ่าน" aria-pressed="false">แสดง</button>
+                </span>
+              </label>
+              <button class="staff-signin-button" id="staff-signin-button" type="submit">เข้าสู่ระบบเจ้าหน้าที่</button>
+            </form>
+          </section>
+        </div>
 
         <button class="auth-secondary-button" id="auth-retry-button" type="button" hidden>ลองเชื่อมต่ออีกครั้ง</button>
 

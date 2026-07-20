@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   setPersistence,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
@@ -13,7 +14,13 @@ const config = window.BRN_AUTH_CONFIG;
 const root = document.documentElement;
 const gate = document.getElementById("auth-gate");
 const appShell = document.querySelector(".app-shell");
+const loginOptions = document.getElementById("auth-login-options");
 const signInButton = document.getElementById("google-signin-button");
+const staffForm = document.getElementById("staff-login-form");
+const staffUsername = document.getElementById("staff-username");
+const staffPassword = document.getElementById("staff-password");
+const staffSignInButton = document.getElementById("staff-signin-button");
+const togglePasswordButton = document.getElementById("toggle-password");
 const retryButton = document.getElementById("auth-retry-button");
 const statusBox = document.getElementById("auth-status");
 const statusText = document.getElementById("auth-status-text");
@@ -41,18 +48,47 @@ function normalizeEmail(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+function normalizeUsername(value) {
+  return String(value || "").trim().toLowerCase().replace(/\s+/g, "");
+}
+
 function normalizedList(values) {
   return Array.isArray(values) ? values.map(normalizeEmail).filter(Boolean) : [];
 }
 
-function isAllowed(user) {
-  const mode = config?.accessMode === "allowlist" ? "allowlist" : "google-only";
-  if (mode === "google-only") return true;
-  return normalizedList(config?.allowedEmails).includes(normalizeEmail(user?.email));
+function internalDomain() {
+  return String(config?.internalEmailDomain || "brn.local").trim().toLowerCase();
 }
 
-function isAdmin(user) {
-  return normalizedList(config?.adminEmails).includes(normalizeEmail(user?.email));
+function staffAccounts() {
+  return Array.isArray(config?.staffAccounts) ? config.staffAccounts : [];
+}
+
+function staffAccountByUsername(username) {
+  const normalized = normalizeUsername(username);
+  return staffAccounts().find((account) => normalizeUsername(account?.username) === normalized) || null;
+}
+
+function staffAccountByEmail(email) {
+  const normalized = normalizeEmail(email);
+  return staffAccounts().find((account) => `${normalizeUsername(account?.username)}@${internalDomain()}` === normalized) || null;
+}
+
+function emailForUsername(username) {
+  return `${normalizeUsername(username)}@${internalDomain()}`;
+}
+
+function roleFor(user) {
+  const email = normalizeEmail(user?.email);
+  if (normalizedList(config?.adminEmails).includes(email)) return "admin";
+  if (staffAccountByEmail(email)) return "staff";
+  return "blocked";
+}
+
+function displayNameFor(user) {
+  const staff = staffAccountByEmail(user?.email);
+  if (staff) return staff.displayName || String(staff.username).toUpperCase();
+  return user?.displayName || user?.email || "ผู้ใช้งาน";
 }
 
 function initials(name, email) {
@@ -62,12 +98,13 @@ function initials(name, email) {
 
 function avatarDataUri(label) {
   const text = encodeURIComponent(label);
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#51247a"/><stop offset="1" stop-color="#ff6f22"/></linearGradient></defs><rect width="96" height="96" rx="48" fill="url(#g)"/><text x="48" y="57" text-anchor="middle" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="white">${text}</text></svg>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#51247a"/><stop offset="1" stop-color="#ff6f22"/></linearGradient></defs><rect width="96" height="96" rx="48" fill="url(#g)"/><text x="48" y="57" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="white">${text}</text></svg>`;
   return `data:image/svg+xml;charset=UTF-8,${svg}`;
 }
 
 function photoFor(user) {
-  return user?.photoURL || avatarDataUri(initials(user?.displayName, user?.email));
+  const name = displayNameFor(user);
+  return user?.photoURL || avatarDataUri(initials(name, user?.email));
 }
 
 function setStatus(message, state = "loading") {
@@ -76,44 +113,55 @@ function setStatus(message, state = "loading") {
   statusBox.hidden = false;
 }
 
-function showSignedOut(message = "พร้อมเข้าสู่ระบบด้วยบัญชี Google") {
+function setSigningState(active) {
+  signingIn = active;
+  signInButton.disabled = active;
+  staffSignInButton.disabled = active;
+  staffUsername.disabled = active;
+  staffPassword.disabled = active;
+}
+
+function showSignedOut(message = "เลือกรูปแบบการเข้าสู่ระบบ") {
   root.classList.remove("auth-pending", "auth-authenticated", "auth-blocked");
   root.classList.add("auth-signed-out");
+  delete root.dataset.userRole;
   gate.hidden = false;
   appShell.setAttribute("aria-hidden", "true");
   accountArea.hidden = true;
   blockedBox.hidden = true;
-  signInButton.hidden = false;
-  signInButton.disabled = false;
+  loginOptions.hidden = false;
   retryButton.hidden = true;
+  setSigningState(false);
   setStatus(message, "ready");
 }
 
 function showBlocked(user) {
   root.classList.remove("auth-pending", "auth-authenticated", "auth-signed-out");
   root.classList.add("auth-blocked");
+  delete root.dataset.userRole;
   gate.hidden = false;
   appShell.setAttribute("aria-hidden", "true");
   accountArea.hidden = true;
-  signInButton.hidden = true;
+  loginOptions.hidden = true;
   retryButton.hidden = true;
   statusBox.hidden = true;
   blockedBox.hidden = false;
   blockedPhoto.src = photoFor(user);
-  blockedPhoto.alt = user?.displayName ? `รูปของ ${user.displayName}` : "รูปบัญชี Google";
+  blockedPhoto.alt = `รูปของ ${displayNameFor(user)}`;
   blockedName.textContent = "บัญชีนี้ยังไม่ได้รับอนุญาต";
   blockedEmail.textContent = user?.email || "ไม่พบอีเมลของบัญชี";
 }
 
-function updateAccountUi(user) {
+function updateAccountUi(user, role) {
+  const name = displayNameFor(user);
   const photo = photoFor(user);
-  const role = isAdmin(user) ? "ผู้ดูแลระบบ" : "ผู้ใช้งาน";
+  const roleLabel = role === "admin" ? "ผู้ดูแลระบบ" : "เจ้าหน้าที่ประชาสัมพันธ์";
   accountPhoto.src = photo;
-  accountPhoto.alt = user?.displayName ? `รูปของ ${user.displayName}` : "รูปผู้ใช้งาน";
-  accountName.textContent = user?.displayName || user?.email || "ผู้ใช้งาน";
-  accountRole.textContent = role;
-  accountMenuName.textContent = user?.displayName || "ผู้ใช้งาน";
-  accountEmail.textContent = user?.email || "";
+  accountPhoto.alt = `รูปของ ${name}`;
+  accountName.textContent = name;
+  accountRole.textContent = roleLabel;
+  accountMenuName.textContent = name;
+  accountEmail.textContent = role === "staff" ? normalizeUsername(user?.email?.split("@")[0]) : (user?.email || "");
   accountArea.hidden = false;
 }
 
@@ -141,17 +189,26 @@ async function loadWorkspace() {
   for (const file of files) await loadScript(file);
 }
 
-async function showWorkspace(user) {
+async function showWorkspace(user, role) {
   root.classList.remove("auth-pending", "auth-signed-out", "auth-blocked");
   root.classList.add("auth-authenticated");
+  root.dataset.userRole = role;
   gate.hidden = true;
   appShell.setAttribute("aria-hidden", "false");
   blockedBox.hidden = true;
-  updateAccountUi(user);
+  window.BRN_CURRENT_USER = {
+    uid: user.uid,
+    email: normalizeEmail(user.email),
+    username: role === "staff" ? normalizeUsername(user.email?.split("@")[0]) : null,
+    displayName: displayNameFor(user),
+    role,
+  };
+  updateAccountUi(user, role);
   await loadWorkspace();
+  document.dispatchEvent(new CustomEvent("brn-auth-ready", { detail: window.BRN_CURRENT_USER }));
 }
 
-function readableError(error) {
+function readableError(error, method = "google") {
   const code = String(error?.code || "");
   if (code.includes("popup-closed-by-user") || code.includes("cancelled-popup-request")) {
     return "ยกเลิกการเลือกบัญชีแล้ว กดเข้าสู่ระบบเมื่อต้องการลองอีกครั้ง";
@@ -165,23 +222,60 @@ function readableError(error) {
   if (code.includes("unauthorized-domain")) {
     return "โดเมนนี้ยังไม่ได้รับอนุญาตใน Firebase Authentication";
   }
-  return "เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง";
+  if (code.includes("invalid-credential") || code.includes("wrong-password") || code.includes("user-not-found")) {
+    return "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+  }
+  if (code.includes("too-many-requests")) {
+    return "ลองเข้าสู่ระบบหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่";
+  }
+  if (code.includes("user-disabled")) {
+    return "บัญชีนี้ถูกปิดใช้งาน กรุณาติดต่อผู้ดูแลระบบ";
+  }
+  return method === "staff" ? "เข้าสู่ระบบเจ้าหน้าที่ไม่สำเร็จ กรุณาลองใหม่" : "เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง";
 }
 
-async function startSignIn() {
+async function startGoogleSignIn() {
   if (signingIn) return;
-  signingIn = true;
-  signInButton.disabled = true;
+  setSigningState(true);
   setStatus("กำลังเปิดหน้าต่างเลือกบัญชี Google…", "loading");
   try {
     provider.setCustomParameters({ prompt: "select_account" });
     await signInWithPopup(auth, provider);
   } catch (error) {
-    showSignedOut(readableError(error));
+    showSignedOut(readableError(error, "google"));
     statusBox.dataset.state = "error";
   } finally {
-    signingIn = false;
-    signInButton.disabled = false;
+    setSigningState(false);
+  }
+}
+
+async function startStaffSignIn(event) {
+  event.preventDefault();
+  if (signingIn) return;
+  const username = normalizeUsername(staffUsername.value);
+  const password = staffPassword.value;
+  if (!username || !password) {
+    setStatus("กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบ", "error");
+    (!username ? staffUsername : staffPassword).focus();
+    return;
+  }
+  if (!staffAccountByUsername(username)) {
+    setStatus("ไม่พบชื่อผู้ใช้นี้ในระบบ", "error");
+    staffUsername.focus();
+    staffUsername.select();
+    return;
+  }
+  setSigningState(true);
+  setStatus(`กำลังตรวจสอบบัญชี ${username}…`, "loading");
+  try {
+    await signInWithEmailAndPassword(auth, emailForUsername(username), password);
+    staffPassword.value = "";
+  } catch (error) {
+    setStatus(readableError(error, "staff"), "error");
+    staffPassword.focus();
+    staffPassword.select();
+  } finally {
+    setSigningState(false);
   }
 }
 
@@ -201,32 +295,43 @@ async function initializeAuthentication() {
   onAuthStateChanged(auth, async (user) => {
     window.__BRN_AUTH_READY__ = true;
     if (!user) {
+      window.BRN_CURRENT_USER = null;
       showSignedOut();
       return;
     }
-    if (!isAllowed(user)) {
+    const role = roleFor(user);
+    if (role === "blocked") {
       showBlocked(user);
       return;
     }
     try {
-      await showWorkspace(user);
+      await showWorkspace(user, role);
     } catch (error) {
       console.error(error);
       root.classList.remove("auth-authenticated");
       root.classList.add("auth-signed-out");
       gate.hidden = false;
+      loginOptions.hidden = true;
       setStatus("เข้าสู่ระบบแล้ว แต่โหลดพื้นที่ทำงานไม่สำเร็จ กรุณารีเฟรชหน้าเว็บ", "error");
       retryButton.hidden = false;
     }
   });
 }
 
-signInButton.addEventListener("click", startSignIn);
+signInButton.addEventListener("click", startGoogleSignIn);
+staffForm.addEventListener("submit", startStaffSignIn);
 retryButton.addEventListener("click", () => location.reload());
+togglePasswordButton.addEventListener("click", () => {
+  const showing = staffPassword.type === "text";
+  staffPassword.type = showing ? "password" : "text";
+  togglePasswordButton.textContent = showing ? "แสดง" : "ซ่อน";
+  togglePasswordButton.setAttribute("aria-label", showing ? "แสดงรหัสผ่าน" : "ซ่อนรหัสผ่าน");
+  togglePasswordButton.setAttribute("aria-pressed", String(!showing));
+  staffPassword.focus();
+});
 otherAccountButton.addEventListener("click", async () => {
   await signOut(auth);
-  showSignedOut("ออกจากบัญชีเดิมแล้ว กรุณาเลือกบัญชี Google ที่ได้รับอนุญาต");
-  startSignIn();
+  showSignedOut("ออกจากบัญชีเดิมแล้ว กรุณาเข้าสู่ระบบด้วยบัญชีที่ได้รับอนุญาต");
 });
 signOutButton.addEventListener("click", async () => {
   closeAccountMenu();
@@ -249,7 +354,7 @@ initializeAuthentication().catch((error) => {
   window.__BRN_AUTH_READY__ = true;
   root.classList.remove("auth-pending");
   root.classList.add("auth-signed-out");
-  signInButton.hidden = true;
+  loginOptions.hidden = true;
   retryButton.hidden = false;
   setStatus("ตั้งค่าระบบเข้าสู่ระบบไม่สำเร็จ กรุณาตรวจไฟล์ auth-config.js", "error");
 });
