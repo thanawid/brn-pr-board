@@ -267,6 +267,7 @@ const defaultEntries = [
 let selectedDate = toISO(safeToday());
 let activeMonth = parseISO(selectedDate).getMonth();
 let entries = loadEntries();
+let editingEntryId = null;
 let ideaOffset = 0;
 
 function event(date, title, type, pillar, note) {
@@ -601,6 +602,7 @@ function renderDay() {
               <button class="mini-button" type="button" data-ai-action="shots">ภาพที่ต้องถ่าย</button>
               <button class="mini-button" type="button" data-ai-action="short">สคริปต์คลิป</button>
               <button class="mini-button" type="button" data-ai-action="field">เช็กลิสต์</button>
+              ${item.source === "user" ? `<button class="mini-button" type="button" data-edit-entry="${item.id}">✏️ แก้ไข</button><button class="mini-button danger-mini" type="button" data-delete-entry="${item.id}">ลบ</button>` : ""}
             </div>
           </article>
         `
@@ -710,6 +712,7 @@ function renderBoard() {
                       <div class="board-actions">
                         <button type="button" data-open-date="${item.date}">เปิด</button>
                         ${status !== statuses[statuses.length - 1] ? `<button type="button" data-next-status="${item.id}">ต่อไป</button>` : ""}
+                        <button type="button" data-edit-entry="${item.id}">แก้ไข</button>
                         <button type="button" data-delete-entry="${item.id}">ลบ</button>
                       </div>
                     </article>
@@ -961,6 +964,12 @@ function openWorkModal(iso = selectedDate) {
   const form = document.getElementById("modal-work-form");
   if (!modal || !form) return;
 
+  editingEntryId = null;
+  const modalTitleEl = document.getElementById("modal-title");
+  if (modalTitleEl) modalTitleEl.textContent = "จดงานเทศบาลลงปฏิทิน";
+  const modalSubmitEl = form.querySelector('button[type="submit"]');
+  if (modalSubmitEl) modalSubmitEl.textContent = "จดงานลงวันนี้";
+
   selectedDate = iso;
   activeMonth = parseISO(iso).getMonth();
   const advice = adviceForDate(iso);
@@ -977,6 +986,47 @@ function openWorkModal(iso = selectedDate) {
   modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
   setTimeout(() => form.elements.title.focus(), 40);
+}
+
+function openEditModal(id) {
+  const item = entries.find((entry) => entry.id === id);
+  if (!item) return;
+  openWorkModal(item.date);
+  const form = document.getElementById("modal-work-form");
+  if (!form) return;
+  editingEntryId = id;
+  form.elements.title.value = item.title || "";
+  form.elements.time.value = item.time === "ยังไม่ระบุเวลา" ? "" : item.time || "";
+  form.elements.location.value = item.location === "รอระบุสถานที่" ? "" : item.location || "";
+  form.elements.owner.value = item.owner === "รอระบุเจ้าของงาน" ? "" : item.owner || "";
+  form.elements.responsible.value = item.responsible || "";
+  if (form.elements.noteQuick) form.elements.noteQuick.value = "";
+  if (form.elements.note) form.elements.note.value = item.note || "";
+  setSelectValue(form.elements.type, item.type);
+  setSelectValue(form.elements.pillar, item.pillar);
+  setSelectValue(form.elements.channel, item.channel);
+  setSelectValue(form.elements.status, item.status);
+  const modalTitleEl = document.getElementById("modal-title");
+  if (modalTitleEl) modalTitleEl.textContent = "แก้ไขงานในปฏิทิน";
+  const modalSubmitEl = form.querySelector('button[type="submit"]');
+  if (modalSubmitEl) modalSubmitEl.textContent = "บันทึกการแก้ไข";
+}
+
+function updateEntry(id, patch) {
+  if (!patch) return;
+  const old = entries.find((entry) => entry.id === id);
+  if (!old) {
+    addEntry(patch);
+    return;
+  }
+  const updated = { ...patch, id, image: patch.image || old.image };
+  entries = entries.map((entry) => (entry.id === id ? updated : entry));
+  editingEntryId = null;
+  saveEntries();
+  selectedDate = updated.date;
+  activeMonth = parseISO(updated.date).getMonth();
+  rerender();
+  toast(`อัปเดต "${updated.title}" เรียบร้อย`);
 }
 
 function closeWorkModal() {
@@ -1101,6 +1151,12 @@ function bindEvents() {
       return;
     }
 
+    const editButton = event.target.closest("[data-edit-entry]");
+    if (editButton) {
+      openEditModal(editButton.dataset.editEntry);
+      return;
+    }
+
     const deleteButton = event.target.closest("[data-delete-entry]");
     if (deleteButton) {
       const id = deleteButton.dataset.deleteEntry;
@@ -1156,7 +1212,11 @@ function bindEvents() {
     if (submitter) submitter.disabled = true;
     try {
       const entry = await entryFromForm(form, selectedDate);
-      addEntry(entry);
+      if (editingEntryId) {
+        if (entry) updateEntry(editingEntryId, entry);
+      } else {
+        addEntry(entry);
+      }
       if (entry) closeWorkModal();
       if (entry) form.reset();
     } catch {

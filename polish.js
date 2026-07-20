@@ -51,3 +51,10 @@
     tc.addEventListener("pointerleave",()=>tc.style.transform="none");
   }
 })();
+
+/* PWA: ลงทะเบียน service worker (ใช้ได้บน https/GitHub Pages) */
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  });
+}

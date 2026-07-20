@@ -119,3 +119,71 @@ input,select,textarea{transition:border-color .15s, box-shadow .15s}
   .day-cell:hover,.day-item:hover,.week-card:hover,.focus-card:hover,.board-task:hover,
   .primary-button:hover,.soft-button:hover,.icon-button:hover,.mini-button:hover{transform:none}
 }
+
+/* ---------- 11) พื้นหลังออโรร่าขยับเบา ๆ ---------- */
+body::before{
+  content:"";position:fixed;inset:-22%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38% 32% at 16% 20%, rgba(81,36,122,.17), transparent 70%),
+    radial-gradient(34% 30% at 84% 14%, rgba(255,111,34,.16), transparent 70%),
+    radial-gradient(40% 34% at 70% 86%, rgba(255,211,109,.22), transparent 70%),
+    radial-gradient(30% 28% at 24% 78%, rgba(27,138,114,.1), transparent 70%);
+  filter:blur(34px);
+  animation:pl-aura 20s ease-in-out infinite alternate;
+}
+@keyframes pl-aura{
+  from{transform:translate3d(-2.5%,-1.5%,0) scale(1) rotate(0.001deg)}
+  to{transform:translate3d(2.5%,2%,0) scale(1.07) rotate(0.001deg)}
+}
+@media (prefers-reduced-motion:reduce){body::before{animation:none}}
+
+/* ปุ่มลบสีเตือน */
+.mini-button.danger-mini{border-color:rgba(220,75,62,.45)!important;color:var(--red)!important}
+.mini-button.danger-mini:hover{background:rgba(220,75,62,.08)!important}
+
+/* ============================================================
+   FIX PACK — แก้ตัวหนังสือหาย/สีตีกัน + ระเบียบ topbar
+   ============================================================ */
+
+/* topbar: แถบแก้วพื้นสว่าง → ตัวหนังสือต้องเข้ม */
+.topbar .brand small{color:var(--muted)!important}
+.topbar .brand strong{color:var(--purple)!important;background:none!important;-webkit-text-fill-color:var(--purple)!important}
+.topbar .nav-link{color:var(--purple-2)!important;border-color:rgba(81,36,122,.3)!important;opacity:1!important}
+.topbar .nav-link:hover{background:rgba(81,36,122,.08)!important}
+.topbar .nav-link.active{background:var(--grad-brand)!important;color:#fff!important;border-color:transparent!important}
+
+/* โลโก้: ล็อกขนาด ไม่ให้ทับข้อความ */
+.brand{align-items:center;gap:12px}
+.brand .brand-mark,.brand .brand-mark-image{width:48px;height:48px;flex:none;overflow:hidden;border-radius:14px;display:inline-flex;align-items:center;justify-content:center}
+.brand .brand-mark-image img{width:100%;height:100%;object-fit:contain;display:block}
+.brand > span:last-child{min-width:0}
+.brand strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw}
+
+/* hero stage (พื้นม่วงเข้ม): หัวเรื่องต้องสว่าง */
+.stage-copy h1{
+  background:linear-gradient(180deg,#ffffff 20%,#ffd9b0 100%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+}
+.stage-copy .eyebrow{color:var(--gold)!important}
+
+/* การ์ด "งานของวันนี้": คืนพื้นม่วงเข้มให้ตัวหนังสือขาวอ่านออก */
+.day-command-card{
+  background:linear-gradient(150deg,#2b0d46,#51247a 62%,#6a2f8f)!important;
+  border:1px solid rgba(255,255,255,.22)!important;color:#fff!important;
+}
+.day-command-card .mini-label{color:rgba(255,255,255,.72)!important}
+.day-command-card strong,.day-command-card p{color:#fff!important}
+.day-command-card p{color:rgba(255,255,255,.82)!important}
+.command-facts span{background:rgba(255,255,255,.14)!important;border:1px solid rgba(255,255,255,.32)!important;color:#fff!important}
+
+/* กล่องวันในแผนรายสัปดาห์: ตัวอักษรขาวชัดบนพื้นม่วง */
+.week-date span,.week-date strong{color:#fff!important}
+
+/* ============ ส่วนลิขสิทธิ์ท้ายเว็บ ============ */
+.site-footer{
+  margin:34px auto 0;padding:26px 20px 34px;text-align:center;
+  border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;line-height:1.9;
+}
+.site-footer strong{color:var(--purple);font-family:var(--font-display)}
+.site-footer a{color:var(--orange-dark);text-decoration:none;font-weight:600}
