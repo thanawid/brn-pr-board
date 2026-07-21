@@ -1,0 +1,9 @@
+{
+  "name": "brn-pr-board",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BRN PR Board — calendar-first workspace for Bangraknoi municipal PR team",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}

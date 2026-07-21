@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>BRN PR Board V1.0.0</title>
+    <meta
+      name="description"
+      content="ปฏิทินไทยและผู้ช่วยคิดคอนเทนต์สำหรับทีมประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย"
+    />
+    <meta name="theme-color" content="#2b0d46" />
+    <script src="./auth-bootstrap.js"></script>
+    <link rel="icon" type="image/png" href="./assets/logoBN-02.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&family=Anuphan:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./polish.css" />
+    <link rel="stylesheet" href="./responsive.css" />
+    <link rel="stylesheet" href="./auth.css" />
+    <link rel="stylesheet" href="./refresh.css?v=1.0.0" />
+  </head>
+  <body>
+    <section class="auth-gate" id="auth-gate" aria-labelledby="auth-title">
+      <div class="auth-card">
+        <div class="auth-brand">
+          <img src="./assets/logoBN-02.png" alt="ตราเทศบาลเมืองบางรักน้อย" />
+          <div>
+            <small>เทศบาลเมืองบางรักน้อย</small>
+            <strong>BRN PR Board</strong>
+          </div>
+        </div>
+
+        <div class="auth-copy auth-copy-compact">
+          <p class="auth-eyebrow">BRN PR BOARD</p>
+          <h1 id="auth-title">เข้าสู่ระบบ</h1>
+        </div>
+
+        <div class="auth-status" id="auth-status" role="status" aria-live="polite">
+          <span class="auth-spinner" aria-hidden="true"></span>
+          <span id="auth-status-text">กำลังเชื่อมต่อระบบ…</span>
+        </div>
+
+        <div class="auth-login-options auth-login-options-compact" id="auth-login-options" hidden>
+          <form class="staff-login-form staff-login-form-compact" id="staff-login-form" autocomplete="off" novalidate>
+            <div class="auth-autofill-trap" aria-hidden="true">
+              <input type="text" name="email" tabindex="-1" autocomplete="username" />
+              <input type="password" name="password" tabindex="-1" autocomplete="current-password" />
+            </div>
+
+            <label class="compact-login-field">
+              <span>USER</span>
+              <input id="staff-username" name="brn_user_code" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="" maxlength="20" data-lpignore="true" data-1p-ignore="true" readonly required />
+            </label>
+
+            <label class="compact-login-field">
+              <span>PASSWORD</span>
+              <span class="password-field">
+                <input id="staff-password" name="brn_access_code" type="password" autocomplete="new-password" placeholder="" minlength="6" data-lpignore="true" data-1p-ignore="true" readonly required />
+                <button id="toggle-password" type="button" aria-label="แสดงรหัสผ่าน" aria-pressed="false">แสดง</button>
+              </span>
+            </label>
+
+            <button class="staff-signin-button" id="staff-signin-button" type="submit">เข้าสู่ระบบ</button>
+          </form>
+
+          <div class="compact-admin-login">
+            <span>สำหรับผู้ดูแลระบบ</span>
+            <button class="google-signin-button google-signin-button-compact" id="google-signin-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M21.6 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.39a4.61 4.61 0 0 1-2 3.02v2.52h3.24c1.9-1.75 2.97-4.33 2.97-7.37Z"/>
+                <path fill="#34A853" d="M12 22c2.7 0 4.97-.9 6.63-2.4l-3.24-2.52c-.9.6-2.05.96-3.39.96-2.61 0-4.82-1.76-5.61-4.13H3.04v2.6A10 10 0 0 0 12 22Z"/>
+                <path fill="#FBBC05" d="M6.39 13.91A6.01 6.01 0 0 1 6.08 12c0-.66.11-1.3.31-1.91v-2.6H3.04A10 10 0 0 0 2 12c0 1.61.39 3.14 1.04 4.51l3.35-2.6Z"/>
+                <path fill="#EA4335" d="M12 5.96c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.63 9.63 0 0 0 12 2a10 10 0 0 0-8.96 5.49l3.35 2.6C7.18 7.72 9.39 5.96 12 5.96Z"/>
+              </svg>
+              <span>เข้าสู่ระบบด้วย Google</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="auth-secondary-button" id="auth-retry-button" type="button" hidden>ลองเชื่อมต่ออีกครั้ง</button>
+
+        <div class="auth-user-blocked" id="auth-user-blocked" hidden>
+          <img id="blocked-user-photo" alt="" />
+          <div>
+            <strong id="blocked-user-name">บัญชีนี้ยังไม่ได้รับอนุญาต</strong>
+            <span id="blocked-user-email"></span>
+          </div>
+          <button type="button" id="use-other-account-button">ใช้บัญชีอื่น</button>
+        </div>
+
+        <p class="auth-note">ระบบจะจำการเข้าสู่ระบบบนอุปกรณ์นี้จนกว่าคุณจะกดออกจากระบบ</p>
+      </div>
+    </section>
+
+    <div class="app-shell" aria-hidden="true">
+      <header class="topbar">
+        <a class="brand" href="#calendar" aria-label="กลับไปหน้าปฏิทิน">
+          <span class="brand-mark brand-mark-image" aria-hidden="true">
+            <img src="./assets/logoBN-02.png" alt="" />
+          </span>
+          <span>
+            <small>เทศบาลเมืองบางรักน้อย</small>
+            <strong>BRN PR Board</strong>
+          </span>
+        </a>
+        <nav class="nav-tabs" aria-label="เมนูหลัก">
+          <a href="#calendar" class="nav-link active">ปฏิทินงาน</a>
+          <a href="#content-advice" class="nav-link">แนวทางวันนี้</a>
+        </nav>
+        <div class="account-area" id="account-area" hidden>
+          <button class="account-button" id="account-button" type="button" aria-expanded="false" aria-controls="account-menu">
+            <img id="account-photo" alt="" />
+            <span>
+              <strong id="account-name">ผู้ใช้งาน</strong>
+              <small id="account-role">Google Account</small>
+            </span>
+            <i aria-hidden="true">⌄</i>
+          </button>
+          <div class="account-menu" id="account-menu" hidden>
+            <div class="account-menu-profile">
+              <strong id="account-menu-name">ผู้ใช้งาน</strong>
+              <span id="account-email">บทบาทผู้ใช้งาน</span>
+            </div>
+            <button id="signout-button" type="button">ออกจากระบบ</button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div class="ambient-orb orb-one" aria-hidden="true"></div>
+        <div class="ambient-orb orb-two" aria-hidden="true"></div>
+        <section class="creator-stage" aria-label="พื้นที่นำปฏิทินงานประชาสัมพันธ์">
+          <div class="stage-copy">
+            <p class="eyebrow"><span class="onair"><i></i>ON AIR</span> กระดานงานประชาสัมพันธ์ของทีม</p>
+            <h1>PR Calendar</h1>
+            <p>BangraknoiNews อยู่ในปฏิทินเดียวกับงานเทศบาล จดงานก่อน แล้วให้ผู้ช่วย PR แนะนำมุมคอนเทนต์ ภาพที่ควรถ่าย และ Prompt สำหรับเอาไปทำงานต่อ</p>
+          </div>
+          <canvas id="stage3d" aria-hidden="true"></canvas>
+          <div class="stage-objects brand-stage" aria-hidden="true">
+            <img class="mascot-hero" src="./assets/mascot.png" alt="" />
+            <img class="brand-badge badge-mini" src="./assets/logoBN-02.png" alt="" />
+          </div>
+        </section>
+
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Daily PR Command Center</p>
+            <h1>เปิดมาแล้วรู้เลย วันนี้ต้องสื่อสารอะไร</h1>
+            <p>
+              วันที่ วันสำคัญ งานเทศบาล สถานที่ สิ่งที่ต้องถ่าย และ Prompt อยู่ในทางเดียวกัน
+              ให้ทีม PR เห็นแผนวันนี้ก่อน แล้วค่อยขยายเป็นรายสัปดาห์หรือรายเดือน
+            </p>
+          </div>
+          <div class="today-card" aria-label="สรุปวันนี้">
+            <span id="today-weekday">วันนี้</span>
+            <strong id="today-number">--</strong>
+            <small id="today-month">กำลังโหลดวันที่</small>
+            <button id="go-today" type="button">กลับมาวันนี้</button>
+          </div>
+          
+        </section>
+
+        <section class="daily-strip" aria-label="สรุปงานประชาสัมพันธ์ของวันที่เลือก">
+          <article class="daily-main">
+            <span>วันนี้ทีมต้องรู้</span>
+            <strong id="pulse-title">กำลังโหลดประเด็น</strong>
+            <p id="pulse-date">เลือกวันในปฏิทินเพื่อดูแผนของวันนั้น</p>
+          </article>
+          <article>
+            <span>ที่ไหน</span>
+            <strong id="pulse-location">-</strong>
+          </article>
+          <article>
+            <span>ทำอะไร</span>
+            <strong id="pulse-action">-</strong>
+          </article>
+          <article>
+            <span>ช่องทาง</span>
+            <strong id="pulse-channel">-</strong>
+          </article>
+        </section>
+
+        <section id="calendar" class="work-grid">
+          <article class="panel calendar-panel">
+            <div class="panel-head">
+              <div class="calendar-title-wrap">
+                <p class="eyebrow">TEAM WORK CALENDAR</p>
+                <h2 id="calendar-title">ปฏิทินงานเทศบาล</h2>
+                <p class="calendar-lead">คลิกวันที่เพื่อเพิ่มงาน แล้วระบบจะแนะนำแนวทางถ่ายภาพและคลิปให้ด้านล่าง</p>
+              </div>
+              <div class="calendar-head-actions">
+                <div class="calendar-visual" aria-hidden="true">
+                  <span class="float-chip chip-photo">ภาพ</span>
+                  <span class="float-chip chip-video">คลิป</span>
+                  <span class="float-chip chip-remind">แจ้งเตือน</span>
+                  <img class="assist-mascot-img" src="./assets/mascot.png" alt="" />
+                </div>
+                <div class="month-controls">
+                  <button class="soft-button today-inline" id="go-today-inline" type="button">วันนี้</button>
+                  <button class="icon-button" id="prev-month" type="button" aria-label="เดือนก่อนหน้า">‹</button>
+                  <button class="icon-button" id="next-month" type="button" aria-label="เดือนถัดไป">›</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="calendar-toolbar">
+              <div class="legend">
+                <span><i class="dot holiday"></i>วันหยุด/วันสำคัญ</span>
+                <span><i class="dot buddhist"></i>วันพระ</span>
+                <span><i class="dot work"></i>งานทีม</span>
+              </div>
+              <select id="month-select" aria-label="เลือกเดือน"></select>
+            </div>
+            <div class="month-pulse" id="month-pulse" aria-label="ภาพรวมงานในเดือนนี้" hidden></div>
+
+            <div class="calendar-scroll">
+              <div class="weekdays" aria-hidden="true">
+                <span>จันทร์</span><span>อังคาร</span><span>พุธ</span><span>พฤหัส</span>
+                <span>ศุกร์</span><span>เสาร์</span><span>อาทิตย์</span>
+              </div>
+              <div class="calendar-grid" id="calendar-grid"></div>
+            </div>
+          </article>
+
+          <aside class="panel day-panel" aria-label="รายละเอียดของวันที่เลือก">
+            <div class="panel-head tight">
+              <div>
+                <p class="eyebrow">Selected day</p>
+                <h2 id="selected-date-title">เลือกวันในปฏิทิน</h2>
+              </div>
+              <button class="primary-button day-add-button" type="button" data-focus-quick-add>จดงานวันนี้</button>
+            </div>
+
+            <div class="day-command-card">
+              <div>
+                <span class="mini-label">งานของวันนี้</span>
+                <strong id="command-title">เลือกวันเพื่อดูงานเทศบาล</strong>
+                <p id="command-subtitle">ดูว่าวันนี้มีงานอะไร เวลาไหน ที่ไหน ใครเป็นเจ้าของงาน และทีม PR ควรเก็บภาพอะไรกลับมา</p>
+              </div>
+              <div class="command-facts">
+                <span id="command-time">เวลา: -</span>
+                <span id="command-location">สถานที่: -</span>
+                <span id="command-owner">เจ้าของงาน: ทีม PR</span>
+                <span id="command-responsible">ผู้รับผิดชอบ: ทีม PR</span>
+              </div>
+            </div>
+
+            <div id="day-items" class="day-items"></div>
+
+            <form class="quick-form" id="quick-form">
+              <div class="quick-form-head">
+                <h3>จดงานในวันที่เลือก</h3>
+                <button class="soft-button" type="button" data-open-work-modal>กรอกละเอียด</button>
+              </div>
+              <label>
+                ชื่องาน
+                <input name="title" required placeholder="เช่น สำรวจจุดน้ำขัง / ประชุมชุมชน / นัดถ่ายคลิป" />
+              </label>
+              <div class="form-row">
+                <label>
+                  เวลา
+                  <input name="time" placeholder="เช่น 09.00 น." />
+                </label>
+                <label>
+                  สถานที่
+                  <input name="location" placeholder="เช่น ซอยบางรักน้อย 12 / วัด / ชุมชน..." />
+                </label>
+              </div>
+              <details class="quick-extra">
+                <summary>เพิ่มภาพ / เจ้าของงาน / สิ่งที่ต้องถ่าย</summary>
+                <div class="form-row">
+                  <label>
+                    เจ้าของงาน
+                    <input name="owner" placeholder="เช่น กองช่าง / สำนักปลัด" />
+                  </label>
+                  <label>
+                    ผู้รับผิดชอบ
+                    <input name="responsible" placeholder="เช่น งานประชาสัมพันธ์ / ช่างภาพ" />
+                  </label>
+                </div>
+                <label>
+                  ภาพประกอบการ์ด
+                  <input name="image" type="file" accept="image/*" />
+                </label>
+                <label>
+                  สิ่งที่ต้องเก็บ
+                  <textarea name="note" rows="2" placeholder="เช่น ภาพก่อน-หลัง, คนทำงาน, จุดที่แก้ไข"></textarea>
+                </label>
+              </details>
+              <button class="primary-button" type="submit">จดลงปฏิทิน</button>
+            </form>
+          </aside>
+        </section>
+
+        <section id="content-advice" class="panel content-advice-panel" aria-label="คำแนะนำคอนเทนต์สำหรับวันที่เลือก">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Content helper</p>
+              <h2>แนวทางของวันที่เลือก</h2>
+            </div>
+            <button class="soft-button content-month-button" id="shuffle-week" type="button">คอนเทนต์แนะนำเดือนนี้</button><button id="use-day-prompt" type="button" hidden></button>
+          </div>
+          <div class="assistant-card content-advice-card">
+            <div class="assistant-title">
+              <span class="mini-label">มุมเล่าเรื่อง</span>
+              <h3 id="advice-title">วันนี้ควรเล่าอะไร</h3>
+            </div>
+            <p id="advice-angle"></p>
+            <div class="advice-grid">
+              <div class="advice-block">
+                <strong>ควรถ่ายกลับมา</strong>
+                <ul id="shot-list"></ul>
+              </div>
+              <div class="advice-block">
+                <strong>คลิปสั้น 30-45 วิ</strong>
+                <ol id="video-plan"></ol>
+              </div>
+            </div>
+            <div class="quiet-ai-note" aria-label="ผู้ช่วยเบื้องหลัง">
+              <span aria-hidden="true">✦</span>
+              <p><strong>ผู้ช่วยเบื้องหลัง</strong> แนวทางจะปรับตามชื่องาน วันสำคัญ และรายละเอียดที่ทีมบันทึกไว้</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="summary-strip" aria-label="สรุปภาพรวมเดือน">
+          <article>
+            <span id="stat-events">0</span>
+            <p>วันสำคัญเดือนนี้</p>
+          </article>
+          <article>
+            <span id="stat-buddhist">0</span>
+            <p>วันพระเดือนนี้</p>
+          </article>
+          <article>
+            <span id="stat-work">0</span>
+            <p>งานทีมเดือนนี้</p>
+          </article>
+          <article>
+            <span id="stat-ready">0</span>
+            <p>โพสต์แล้ว</p>
+          </article>
+        </section>
+
+        <section id="ideas" class="ideas-grid">
+          <article class="panel weekly-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">This week</p>
+                <h2>แผนคอนเทนต์รายสัปดาห์</h2>
+              </div>
+              <button class="soft-button" id="shuffle-week-hidden" type="button">สลับมุมคิด</button>
+            </div>
+            <div id="week-list" class="week-list"></div>
+          </article>
+
+          <article class="panel monthly-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Monthly direction</p>
+                <h2 id="month-direction-title">เดือนนี้ควรทำอะไร</h2>
+              </div>
+            </div>
+            <div id="month-focus" class="focus-list"></div>
+          </article>
+        </section>
+
+        <section id="board" class="panel board-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Saved municipal work</p>
+              <h2>งานเทศบาลที่จดไว้</h2>
+            </div>
+            <button class="soft-button danger" id="reset-demo" type="button">คืนค่างานตัวอย่าง</button>
+          </div>
+          <div class="board-grid" id="board-grid"></div>
+        </section>
+
+        <section id="prompt" class="prompt-grid">
+          <article class="panel">
+            <div class="panel-head tight">
+              <div>
+                <p class="eyebrow">AI Studio helper</p>
+                <h2>สร้าง Prompt ให้ทันใจ AI Studio</h2>
+              </div>
+            </div>
+            <form class="prompt-form" id="prompt-form">
+              <label>
+                ประเภทงาน
+                <select id="prompt-type" name="promptType">
+                  <option>โพสต์ Facebook</option>
+                  <option>LINE แจ้งข่าว</option>
+                  <option>YouTube Shorts</option>
+                  <option>ข่าวประชาสัมพันธ์</option>
+                  <option>สคริปต์พิธีกร / เสียงบรรยาย</option>
+                </select>
+              </label>
+              <label>
+                ข้อมูลหน้างาน
+                <textarea id="prompt-details" rows="8" placeholder="ใส่วัน เวลา สถานที่ ใครทำอะไร ปัญหาคืออะไร ประชาชนต้องรู้อะไร"></textarea>
+              </label>
+              <button class="primary-button" type="submit">สร้าง Prompt</button>
+            </form>
+          </article>
+
+          <article class="panel prompt-output-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Ready to copy</p>
+                <h2>ข้อความพร้อมนำไปใช้</h2>
+              </div>
+              <button class="soft-button" id="copy-prompt" type="button">คัดลอก</button>
+            </div>
+            <textarea id="prompt-output" class="prompt-output" readonly></textarea>
+          </article>
+        </section>
+      </main>
+      <footer class="site-footer">
+        <strong>BRN PR Board</strong><br />
+        © พ.ศ. 2569 เทศบาลเมืองบางรักน้อย จังหวัดนนทบุรี · จัดทำโดยงานประชาสัมพันธ์<br />
+        เนื้อหา ภาพ และตราสัญลักษณ์ BangraknoiNews เป็นลิขสิทธิ์ของเทศบาลเมืองบางรักน้อย ห้ามนำไปใช้โดยไม่ได้รับอนุญาต<br />
+        ติดต่อ: LINE @brn12345 · Facebook เทศบาลเมืองบางรักน้อย · YouTube @BangraknoiNews
+      </footer>
+
+    </div>
+
+    <div class="work-modal" id="work-modal" aria-hidden="true">
+      <button class="modal-backdrop" type="button" data-close-modal aria-label="ปิดหน้าต่างเพิ่มงาน"></button>
+      <section class="modal-board" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Add municipal work</p>
+            <h2 id="modal-title">จดงานเทศบาลลงปฏิทิน</h2>
+            <p id="modal-date-title">เลือกวันที่จากปฏิทิน</p>
+          </div>
+          <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        </div>
+
+        <form class="modal-form" id="modal-work-form">
+          <label class="wide">
+            ชื่องาน / ภารกิจ
+            <input name="title" required placeholder="เช่น ลงพื้นที่ลอกท่อ / งานประชุมชุมชน / นัดถ่ายคลิปแจ้งข่าว" />
+          </label>
+          <div class="form-row three">
+            <label>
+              วัน
+              <input name="dateText" readonly />
+            </label>
+            <label>
+              เวลา
+              <input name="time" placeholder="เช่น 09.00 น." />
+            </label>
+            <label>
+              สถานที่
+              <input name="location" placeholder="เช่น ชุมชน... / ซอย... / วัด..." />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>
+              เจ้าของงาน
+              <input name="owner" placeholder="เช่น กองช่าง / กองสาธารณสุข / สำนักปลัด" />
+            </label>
+            <label>
+              ผู้รับผิดชอบ
+              <input name="responsible" placeholder="เช่น งานประชาสัมพันธ์ / ผู้ถ่ายภาพ / ผู้ประสาน" />
+            </label>
+          </div>
+          <label class="wide">
+            ต้องเก็บภาพ/วิดีโออะไร
+            <input name="noteQuick" placeholder="เช่น ภาพก่อน-หลัง คนทำงาน จุดปัญหา ผลลัพธ์" />
+          </label>
+          <label class="wide">
+            ภาพประกอบการ์ด
+            <input name="image" type="file" accept="image/*" />
+          </label>
+          <details class="advanced-fields">
+            <summary>รายละเอียดเพิ่มเติม</summary>
+            <div class="form-row four">
+              <label>
+                ช่องทาง
+                <select name="channel">
+                  <option>Facebook</option>
+                  <option>LINE @brn12345</option>
+                  <option>YouTube @BangraknoiNews</option>
+                  <option>หลายช่องทาง</option>
+                </select>
+              </label>
+              <label>
+                ประเภท
+                <select name="type"></select>
+              </label>
+              <label>
+                เสาหลัก
+                <select name="pillar"></select>
+              </label>
+              <label>
+                สถานะ
+                <select name="status"></select>
+              </label>
+            </div>
+            <label class="wide">
+              โน้ตเพิ่มเติม
+              <textarea name="note" rows="3" placeholder="รายละเอียดหน้างาน ข้อควรระวัง ข้อมูลที่ต้องเช็กก่อนโพสต์"></textarea>
+            </label>
+          </details>
+          <button class="primary-button" type="submit">จดงานลงวันนี้</button>
+        </form>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./auth-config.js"></script>
+    <script type="module" src="./firebase-auth.js"></script>
+    <script src="./refresh.js?v=1.0.0" defer></script>
+  </body>
+</html>
