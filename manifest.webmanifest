@@ -1,11 +1,9 @@
 {
   "name": "BRN PR Board",
   "short_name": "BRN PR Board",
-  "description": "กระดานปฏิทินงานประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย",
   "start_url": "./",
-  "scope": "./",
   "display": "standalone",
-  "background_color": "#fbf8ff",
-  "theme_color": "#2a0f44",
-  "icons": [{"src":"./assets/logo.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]
+  "background_color": "#f6f3f9",
+  "theme_color": "#5b2b82",
+  "icons": []
 }

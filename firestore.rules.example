@@ -1,0 +1,2 @@
+rules_version = '2';
+service cloud.firestore { match /databases/{database}/documents { function signedIn(){ return request.auth != null; } match /prEvents/{id} { allow read, create, update, delete: if signedIn(); } match /lineOutbox/{id} { allow create: if signedIn(); allow read, update, delete: if false; } match /system/{id} { allow read: if signedIn(); allow write: if false; } } }
