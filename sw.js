@@ -1,4 +1,4 @@
-const CACHE = "brn-pr-v8-compact-login";
+const CACHE = "brn-pr-v10-calendar-refresh";
 const CORE = [
   "./",
   "./index.html",
@@ -6,6 +6,8 @@ const CORE = [
   "./polish.css",
   "./responsive.css",
   "./auth.css",
+  "./refresh.css?v=10.0.0",
+  "./refresh.js?v=10.0.0",
   "./auth-bootstrap.js",
   "./auth-config.js",
   "./firebase-auth.js",

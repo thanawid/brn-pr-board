@@ -1125,8 +1125,9 @@ function bindEvents() {
       selectedDate = openButton.dataset.openDate;
       activeMonth = parseISO(selectedDate).getMonth();
       rerender();
-      if (openButton.closest("#calendar-grid")) cueQuickForm();
-      if (!openButton.closest("#calendar-grid")) {
+      if (openButton.closest("#calendar-grid")) {
+        openWorkModal(selectedDate);
+      } else {
         document.getElementById("calendar").scrollIntoView({ behavior: "smooth", block: "start" });
       }
       return;

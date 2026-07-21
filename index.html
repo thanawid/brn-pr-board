@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="./polish.css" />
     <link rel="stylesheet" href="./responsive.css" />
     <link rel="stylesheet" href="./auth.css" />
+    <link rel="stylesheet" href="./refresh.css?v=10.0.0" />
   </head>
   <body>
     <section class="auth-gate" id="auth-gate" aria-labelledby="auth-title">
@@ -54,13 +55,13 @@
 
             <label class="compact-login-field">
               <span>USER</span>
-              <input id="staff-username" name="brn_user_code" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="pr01" maxlength="20" data-lpignore="true" data-1p-ignore="true" readonly required />
+              <input id="staff-username" name="brn_user_code" type="text" inputmode="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="" maxlength="20" data-lpignore="true" data-1p-ignore="true" readonly required />
             </label>
 
             <label class="compact-login-field">
               <span>PASSWORD</span>
               <span class="password-field">
-                <input id="staff-password" name="brn_access_code" type="password" autocomplete="new-password" placeholder="••••••••" minlength="6" data-lpignore="true" data-1p-ignore="true" readonly required />
+                <input id="staff-password" name="brn_access_code" type="password" autocomplete="new-password" placeholder="" minlength="6" data-lpignore="true" data-1p-ignore="true" readonly required />
                 <button id="toggle-password" type="button" aria-label="แสดงรหัสผ่าน" aria-pressed="false">แสดง</button>
               </span>
             </label>
@@ -109,10 +110,8 @@
           </span>
         </a>
         <nav class="nav-tabs" aria-label="เมนูหลัก">
-          <a href="#calendar" class="nav-link active">ปฏิทิน</a>
-          <a href="#ideas" class="nav-link">ไอเดียคอนเทนต์</a>
-          <a href="#board" class="nav-link">งานที่จดไว้</a>
-          <a href="#prompt" class="nav-link">Prompt</a>
+          <a href="#calendar" class="nav-link active">ปฏิทินงาน</a>
+          <a href="#content-advice" class="nav-link">แนวทางวันนี้</a>
         </nav>
         <div class="account-area" id="account-area" hidden>
           <button class="account-button" id="account-button" type="button" aria-expanded="false" aria-controls="account-menu">
@@ -134,6 +133,8 @@
       </header>
 
       <main>
+        <div class="ambient-orb orb-one" aria-hidden="true"></div>
+        <div class="ambient-orb orb-two" aria-hidden="true"></div>
         <section class="creator-stage" aria-label="พื้นที่นำปฏิทินงานประชาสัมพันธ์">
           <div class="stage-copy">
             <p class="eyebrow"><span class="onair"><i></i>ON AIR</span> Bangraknoi PR command calendar</p>
@@ -188,17 +189,17 @@
         <section id="calendar" class="work-grid">
           <article class="panel calendar-panel">
             <div class="panel-head">
-              <div>
-                <p class="eyebrow">Municipal work calendar</p>
+              <div class="calendar-title-wrap">
+                <p class="eyebrow">TEAM WORK CALENDAR</p>
                 <h2 id="calendar-title">ปฏิทินงานเทศบาล</h2>
+                <p class="calendar-lead">คลิกวันที่เพื่อเพิ่มงาน แล้วระบบจะแนะนำแนวทางถ่ายภาพและคลิปให้ด้านล่าง</p>
               </div>
               <div class="calendar-head-actions">
-                <div class="calendar-assist" aria-label="วิธีใช้ปฏิทิน">
+                <div class="calendar-visual" aria-hidden="true">
+                  <span class="float-chip chip-photo">ภาพ</span>
+                  <span class="float-chip chip-video">คลิป</span>
+                  <span class="float-chip chip-remind">แจ้งเตือน</span>
                   <img class="assist-mascot-img" src="./assets/mascot.png" alt="" />
-                  <span>
-                    <strong>จดงานเทศบาลลงวันที่</strong>
-                    <small>คลิกเพื่อดูงาน ดับเบิ้ลคลิกเพื่อเพิ่ม แล้วให้ AI ช่วยคิดคอนเทนต์ต่อ</small>
-                  </span>
                 </div>
                 <div class="month-controls">
                   <button class="soft-button today-inline" id="go-today-inline" type="button">วันนี้</button>
@@ -216,7 +217,7 @@
               </div>
               <select id="month-select" aria-label="เลือกเดือน"></select>
             </div>
-            <div class="month-pulse" id="month-pulse" aria-label="ภาพรวมงานในเดือนนี้"></div>
+            <div class="month-pulse" id="month-pulse" aria-label="ภาพรวมงานในเดือนนี้" hidden></div>
 
             <div class="calendar-scroll">
               <div class="weekdays" aria-hidden="true">
@@ -301,9 +302,9 @@
           <div class="panel-head">
             <div>
               <p class="eyebrow">Content helper</p>
-              <h2>แนะนำคอนเทนต์จากงานที่เลือก</h2>
+              <h2>แนวทางของวันที่เลือก</h2>
             </div>
-            <button class="soft-button" id="use-day-prompt" type="button">ส่งโจทย์วันนี้ไป Prompt</button>
+            <button class="soft-button content-month-button" id="shuffle-week" type="button">คอนเทนต์แนะนำเดือนนี้</button><button id="use-day-prompt" type="button" hidden></button>
           </div>
           <div class="assistant-card content-advice-card">
             <div class="assistant-title">
@@ -321,11 +322,9 @@
                 <ol id="video-plan"></ol>
               </div>
             </div>
-            <div class="ai-actions" aria-label="คำสั่งผู้ช่วย PR">
-              <button type="button" data-ai-action="post">คิดโพสต์</button>
-              <button type="button" data-ai-action="short">สคริปต์คลิป</button>
-              <button type="button" data-ai-action="shots">Shot list</button>
-              <button type="button" data-ai-action="field">เช็กลิสต์หน้างาน</button>
+            <div class="quiet-ai-note" aria-label="ผู้ช่วยเบื้องหลัง">
+              <span aria-hidden="true">✦</span>
+              <p><strong>ผู้ช่วยเบื้องหลัง</strong> แนวทางจะปรับตามชื่องาน วันสำคัญ และรายละเอียดที่ทีมบันทึกไว้</p>
             </div>
           </div>
         </section>
@@ -356,7 +355,7 @@
                 <p class="eyebrow">This week</p>
                 <h2>แผนคอนเทนต์รายสัปดาห์</h2>
               </div>
-              <button class="soft-button" id="shuffle-week" type="button">สลับมุมคิด</button>
+              <button class="soft-button" id="shuffle-week-hidden" type="button">สลับมุมคิด</button>
             </div>
             <div id="week-list" class="week-list"></div>
           </article>
@@ -518,5 +517,6 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="./auth-config.js"></script>
     <script type="module" src="./firebase-auth.js"></script>
+    <script src="./refresh.js?v=10.0.0" defer></script>
   </body>
 </html>
