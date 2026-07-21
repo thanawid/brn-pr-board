@@ -3,7 +3,9 @@
 
   const config = window.BRN_AUTH_CONFIG || {};
   const firebaseConfig = config.firebaseConfig;
-  const lineConfig = config.lineReminder || {};
+  const LINE_OUTBOX_COLLECTION = 'lineOutbox';
+  const LINE_GROUP_PATH = 'system/lineGroup';
+  const TEAM_NAME = 'ทีม PR';
   const $ = (id) => document.getElementById(id);
   const state = {
     cursor: new Date(),
@@ -18,12 +20,13 @@
   };
 
   const categoryNames = {
+    work: 'งานทีม PR',
     meeting: 'ประชุม / อบรม',
     activity: 'กิจกรรม',
     important: 'วันสำคัญ',
     media: 'ถ่ายทำ / สื่อ',
     buddhist: 'วันพระ',
-    other: 'อื่น ๆ',
+    other: 'งานทีม PR',
   };
 
   const importantDaysByMonth = {
@@ -54,16 +57,14 @@
     ['2026-10-04', 'แรม 8 ค่ำ เดือนสิบ'], ['2026-10-11', 'แรม 15 ค่ำ เดือนสิบ'], ['2026-10-19', 'ขึ้น 8 ค่ำ เดือนสิบเอ็ด'], ['2026-10-26', 'ขึ้น 15 ค่ำ เดือนสิบเอ็ด'],
     ['2026-11-03', 'แรม 8 ค่ำ เดือนสิบเอ็ด'], ['2026-11-09', 'แรม 14 ค่ำ เดือนสิบเอ็ด'], ['2026-11-17', 'ขึ้น 8 ค่ำ เดือนสิบสอง'], ['2026-11-24', 'ขึ้น 15 ค่ำ เดือนสิบสอง'],
     ['2026-12-02', 'แรม 8 ค่ำ เดือนสิบสอง'], ['2026-12-09', 'แรม 15 ค่ำ เดือนสิบสอง'], ['2026-12-17', 'ขึ้น 8 ค่ำ เดือนอ้าย'], ['2026-12-24', 'ขึ้น 15 ค่ำ เดือนอ้าย'],
-  ].map(([date, lunar]) => ({ id: `buddhist-${date}`, date, title: 'วันพระ', description: lunar, category: 'buddhist', owner: 'ทีม PR', responsible: 'ทีม PR', source: 'system' }));
+  ].map(([date, lunar]) => ({ id: `buddhist-${date}`, date, title: 'วันพระ', description: lunar, category: 'buddhist', owner: TEAM_NAME, source: 'system' }));
 
   const els = {
     title: $('month-title'), grid: $('calendar-grid'), prev: $('prev-month'), next: $('next-month'), today: $('today-button'), add: $('add-event-button'),
-    search: $('search-button'), filter: $('filter-button'), syncStatus: $('sync-status'),
-    quickForm: $('quick-event-form'), quickTitle: $('quick-title'), quickDescription: $('quick-description'), quickDate: $('quick-date'), quickTime: $('quick-time'), quickLocation: $('quick-location'), quickOwner: $('quick-owner'), quickResponsible: $('quick-responsible'), quickCategory: $('quick-category'), quickReminder: $('quick-reminder'), quickLineNotify: $('quick-line-notify'), quickLineTarget: $('quick-line-target'), quickDetail: $('quick-detail-button'),
-    selectedTitle: $('selected-day-title'), selectedList: $('selected-day-list'), selectedAdd: $('selected-add-button'), selectedEventCount: $('selected-event-count'), lineQueueCount: $('line-queue-count'), lineStatusTitle: $('line-status-title'), lineStatusText: $('line-status-text'),
+    syncStatus: $('sync-status'),
     eventDialog: $('event-dialog'), eventForm: $('event-form'), eventDialogTitle: $('event-dialog-title'), eventDialogKicker: $('event-dialog-kicker'), eventId: $('event-id'),
-    eventTitle: $('event-title'), eventDescription: $('event-description'), eventDate: $('event-date'), eventTime: $('event-time'), eventLocation: $('event-location'), eventOwner: $('event-owner'), eventResponsible: $('event-responsible'), eventCategory: $('event-category'), eventReminder: $('event-reminder'), eventLineNotify: $('event-line-notify'), eventLineTarget: $('event-line-target'), deleteEvent: $('delete-event'),
-    detailDialog: $('detail-dialog'), detailTitle: $('detail-title'), detailCategory: $('detail-category'), detailDate: $('detail-date'), detailTime: $('detail-time'), detailLocation: $('detail-location'), detailOwner: $('detail-owner'), detailResponsible: $('detail-responsible'), detailLine: $('detail-line'), detailDescription: $('detail-description'), editEvent: $('edit-event'), sendLineNow: $('send-line-now'),
+    eventTitle: $('event-title'), eventDescription: $('event-description'), eventDate: $('event-date'), eventTime: $('event-time'), eventLocation: $('event-location'), eventOwner: $('event-owner'), deleteEvent: $('delete-event'),
+    detailDialog: $('detail-dialog'), detailTitle: $('detail-title'), detailCategory: $('detail-category'), detailDate: $('detail-date'), detailTime: $('detail-time'), detailLocation: $('detail-location'), detailOwner: $('detail-owner'), detailDescription: $('detail-description'), editEvent: $('edit-event'),
     guideTitle: $('guide-title'), photoGuide: $('photo-guide'), videoGuide: $('video-guide'), prepGuide: $('prep-guide'), contentGuide: $('content-guide'), importantDays: $('important-days'),
     ideasDialog: $('ideas-dialog'), ideasList: $('ideas-list'), toast: $('toast'),
   };
@@ -99,22 +100,10 @@
     const jobs = localLineJobs();
     jobs.unshift(job);
     localStorage.setItem('brn-pr-board-line-jobs', JSON.stringify(jobs.slice(0, 50)));
-    renderLineStatus();
   }
 
   function renderLineStatus() {
-    const localCount = localLineJobs().filter((job) => job.status === 'pending').length;
-    els.lineQueueCount.textContent = localCount;
-    if (state.cloudReady) {
-      els.lineStatusTitle.textContent = 'เชื่อมหลังบ้านแล้ว';
-      els.lineStatusText.textContent = `บันทึกคิวเข้า ${lineConfig.outboxCollection || 'lineOutbox'} เพื่อให้ Cloud Functions ส่ง LINE`;
-    } else if (lineConfig.webhookUrl) {
-      els.lineStatusTitle.textContent = 'ใช้ webhook หลังบ้าน';
-      els.lineStatusText.textContent = 'ถ้า Firestore ยังไม่พร้อม ระบบจะ POST งานแจ้งเตือนไปที่ webhookUrl';
-    } else {
-      els.lineStatusTitle.textContent = 'เก็บคิวไว้ในเครื่อง';
-      els.lineStatusText.textContent = 'ใส่ Firebase/Cloud Functions หรือ webhookUrl แล้วคิว LINE จะส่งออกหลังบ้านได้';
-    }
+    // LINE status is handled by the existing backend; keep this quiet in the UI.
   }
 
   function specialItemsForDate(dateIso) {
@@ -127,8 +116,7 @@
         title: item.title,
         description: item.note,
         category: 'important',
-        owner: 'ทีม PR',
-        responsible: 'ทีม PR',
+        owner: TEAM_NAME,
         source: 'system',
       }));
     return [...important, ...buddhistDays.filter((item) => item.date === dateIso)];
@@ -150,12 +138,11 @@
   function setSelectedDate(dateIso, { keepMonth = false } = {}) {
     state.selectedDate = parseDate(dateIso);
     if (!keepMonth) state.cursor = new Date(state.selectedDate.getFullYear(), state.selectedDate.getMonth(), 1);
-    syncQuickDate();
     renderAll();
   }
 
   function syncQuickDate() {
-    if (els.quickDate) els.quickDate.value = selectedIso();
+    return selectedIso();
   }
 
   function guidanceFor(items) {
@@ -231,10 +218,10 @@
       const date = new Date(start);
       date.setDate(start.getDate() + i);
       const dateIso = isoDate(date);
-      const cell = document.createElement('button');
-      cell.type = 'button';
+      const cell = document.createElement('div');
       cell.className = 'day-cell';
       cell.dataset.date = dateIso;
+      cell.tabIndex = 0;
       cell.setAttribute('role', 'gridcell');
       cell.setAttribute('aria-label', `เลือกวันที่ ${thaiFullDate(dateIso)}`);
       if (date.getMonth() !== month) cell.classList.add('outside');
@@ -254,8 +241,14 @@
           return;
         }
         setSelectedDate(dateIso, { keepMonth: true });
+        openEventDialog(dateIso);
       });
       cell.addEventListener('dblclick', (event) => {
+        event.preventDefault();
+        if (!els.eventDialog.open) openEventDialog(dateIso);
+      });
+      cell.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
         setSelectedDate(dateIso, { keepMonth: true });
         openEventDialog(dateIso);
@@ -267,64 +260,21 @@
   }
 
   function renderSelectedDayPanel() {
-    const iso = selectedIso();
-    const items = allItemsForDate(iso);
-    const userItems = items.filter((item) => item.source === 'user');
-    els.selectedTitle.textContent = thaiFullDate(iso);
-    els.selectedEventCount.textContent = userItems.length;
-    syncQuickDate();
-    if (!items.length) {
-      els.selectedList.innerHTML = '<div class="empty-day">วันนี้ยังไม่มีงาน จดงานใหม่ทางกล่องด้านบนได้เลย</div>';
-      return;
-    }
-    els.selectedList.innerHTML = items.map((item) => `
-      <article class="selected-event ${item.source === 'system' ? 'readonly' : ''}">
-        <span class="event-kind ${item.category || 'other'}">${escapeHtml(categoryNames[item.category] || categoryNames.other)}</span>
-        <h3>${escapeHtml(item.title)}</h3>
-        <p>${escapeHtml([item.time || 'ไม่ระบุเวลา', item.location || item.description || '', item.owner || 'ทีม PR'].filter(Boolean).join(' · '))}</p>
-        ${item.source === 'user' ? `
-          <div class="selected-actions">
-            <button type="button" data-detail-id="${escapeHtml(item.id)}">รายละเอียด</button>
-            <button type="button" data-edit-id="${escapeHtml(item.id)}">แก้ไข</button>
-            <button type="button" data-line-id="${escapeHtml(item.id)}">ส่ง LINE</button>
-          </div>` : ''}
-      </article>
-    `).join('');
+    // Kept as a no-op for older cached pages that may still call it.
   }
 
   function renderAll() {
     renderCalendar();
     renderGuides();
-    renderSelectedDayPanel();
     renderIdeas();
-    renderLineStatus();
   }
 
   function resetQuickForm(keepDate = true) {
-    const date = els.quickDate.value || selectedIso();
-    els.quickForm.reset();
-    if (keepDate) els.quickDate.value = date;
-    els.quickReminder.value = '60';
-    els.quickLineNotify.checked = true;
-    els.quickLineTarget.value = lineConfig.defaultTarget || 'กลุ่ม PR';
+    return keepDate;
   }
 
   function payloadFromQuickForm() {
-    return {
-      title: els.quickTitle.value.trim(),
-      description: els.quickDescription.value.trim(),
-      date: els.quickDate.value,
-      time: els.quickTime.value,
-      location: els.quickLocation.value.trim(),
-      owner: els.quickOwner.value.trim(),
-      responsible: els.quickResponsible.value.trim(),
-      category: els.quickCategory.value,
-      reminder: Number(els.quickReminder.value || 0),
-      lineNotify: els.quickLineNotify.checked,
-      lineTarget: els.quickLineTarget.value.trim() || lineConfig.defaultTarget || 'กลุ่ม PR',
-      updatedAtLocal: new Date().toISOString(),
-      updatedBy: window.BRN_CURRENT_USER?.displayName || 'ทีม PR',
-    };
+    return { date: selectedIso() };
   }
 
   function payloadFromDialog() {
@@ -335,13 +285,11 @@
       time: els.eventTime.value,
       location: els.eventLocation.value.trim(),
       owner: els.eventOwner.value.trim(),
-      responsible: els.eventResponsible.value.trim(),
-      category: els.eventCategory.value,
-      reminder: Number(els.eventReminder.value || 0),
-      lineNotify: els.eventLineNotify.checked,
-      lineTarget: els.eventLineTarget.value.trim() || lineConfig.defaultTarget || 'กลุ่ม PR',
+      category: 'work',
+      lineNotify: true,
+      lineTarget: LINE_GROUP_PATH,
       updatedAtLocal: new Date().toISOString(),
-      updatedBy: window.BRN_CURRENT_USER?.displayName || 'ทีม PR',
+      updatedBy: window.BRN_CURRENT_USER?.displayName || TEAM_NAME,
     };
   }
 
@@ -352,11 +300,6 @@
     els.eventTime.value = payload.time || '';
     els.eventLocation.value = payload.location || '';
     els.eventOwner.value = payload.owner || '';
-    els.eventResponsible.value = payload.responsible || '';
-    els.eventCategory.value = payload.category || 'meeting';
-    els.eventReminder.value = String(payload.reminder ?? 60);
-    els.eventLineNotify.checked = payload.lineNotify !== false;
-    els.eventLineTarget.value = payload.lineTarget || lineConfig.defaultTarget || 'กลุ่ม PR';
   }
 
   function openEventDialog(dateIso, event = null, seed = null) {
@@ -364,7 +307,7 @@
     els.eventDialogTitle.textContent = event ? 'แก้ไขงาน' : 'เพิ่มงานใหม่';
     els.eventDialogKicker.textContent = event ? 'รายละเอียดงานในปฏิทิน' : 'จัดงานในปฏิทิน';
     els.eventId.value = event?.id || '';
-    fillDialogFromPayload(event || seed || { date: dateIso || selectedIso(), reminder: 60, lineNotify: true, lineTarget: lineConfig.defaultTarget || 'กลุ่ม PR' });
+    fillDialogFromPayload(event || seed || { date: dateIso || selectedIso() });
     els.deleteEvent.hidden = !event;
     els.eventDialog.showModal();
     setTimeout(() => els.eventTitle.focus(), 100);
@@ -379,9 +322,7 @@
     els.detailDate.textContent = thaiFullDate(event.date);
     els.detailTime.textContent = event.time || 'ไม่ระบุเวลา';
     els.detailLocation.textContent = event.location || 'ไม่ระบุสถานที่';
-    els.detailOwner.textContent = event.owner || 'ทีม PR';
-    els.detailResponsible.textContent = event.responsible || 'ทีม PR';
-    els.detailLine.textContent = event.lineNotify ? `${event.lineTarget || lineConfig.defaultTarget || 'กลุ่ม PR'} · ${event.reminder || 0} นาทีล่วงหน้า` : 'ไม่แจ้งเตือน';
+    els.detailOwner.textContent = event.owner || TEAM_NAME;
     els.detailDescription.textContent = event.description || 'ไม่มีรายละเอียดเพิ่มเติม';
     els.detailDialog.showModal();
   }
@@ -400,24 +341,25 @@
   function buildLineMessage(event, immediate = false) {
     const when = `${thaiFullDate(event.date)}${event.time ? ` เวลา ${event.time} น.` : ''}`;
     return [
-      immediate ? '📣 แจ้งเตือนงาน PR' : '📌 เพิ่มงานใหม่ใน BRN PR Board',
+      immediate ? 'แจ้งงาน PR เทศบาลเมืองบางรักน้อย' : 'เพิ่มงานใหม่ใน BRN PR Board',
       event.title,
       when,
-      event.location ? `📍 ${event.location}` : '',
+      event.location ? `สถานที่: ${event.location}` : '',
       event.owner ? `เจ้าของงาน: ${event.owner}` : '',
-      event.responsible ? `ผู้รับผิดชอบ: ${event.responsible}` : '',
       event.description ? `รายละเอียด: ${event.description}` : '',
     ].filter(Boolean).join('\n');
   }
 
   function buildLineJob(event, { immediate = false, reason = 'save' } = {}) {
-    const reminderMinutes = Number(event.reminder || 0);
-    const sendAt = immediate ? new Date() : new Date(eventDateTime(event).getTime() - (reminderMinutes * 60 * 1000));
+    const sendAt = immediate ? new Date() : eventDateTime(event);
     return {
       kind: immediate ? 'line-immediate' : 'line-reminder',
       reason,
       status: 'pending',
-      target: event.lineTarget || lineConfig.defaultTarget || 'กลุ่ม PR',
+      target: LINE_GROUP_PATH,
+      targetRef: LINE_GROUP_PATH,
+      groupRef: LINE_GROUP_PATH,
+      lineGroupPath: LINE_GROUP_PATH,
       eventId: event.id || null,
       sendAtLocal: sendAt.toISOString(),
       message: buildLineMessage(event, immediate),
@@ -428,8 +370,7 @@
         time: event.time || '',
         location: event.location || '',
         owner: event.owner || '',
-        responsible: event.responsible || '',
-        category: event.category || 'other',
+        category: event.category || 'work',
       },
       createdBy: window.BRN_CURRENT_USER || null,
       createdAtLocal: new Date().toISOString(),
@@ -437,10 +378,9 @@
   }
 
   async function queueLineNotification(event, options = {}) {
-    const immediate = Boolean(options.immediate);
-    if (!immediate && (!event.lineNotify || !Number(event.reminder))) return false;
-    const job = buildLineJob(event, options);
-    const collectionName = lineConfig.outboxCollection || 'lineOutbox';
+    const immediate = options.immediate !== false;
+    const job = buildLineJob(event, { ...options, immediate });
+    const collectionName = LINE_OUTBOX_COLLECTION;
     try {
       if (state.cloudReady && state.firestore) {
         const { addDoc, collection, serverTimestamp, Timestamp } = state.firestore;
@@ -448,15 +388,6 @@
           ...job,
           sendAt: Timestamp.fromDate(new Date(job.sendAtLocal)),
           createdAt: serverTimestamp(),
-        });
-        renderLineStatus();
-        return true;
-      }
-      if (lineConfig.webhookUrl) {
-        await fetch(lineConfig.webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(job),
         });
         return true;
       }
@@ -494,7 +425,7 @@
     }
     if (savedEvent) {
       state.events = [...state.events.filter((event) => event.id !== savedEvent.id), savedEvent];
-      await queueLineNotification(savedEvent, { reason: state.editingId ? 'event-updated' : 'event-created' });
+      await queueLineNotification(savedEvent, { immediate: true, reason: state.editingId ? 'event-updated' : 'event-created' });
       setSelectedDate(savedEvent.date);
     }
     return savedEvent;
@@ -560,31 +491,6 @@
 
   els.today.addEventListener('click', () => setSelectedDate(isoDate(new Date())));
   els.add.addEventListener('click', () => openEventDialog(selectedIso()));
-  els.selectedAdd.addEventListener('click', () => openEventDialog(selectedIso()));
-  els.search.addEventListener('click', () => showToast('ค้นหาจะใช้ร่วมกับหลังบ้านได้ในรอบถัดไป ตอนนี้เลือกจากปฏิทินได้ทันที'));
-  els.filter.addEventListener('click', () => showToast('ตัวกรองพร้อมต่อยอด: ประเภทงาน / ผู้รับผิดชอบ / สถานะ LINE'));
-
-  els.quickDetail.addEventListener('click', () => {
-    const payload = payloadFromQuickForm();
-    openEventDialog(payload.date || selectedIso(), null, payload);
-  });
-
-  els.quickForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const payload = payloadFromQuickForm();
-    if (!payload.title || !payload.date) return;
-    try {
-      state.editingId = null;
-      const saved = await saveEvent(payload);
-      if (saved) {
-        resetQuickForm();
-        showToast('เพิ่มงานลงปฏิทินแล้ว');
-      }
-    } catch (error) {
-      console.error(error);
-      showToast('บันทึกไม่สำเร็จ กรุณาลองใหม่');
-    }
-  });
 
   els.eventForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -606,12 +512,6 @@
     els.detailDialog.close();
     openEventDialog(event.date, event);
   });
-  els.sendLineNow.addEventListener('click', async () => {
-    const event = state.events.find((item) => item.id === state.detailId);
-    if (!event) return;
-    const ok = await queueLineNotification(event, { immediate: true, reason: 'manual-send' });
-    showToast(ok ? 'ส่งคิว LINE แล้ว' : 'ส่งคิว LINE ไม่สำเร็จ แต่เก็บสำรองไว้แล้ว');
-  });
 
   document.body.addEventListener('click', (event) => {
     const detail = event.target.closest('[data-detail-id]');
@@ -623,27 +523,18 @@
     if (edit) {
       const item = state.events.find((entry) => entry.id === edit.dataset.editId);
       if (item) openEventDialog(item.date, item);
-      return;
-    }
-    const line = event.target.closest('[data-line-id]');
-    if (line) {
-      const item = state.events.find((entry) => entry.id === line.dataset.lineId);
-      if (item) queueLineNotification(item, { immediate: true, reason: 'manual-send' }).then(() => showToast('ส่งคิว LINE แล้ว'));
     }
   });
 
   document.querySelectorAll('[data-close-dialog]').forEach((button) => button.addEventListener('click', () => button.closest('dialog').close()));
   document.querySelectorAll('.modal-dialog').forEach((dialog) => dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); }));
-  $('open-month-ideas').addEventListener('click', () => { renderIdeas(); els.ideasDialog.showModal(); });
-  $('open-ideas-card').addEventListener('click', () => { renderIdeas(); els.ideasDialog.showModal(); });
-  $('refresh-guides').addEventListener('click', () => { renderGuides(); showToast('ปรับแนวทางตามวันที่เลือกแล้ว'); });
-  document.querySelectorAll('.guide-more').forEach((button) => button.addEventListener('click', () => { document.getElementById('guides').scrollIntoView({ behavior: 'smooth' }); showToast('แนวทางนี้ปรับตามงานในวันที่เลือก'); }));
+  const ideasButton = $('open-month-ideas');
+  if (ideasButton) ideasButton.addEventListener('click', () => { renderIdeas(); els.ideasDialog.showModal(); });
 
   state.cursor = new Date();
   state.cursor.setDate(1);
   state.selectedDate = new Date();
   state.events = localEvents();
-  resetQuickForm();
   renderAll();
   initCloud();
 })();

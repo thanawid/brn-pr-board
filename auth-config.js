@@ -9,12 +9,6 @@ window.BRN_AUTH_CONFIG = {
     { username: 'pr04', displayName: 'เจ้าหน้าที่ PR 04' },
     { username: 'pr05', displayName: 'เจ้าหน้าที่ PR 05' }
   ],
-  lineReminder: {
-    mode: 'firestoreOutbox',
-    outboxCollection: 'lineOutbox',
-    defaultTarget: 'กลุ่ม PR',
-    webhookUrl: ''
-  },
   firebaseConfig: {
     apiKey: 'AIzaSyByR15Ptjs6Q-DMzVWPQmTOihqMMhW_868',
     authDomain: 'brn-pr-board.firebaseapp.com',

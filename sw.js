@@ -1,4 +1,4 @@
-const CACHE = 'brn-pr-board-v2-shell';
+const CACHE = 'brn-pr-board-calendar-first-20260721';
 const ASSETS = ['./','./index.html','./styles.css','./app.js','./auth-bootstrap.js','./auth-config.js','./firebase-auth.js','./manifest.webmanifest','./assets/logo.png'];
 self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
