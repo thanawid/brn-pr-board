@@ -222,8 +222,8 @@ async function loadScript(src) {
 async function loadWorkspace() {
   if (workspaceLoaded) return;
   workspaceLoaded = true;
-  if (window.__BRN_APP_STARTED__) return;
-  await loadScript('./app.js?v=1.0.1');
+  const files = ["./app.js"];
+  for (const file of files) await loadScript(file);
 }
 
 async function showWorkspace(user, role) {

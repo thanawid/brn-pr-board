@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css?v=1.0.1" />
+  <link rel="stylesheet" href="./styles.css" />
   <script src="./auth-bootstrap.js"></script>
 </head>
 <body>
@@ -89,39 +89,105 @@
       </div>
     </header>
 
-    <section id="calendar" class="calendar-stage reveal">
-      <div class="calendar-toolbar">
-        <div class="month-title-wrap">
-          <button id="prev-month" class="icon-button" type="button" aria-label="เดือนก่อนหน้า">‹</button>
-          <div>
-            <p>TEAM WORK CALENDAR</p>
-            <h1 id="month-title">กรกฎาคม 2569</h1>
+    <section id="calendar" class="workspace-board reveal">
+      <div class="calendar-stage">
+        <div class="calendar-toolbar">
+          <div class="month-title-wrap">
+            <button id="prev-month" class="icon-button" type="button" aria-label="เดือนก่อนหน้า">‹</button>
+            <div>
+              <p>TEAM WORK CALENDAR</p>
+              <h1 id="month-title">กรกฎาคม 2569</h1>
+            </div>
+            <button id="next-month" class="icon-button" type="button" aria-label="เดือนถัดไป">›</button>
           </div>
-          <button id="next-month" class="icon-button" type="button" aria-label="เดือนถัดไป">›</button>
+          <div class="toolbar-actions">
+            <button id="search-button" class="secondary-button icon-action" type="button" aria-label="ค้นหางาน">⌕</button>
+            <button id="filter-button" class="secondary-button icon-action" type="button" aria-label="กรองงาน">▾</button>
+            <button id="today-button" class="secondary-button" type="button">วันนี้</button>
+            <button id="add-event-button" class="primary-button" type="button"><span>＋</span> เพิ่มงาน</button>
+          </div>
         </div>
-        <div class="toolbar-actions">
-          <button id="today-button" class="secondary-button" type="button">วันนี้</button>
-          <button id="add-event-button" class="primary-button" type="button"><span>＋</span> เพิ่มงาน</button>
+
+        <div class="calendar-card">
+          <div class="weekdays" aria-hidden="true">
+            <span>อาทิตย์</span><span>จันทร์</span><span>อังคาร</span><span>พุธ</span><span>พฤหัสบดี</span><span>ศุกร์</span><span>เสาร์</span>
+          </div>
+          <div id="calendar-grid" class="calendar-grid" role="grid" aria-label="ปฏิทินรายเดือน"></div>
+        </div>
+
+        <div class="calendar-footer">
+          <div class="legend">
+            <span><i class="dot meeting"></i>ประชุม / อบรม</span>
+            <span><i class="dot activity"></i>กิจกรรม</span>
+            <span><i class="dot important"></i>วันสำคัญ</span>
+            <span><i class="dot media"></i>ถ่ายทำ / สื่อ</span>
+            <span><i class="dot buddhist"></i>วันพระ</span>
+            <span><i class="dot other"></i>อื่น ๆ</span>
+          </div>
+          <p id="sync-status" class="sync-status">กำลังเตรียมข้อมูล…</p>
         </div>
       </div>
 
-      <div class="calendar-card">
-        <div class="weekdays" aria-hidden="true">
-          <span>อาทิตย์</span><span>จันทร์</span><span>อังคาร</span><span>พุธ</span><span>พฤหัสบดี</span><span>ศุกร์</span><span>เสาร์</span>
-        </div>
-        <div id="calendar-grid" class="calendar-grid" role="grid" aria-label="ปฏิทินรายเดือน"></div>
-      </div>
+      <aside class="work-sidebar" aria-label="เพิ่มงานและรายละเอียดวันที่เลือก">
+        <section class="side-card quick-add-card">
+          <div class="side-head">
+            <p>เพิ่มงาน</p>
+            <h2>จดงานเทศบาล</h2>
+          </div>
+          <form id="quick-event-form" class="quick-event-form">
+            <label class="wide">ชื่องาน <em>*</em><input id="quick-title" required placeholder="เช่น ประชุมทีมงาน PR" /></label>
+            <label class="wide">รายละเอียด<textarea id="quick-description" rows="3" placeholder="สรุปงาน สิ่งที่ต้องถ่าย หรือข้อมูลที่ต้องแจ้ง"></textarea></label>
+            <div class="two-fields">
+              <label>วัน <em>*</em><input id="quick-date" type="date" required /></label>
+              <label>เวลา<input id="quick-time" type="time" /></label>
+            </div>
+            <label class="wide">สถานที่<input id="quick-location" placeholder="เช่น ห้องประชุม ชั้น 2 / ชุมชน..." /></label>
+            <div class="two-fields">
+              <label>เจ้าของงาน<input id="quick-owner" placeholder="เช่น กองสาธารณสุขฯ" /></label>
+              <label>ผู้รับผิดชอบ<input id="quick-responsible" placeholder="เช่น ทีม PR / ช่างภาพ" /></label>
+            </div>
+            <div class="two-fields">
+              <label>ประเภทงาน<select id="quick-category"><option value="meeting">ประชุม / อบรม</option><option value="activity">กิจกรรม</option><option value="important">วันสำคัญ</option><option value="media">ถ่ายทำ / สื่อ</option><option value="buddhist">วันพระ</option><option value="other">อื่น ๆ</option></select></label>
+              <label>แจ้งเตือนล่วงหน้า<select id="quick-reminder"><option value="0">ไม่แจ้งเตือน</option><option value="30">30 นาที</option><option value="60" selected>1 ชั่วโมง</option><option value="180">3 ชั่วโมง</option><option value="1440">1 วัน</option></select></label>
+            </div>
+            <label class="line-toggle"><input id="quick-line-notify" type="checkbox" checked /> แจ้งเตือนเข้า LINE</label>
+            <label class="wide">ปลายทาง LINE<input id="quick-line-target" placeholder="เช่น กลุ่ม PR / userId / roomId" /></label>
+            <div class="form-actions">
+              <button id="quick-detail-button" class="secondary-button" type="button">กรอกละเอียด</button>
+              <button class="primary-button" type="submit">บันทึกงาน</button>
+            </div>
+          </form>
+        </section>
 
-      <div class="calendar-footer">
-        <div class="legend">
-          <span><i class="dot meeting"></i>ประชุม / อบรม</span>
-          <span><i class="dot activity"></i>กิจกรรม</span>
-          <span><i class="dot important"></i>วันสำคัญ</span>
-          <span><i class="dot media"></i>ถ่ายทำ / สื่อ</span>
-          <span><i class="dot other"></i>อื่น ๆ</span>
-        </div>
-        <p id="sync-status" class="sync-status">กำลังเตรียมข้อมูล…</p>
-      </div>
+        <section class="side-card selected-card">
+          <div class="side-head row">
+            <div>
+              <p>รายละเอียดวันที่เลือก</p>
+              <h2 id="selected-day-title">เลือกวันในปฏิทิน</h2>
+            </div>
+            <button id="selected-add-button" class="mini-round" type="button" aria-label="เพิ่มงานในวันที่เลือก">＋</button>
+          </div>
+          <div id="selected-day-list" class="selected-day-list"></div>
+        </section>
+
+        <section class="side-card line-card">
+          <div class="side-head">
+            <p>LINE Reminder</p>
+            <h2>แจ้งเตือนทีมอัตโนมัติ</h2>
+          </div>
+          <div class="line-status-box">
+            <span class="line-badge">LINE</span>
+            <div>
+              <strong id="line-status-title">พร้อมส่งเข้าหลังบ้าน</strong>
+              <p id="line-status-text">เมื่อเพิ่มงานและเลือกแจ้งเตือน ระบบจะสร้างคิว `lineOutbox` ให้หลังบ้านส่งต่อเข้า LINE</p>
+            </div>
+          </div>
+          <div class="line-mini-stats">
+            <span><b id="line-queue-count">0</b> คิวในเครื่อง</span>
+            <span><b id="selected-event-count">0</b> งานวันนี้</span>
+          </div>
+        </section>
+      </aside>
     </section>
 
     <section id="guides" class="guide-section reveal">
@@ -191,8 +257,11 @@
         <label>เวลา<input id="event-time" type="time" /></label>
         <label class="wide">สถานที่<input id="event-location" /></label>
         <label>เจ้าของงาน<input id="event-owner" placeholder="เช่น กองสาธารณสุขฯ" /></label>
-        <label>ประเภทงาน<select id="event-category"><option value="meeting">ประชุม / อบรม</option><option value="activity">กิจกรรม</option><option value="important">วันสำคัญ</option><option value="media">ถ่ายทำ / สื่อ</option><option value="other">อื่น ๆ</option></select></label>
-        <label class="wide">แจ้งเตือนล่วงหน้า<select id="event-reminder"><option value="0">ไม่แจ้งเตือน</option><option value="30">30 นาที</option><option value="60" selected>1 ชั่วโมง</option><option value="180">3 ชั่วโมง</option><option value="1440">1 วัน</option></select></label>
+        <label>ผู้รับผิดชอบ<input id="event-responsible" placeholder="เช่น ทีม PR / ช่างภาพ" /></label>
+        <label>ประเภทงาน<select id="event-category"><option value="meeting">ประชุม / อบรม</option><option value="activity">กิจกรรม</option><option value="important">วันสำคัญ</option><option value="media">ถ่ายทำ / สื่อ</option><option value="buddhist">วันพระ</option><option value="other">อื่น ๆ</option></select></label>
+        <label>แจ้งเตือนล่วงหน้า<select id="event-reminder"><option value="0">ไม่แจ้งเตือน</option><option value="30">30 นาที</option><option value="60" selected>1 ชั่วโมง</option><option value="180">3 ชั่วโมง</option><option value="1440">1 วัน</option></select></label>
+        <label class="line-toggle wide"><input id="event-line-notify" type="checkbox" checked /> แจ้งเตือนเข้า LINE เมื่อบันทึกงาน</label>
+        <label class="wide">ปลายทาง LINE<input id="event-line-target" placeholder="เช่น กลุ่ม PR / userId / roomId" /></label>
       </div>
       <div class="modal-actions">
         <button id="delete-event" class="danger-button" type="button" hidden>ลบงาน</button>
@@ -206,9 +275,9 @@
   <dialog id="detail-dialog" class="modal-dialog">
     <article class="modal-card detail-card">
       <header><div><span id="detail-category"></span><h2 id="detail-title"></h2></div><button class="modal-close" type="button" data-close-dialog aria-label="ปิด">×</button></header>
-      <div class="detail-meta"><p>📅 <span id="detail-date"></span></p><p>🕘 <span id="detail-time"></span></p><p>📍 <span id="detail-location"></span></p><p>🏷️ <span id="detail-owner"></span></p></div>
+      <div class="detail-meta"><p>📅 <span id="detail-date"></span></p><p>🕘 <span id="detail-time"></span></p><p>📍 <span id="detail-location"></span></p><p>🏷️ <span id="detail-owner"></span></p><p>👤 <span id="detail-responsible"></span></p><p>LINE <span id="detail-line"></span></p></div>
       <p id="detail-description" class="detail-description"></p>
-      <div class="modal-actions"><span class="action-spacer"></span><button class="secondary-button" type="button" data-close-dialog>ปิด</button><button id="edit-event" class="primary-button" type="button">แก้ไขงาน</button></div>
+      <div class="modal-actions"><button id="send-line-now" class="secondary-button" type="button">ส่ง LINE ตอนนี้</button><span class="action-spacer"></span><button class="secondary-button" type="button" data-close-dialog>ปิด</button><button id="edit-event" class="primary-button" type="button">แก้ไขงาน</button></div>
     </article>
   </dialog>
 
@@ -221,8 +290,7 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script src="./auth-config.js?v=1.0.1"></script>
-  <script src="./app.js?v=1.0.1"></script>
-  <script type="module" src="./firebase-auth.js?v=1.0.1"></script>
+  <script src="./auth-config.js"></script>
+  <script type="module" src="./firebase-auth.js"></script>
 </body>
 </html>
