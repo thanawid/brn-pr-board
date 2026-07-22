@@ -1,9 +1,5 @@
 # BRN PR Board
 
-ชุดหน้าบ้านปรับ Visual Polish โดยใช้ Firebase/Firestore/LINE หลังบ้านเดิม
+Frontend refreshed to follow the approved calendar-first visual reference while preserving the existing Firebase Authentication, Firestore (`prEvents`), and LINE outbox (`lineOutbox`) integration.
 
-## อัปโหลด
-นำไฟล์ทั้งหมดในโฟลเดอร์นี้ไปวางที่ root ของ repository `brn-pr-board`
-
-## ระบบหลังบ้าน
-อ่าน `BACKEND-CONTRACT.md` ก่อนแก้ Firebase, Firestore, Functions หรือ LINE
+Upload all files in this folder to the repository root.
