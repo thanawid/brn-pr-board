@@ -10,6 +10,11 @@
 5. ส่งคิวแจ้งเตือนเข้า `lineOutbox` เมื่อเลือกแจ้ง LINE
 6. จัดแนวทางคอนเทนต์จากชื่องาน รายละเอียด ประเภทงาน วันสำคัญ และวันพระ
 
+## ค่าแจ้งเตือนเริ่มต้น
+- ทุกงานที่เลือกแจ้ง LINE จะตั้งค่าเตือนอัตโนมัติเป็น `แจ้งล่วงหน้า 1 วัน` และ `แจ้งเช้าวันงาน`
+- Frontend บันทึกค่า `reminderEnabled`, `reminderPolicy`, `reminderTimezone`, และ `reminders` ลงใน `prEvents`
+- Cloud Functions ฝั่งหลังบ้านสามารถอ่านค่าเหล่านี้แล้วสร้างคิวส่งเข้า `lineOutbox` ได้
+
 ## หลังบ้านที่ต้องคงเดิม
 - Firebase project `brn-pr-board`
 - Firebase Authentication
