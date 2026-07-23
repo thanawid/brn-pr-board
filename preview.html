@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=1.1.1">
+  <link rel="stylesheet" href="./styles.css?v=1.1.2">
 </head>
 <body>
   <div id="auth-gate" class="auth-gate" hidden>
@@ -140,6 +140,8 @@
         <label>เบอร์ผู้ประสานงาน<input id="event-contact-phone" inputmode="tel"></label>
         <label class="wide">ประธาน/ผู้กล่าวเปิดงาน<input id="event-chairperson" placeholder="ระบุเมื่อยืนยันแล้ว"></label>
         <fieldset class="wide output-fieldset"><legend>ผลงานที่ต้องจัดทำ</legend><div class="output-grid"><label><input type="checkbox" name="outputs" value="news"> ข่าว Facebook</label><label><input type="checkbox" name="outputs" value="album"> อัลบั้มภาพ</label><label><input type="checkbox" name="outputs" value="reel"> Reel / คลิปสั้น</label><label><input type="checkbox" name="outputs" value="video"> วิดีโอสรุป</label><label><input type="checkbox" name="outputs" value="live"> ถ่ายทอดสด</label><label><input type="checkbox" name="outputs" value="poster"> โปสเตอร์</label></div></fieldset>
+        <fieldset class="wide output-fieldset"><legend>ลักษณะงานประชาสัมพันธ์</legend><div class="output-grid pr-task-grid"><label><input type="checkbox" name="prTasks" value="photo"> ถ่ายภาพนิ่ง</label><label><input type="checkbox" name="prTasks" value="video"> ถ่ายวิดีโอ</label><label><input type="checkbox" name="prTasks" value="mc"> เป็นพิธีกร</label><label><input type="checkbox" name="prTasks" value="live"> ถ่ายทอดสด</label><label><input type="checkbox" name="prTasks" value="write_news"> เขียนข่าวประชาสัมพันธ์</label><label><input type="checkbox" name="prTasks" value="facebook"> เผยแพร่ Facebook</label><label><input type="checkbox" name="prTasks" value="website"> เผยแพร่เว็บไซต์</label><label><input type="checkbox" name="prTasks" value="poster"> จัดทำโปสเตอร์</label><label><input type="checkbox" name="prTasks" value="reel"> จัดทำ Reel / คลิปสั้น</label><label><input type="checkbox" name="prTasks" value="audio"> บันทึกเสียงประชาสัมพันธ์</label></div></fieldset>
+        <label class="wide">สรุปการปฏิบัติงาน<textarea id="event-pr-summary" rows="3" placeholder="สรุปสั้น ๆ ว่างานประชาสัมพันธ์ดำเนินการอะไรบ้าง (เว้นว่างได้ ระบบจะสรุปจากรายการที่เลือก)"></textarea></label>
         <label class="wide">ลิงก์ผลงาน/โพสต์<textarea id="event-publication-links" rows="2" placeholder="วางลิงก์หลังเผยแพร่แล้ว บรรทัดละ 1 ลิงก์"></textarea></label>
         <label class="wide check"><input id="event-notify" type="checkbox" checked> แจ้ง LINE ตอนบันทึก และใช้การเตือนตามนโยบายเดิม</label>
       </div>
@@ -155,6 +157,7 @@
         <section class="work-order-main">
           <div id="detail-meta" class="detail-meta"></div>
           <p id="detail-description" class="detail-description"></p>
+          <section><div class="subhead"><h3>ลักษณะงานประชาสัมพันธ์</h3></div><div id="detail-pr-tasks" class="output-tags"></div><p id="detail-pr-summary" class="detail-pr-summary"></p></section>
           <section><div class="subhead"><h3>ตรวจความพร้อม</h3><span id="detail-readiness"></span></div><div id="detail-missing" class="check-panel"></div></section>
           <section><div class="subhead"><h3>ผลงานที่ต้องจัดทำ</h3></div><div id="detail-outputs" class="output-tags"></div></section>
           <section id="detail-links-section"><div class="subhead"><h3>ลิงก์ผลงาน</h3></div><div id="detail-links" class="link-list"></div></section>
@@ -166,7 +169,7 @@
           <button id="copy-support" class="btn ghost full" type="button">คัดลอกแนวทางนี้</button>
         </aside>
       </div>
-      <footer class="work-order-footer"><button id="mark-next-status" class="btn ghost" type="button">เลื่อนสถานะ</button><button id="print-work-order" class="btn ghost" type="button">พิมพ์ใบงาน</button><button id="copy-media-brief" class="btn ghost" type="button">คัดลอกบรีฟสร้างสื่อ</button><button id="retry-line" class="btn ghost" type="button">ส่งแจ้ง LINE อีกครั้ง</button><span></span><button id="edit-event" class="btn primary" type="button">แก้ไขงาน</button></footer>
+      <footer class="work-order-footer"><button id="mark-next-status" class="btn ghost" type="button">เลื่อนสถานะ</button><button id="print-work-order" class="btn ghost" type="button" title="เปิดหน้าพิมพ์และเลือกบันทึกเป็น PDF ได้">พิมพ์ / บันทึก PDF</button><button id="copy-media-brief" class="btn ghost" type="button">คัดลอกบรีฟสร้างสื่อ</button><button id="retry-line" class="btn ghost" type="button">ส่งแจ้ง LINE อีกครั้ง</button><span></span><button id="edit-event" class="btn primary" type="button">แก้ไขงาน</button></footer>
     </article>
   </dialog>
 
@@ -178,13 +181,13 @@
     window.BRN_CURRENT_USER={displayName:"ธนวิชญ์",email:"preview@local",role:"admin"};
     window.BRN_AUTH_CONFIG={firebaseConfig:null};
     localStorage.setItem('brn-pr-events-v2', JSON.stringify([
-      {id:'demo-1',title:'ประชุมประชาคมระดับเมือง',description:'สรุปปัญหา ความต้องการ และประเด็นการพัฒนา เพื่อประกอบการจัดทำแผนพัฒนาท้องถิ่น',date:'2026-07-23',startTime:'09:00',endTime:'12:00',location:'ห้องประชุมชั้น 5',owner:'สำนักปลัดเทศบาล',category:'meeting',status:'preparing',contactName:'คุณอรทัย',contactPhone:'02-193-4512 ต่อ 102',chairperson:'นายสุชาติ แก้วประดิษฐ์',outputs:['news','album','reel'],notifyLine:true},
-      {id:'demo-2',title:'กิจกรรมทำความสะอาดคลองป่าช้า หมู่ที่ 3',description:'ร่วมกันเก็บขยะและปรับภูมิทัศน์ริมคลอง',date:'2026-07-24',startTime:'08:30',location:'จุดรวมพลริมคลองป่าช้า หมู่ที่ 3',owner:'กองสาธารณสุขและสิ่งแวดล้อม',category:'activity',status:'waiting_info',outputs:['news','album','reel'],notifyLine:true},
-      {id:'demo-3',title:'ถ่ายทำคลิปแนะนำบริการประชาชน',description:'ถ่ายคลิปสั้นแนะนำช่องทางติดต่อเทศบาล',date:'2026-07-27',startTime:'13:30',location:'สำนักงานเทศบาลเมืองบางรักน้อย',owner:'งานประชาสัมพันธ์',category:'media',status:'confirmed',contactName:'ทีมประชาสัมพันธ์',outputs:['reel','video'],notifyLine:true},
-      {id:'demo-4',title:'โครงการร่วมกิจกรรมร่วมใจเพื่อผู้สูงวัยบางรักน้อย',description:'สรุปข่าวและอัลบั้มภาพหลังจบกิจกรรม',date:'2026-07-14',startTime:'08:30',location:'ลานอเนกประสงค์ เทศบาลเมืองบางรักน้อย',owner:'กองสวัสดิการสังคม',category:'activity',status:'waiting_publish',contactName:'กองสวัสดิการสังคม',contactPhone:'02-193-4512',chairperson:'นายสุชาติ แก้วประดิษฐ์',outputs:['news','album','video'],notifyLine:false}
+      {id:'demo-1',title:'ประชุมประชาคมระดับเมือง',description:'สรุปปัญหา ความต้องการ และประเด็นการพัฒนา เพื่อประกอบการจัดทำแผนพัฒนาท้องถิ่น',date:'2026-07-23',startTime:'09:00',endTime:'12:00',location:'ห้องประชุมชั้น 5',owner:'สำนักปลัดเทศบาล',category:'meeting',status:'preparing',contactName:'คุณอรทัย',contactPhone:'02-193-4512 ต่อ 102',chairperson:'นายสุชาติ แก้วประดิษฐ์',outputs:['news','album','reel'],prTasks:['photo','video','write_news','facebook','reel'],prSummary:'บันทึกภาพนิ่งและวิดีโอ จัดทำข่าวประชาสัมพันธ์ และเผยแพร่ผ่าน Facebook ของเทศบาลเมืองบางรักน้อย',notifyLine:true},
+      {id:'demo-2',title:'กิจกรรมทำความสะอาดคลองป่าช้า หมู่ที่ 3',description:'ร่วมกันเก็บขยะและปรับภูมิทัศน์ริมคลอง',date:'2026-07-24',startTime:'08:30',location:'จุดรวมพลริมคลองป่าช้า หมู่ที่ 3',owner:'กองสาธารณสุขและสิ่งแวดล้อม',category:'activity',status:'waiting_info',outputs:['news','album','reel'],prTasks:['photo','video','write_news','facebook'],notifyLine:true},
+      {id:'demo-3',title:'ถ่ายทำคลิปแนะนำบริการประชาชน',description:'ถ่ายคลิปสั้นแนะนำช่องทางติดต่อเทศบาล',date:'2026-07-27',startTime:'13:30',location:'สำนักงานเทศบาลเมืองบางรักน้อย',owner:'งานประชาสัมพันธ์',category:'media',status:'confirmed',contactName:'ทีมประชาสัมพันธ์',outputs:['reel','video'],prTasks:['video','reel','facebook'],notifyLine:true},
+      {id:'demo-4',title:'โครงการร่วมกิจกรรมร่วมใจเพื่อผู้สูงวัยบางรักน้อย',description:'สรุปข่าวและอัลบั้มภาพหลังจบกิจกรรม',date:'2026-07-14',startTime:'08:30',location:'ลานอเนกประสงค์ เทศบาลเมืองบางรักน้อย',owner:'กองสวัสดิการสังคม',category:'activity',status:'waiting_publish',contactName:'กองสวัสดิการสังคม',contactPhone:'02-193-4512',chairperson:'นายสุชาติ แก้วประดิษฐ์',outputs:['news','album','video'],prTasks:['photo','video','write_news','facebook'],prSummary:'บันทึกภาพกิจกรรม จัดทำข่าวพร้อมอัลบั้มภาพ และเผยแพร่ประชาสัมพันธ์เรียบร้อยแล้ว',notifyLine:false}
     ]));
   </script>
-  <script src="./calendar-data.js?v=1.1.1"></script>
-  <script src="./app.js?v=1.1.1"></script>
+  <script src="./calendar-data.js?v=1.1.2"></script>
+  <script src="./app.js?v=1.1.2"></script>
 </body>
 </html>

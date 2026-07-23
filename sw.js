@@ -1,5 +1,5 @@
-const CACHE = 'brn-pr-board-work-led-v1-1-1-20260723';
-const ASSETS = ['./','./index.html','./styles.css?v=1.1.1','./app.js?v=1.1.1','./calendar-data.js?v=1.1.1','./auth-bootstrap.js?v=1.1.1','./auth-config.js?v=1.1.1','./firebase-auth.js?v=1.1.1','./manifest.webmanifest','./assets/logo.png'];
+const CACHE = 'brn-pr-board-work-led-v1-1-2-20260723';
+const ASSETS = ['./','./index.html','./styles.css?v=1.1.2','./app.js?v=1.1.2','./calendar-data.js?v=1.1.2','./auth-bootstrap.js?v=1.1.2','./auth-config.js?v=1.1.2','./firebase-auth.js?v=1.1.2','./manifest.webmanifest','./assets/logo.png'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', event => { if (event.request.method !== 'GET') return; event.respondWith(fetch(event.request).then(response => { const copy = response.clone(); caches.open(CACHE).then(cache => cache.put(event.request, copy)); return response; }).catch(() => caches.match(event.request).then(response => response || caches.match('./index.html')))); });

@@ -34,6 +34,18 @@
     live: 'ถ่ายทอดสด',
     poster: 'โปสเตอร์',
   };
+  const PR_TASKS = {
+    photo: 'ถ่ายภาพนิ่ง',
+    video: 'ถ่ายวิดีโอ',
+    mc: 'เป็นพิธีกร',
+    live: 'ถ่ายทอดสด',
+    write_news: 'เขียนข่าวประชาสัมพันธ์',
+    facebook: 'เผยแพร่ Facebook',
+    website: 'เผยแพร่เว็บไซต์',
+    poster: 'จัดทำโปสเตอร์',
+    reel: 'จัดทำ Reel / คลิปสั้น',
+    audio: 'บันทึกเสียงประชาสัมพันธ์',
+  };
   const MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
   const SHORT_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
 
@@ -111,6 +123,8 @@
       contactPhone: raw.contactPhone || '',
       chairperson: raw.chairperson || '',
       outputs: Array.isArray(raw.outputs) ? raw.outputs : [],
+      prTasks: Array.isArray(raw.prTasks) ? raw.prTasks : inferLegacyPrTasks(raw),
+      prSummary: raw.prSummary || '',
       publicationLinks: raw.publicationLinks || '',
       notifyLine: raw.notifyLine !== false,
     };
@@ -119,6 +133,17 @@
     const today = iso(new Date());
     if (event.date < today) return event.publicationLinks ? 'published' : 'waiting_publish';
     return 'waiting_info';
+  }
+  function inferLegacyPrTasks(event) {
+    const outputs = Array.isArray(event.outputs) ? event.outputs : [];
+    const tasks = [];
+    if (outputs.includes('album')) tasks.push('photo');
+    if (outputs.includes('video') || outputs.includes('reel')) tasks.push('video');
+    if (outputs.includes('reel')) tasks.push('reel');
+    if (outputs.includes('live')) tasks.push('live');
+    if (outputs.includes('news')) tasks.push('write_news', 'facebook');
+    if (outputs.includes('poster')) tasks.push('poster');
+    return [...new Set(tasks)];
   }
   function displayTime(event) {
     if (event.allDay) return 'ตลอดวัน';
@@ -134,7 +159,7 @@
     return !['completed', 'cancelled'].includes(event.status);
   }
   function eventSearchText(event) {
-    return [event.title, event.description, event.location, event.owner, event.contactName, STATUSES[event.status], CATEGORIES[event.category]].join(' ').toLowerCase();
+    return [event.title, event.description, event.prSummary, event.location, event.owner, event.contactName, ...(event.prTasks || []).map((key) => PR_TASKS[key] || key), STATUSES[event.status], CATEGORIES[event.category]].join(' ').toLowerCase();
   }
   function filteredEvents(events = state.events) {
     return events.filter((event) => {
@@ -146,6 +171,14 @@
   }
   function outputLabels(event) {
     return (event.outputs || []).map((key) => OUTPUTS[key] || key);
+  }
+  function prTaskLabels(event) {
+    return (event.prTasks || []).map((key) => PR_TASKS[key] || key);
+  }
+  function autoPrSummary(event) {
+    const tasks = prTaskLabels(event);
+    if (!tasks.length) return 'ยังไม่ได้ระบุรายละเอียดการปฏิบัติงานประชาสัมพันธ์';
+    return `งานประชาสัมพันธ์ดำเนินการ ${tasks.join(' · ')} สำหรับงาน “${event.title}”`;
   }
 
   function readiness(event) {
@@ -395,9 +428,11 @@
     $('event-contact-name').value = event?.contactName || '';
     $('event-contact-phone').value = event?.contactPhone || '';
     $('event-chairperson').value = event?.chairperson || '';
+    $('event-pr-summary').value = event?.prSummary || '';
     $('event-publication-links').value = event?.publicationLinks || '';
     $('event-notify').checked = event?.notifyLine !== false;
     qsa('input[name="outputs"]', $('event-form')).forEach((input) => { input.checked = Boolean(event?.outputs?.includes(input.value)); });
+    qsa('input[name="prTasks"]', $('event-form')).forEach((input) => { input.checked = Boolean(event?.prTasks?.includes(input.value)); });
     $('delete-event').hidden = !event;
     syncAllDayFields();
     $('event-dialog').showModal();
@@ -428,6 +463,8 @@
       contactPhone: $('event-contact-phone').value.trim(),
       chairperson: $('event-chairperson').value.trim(),
       outputs: qsa('input[name="outputs"]:checked', $('event-form')).map((input) => input.value),
+      prTasks: qsa('input[name="prTasks"]:checked', $('event-form')).map((input) => input.value),
+      prSummary: $('event-pr-summary').value.trim(),
       publicationLinks: $('event-publication-links').value.trim(),
       notifyLine: $('event-notify').checked,
       reminderEnabled: $('event-notify').checked,
@@ -517,6 +554,9 @@
     ];
     $('detail-meta').innerHTML = meta.map(([label, value]) => `<div class="meta-card"><small>${esc(label)}</small><strong>${esc(value)}</strong></div>`).join('');
     $('detail-description').textContent = event.description || 'ยังไม่มีรายละเอียดกิจกรรม';
+    const taskLabels = prTaskLabels(event);
+    $('detail-pr-tasks').innerHTML = taskLabels.length ? taskLabels.map((label) => `<span class="output-tag pr-task-tag">${esc(label)}</span>`).join('') : '<span class="empty-state" style="width:100%">ยังไม่ได้ระบุลักษณะงานประชาสัมพันธ์</span>';
+    $('detail-pr-summary').textContent = event.prSummary || autoPrSummary(event);
     $('detail-readiness').innerHTML = `<span class="readiness-pill ${r.level}">${r.score}% พร้อม</span>`;
     $('detail-missing').innerHTML = r.fields.map(([name, ok]) => `<div class="check-row ${ok ? 'ok' : 'missing'}"><span>${ok ? '✓' : '!'}</span><span>${esc(name)}${ok ? ' พร้อมแล้ว' : ' ยังไม่มีข้อมูล'}</span></div>`).join('');
     $('detail-outputs').innerHTML = event.outputs?.length ? outputLabels(event).map((label) => `<span class="output-tag">${esc(label)}</span>`).join('') : '<span class="empty-state" style="width:100%">ยังไม่ได้กำหนดผลงานที่ต้องจัดทำ</span>';
@@ -614,6 +654,45 @@
     $('live-time-text').textContent = `เวลา ${now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Bangkok' }).replace(':', '.')} น.`;
   }
 
+  function printPrSummary(event) {
+    const popup = window.open('', '_blank', 'width=980,height=900');
+    if (!popup) {
+      toast('เบราว์เซอร์บล็อกหน้าพิมพ์ กรุณาอนุญาตป๊อปอัปสำหรับเว็บไซต์นี้');
+      return;
+    }
+    const logoUrl = new URL('./assets/logo.png', window.location.href).href;
+    const tasks = prTaskLabels(event);
+    const outputs = outputLabels(event);
+    const links = String(event.publicationLinks || '').split(/\n+/).map((item) => item.trim()).filter(Boolean);
+    const current = window.BRN_CURRENT_USER || {};
+    const recorder = current.displayName || current.email || event.updatedBy || 'งานประชาสัมพันธ์';
+    const summary = event.prSummary || autoPrSummary(event);
+    const taskHtml = (tasks.length ? tasks : ['ยังไม่ได้ระบุ']).map((label) => `<span class="task"><b>✓</b>${esc(label)}</span>`).join('');
+    const outputHtml = (outputs.length ? outputs : ['ยังไม่ได้ระบุ']).map((label) => `<span class="output">${esc(label)}</span>`).join('');
+    const linksHtml = links.length ? links.map((link) => `<div class="link">${esc(link)}</div>`).join('') : '<span class="muted">ยังไม่มีลิงก์ผลงาน</span>';
+    popup.document.open();
+    popup.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ใบสรุปการปฏิบัติงานประชาสัมพันธ์ - ${esc(event.title)}</title><style>
+      @page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{margin:0;background:#eef0f3;color:#1f1724;font-family:"IBM Plex Sans Thai","Noto Sans Thai",Tahoma,sans-serif;font-size:12.4px;line-height:1.42}.sheet{width:190mm;margin:12px auto;background:#fff;padding:7mm 9mm 5mm;box-shadow:0 8px 35px rgba(0,0,0,.16)}.top{display:grid;grid-template-columns:22mm 1fr 25mm;align-items:center;gap:4mm;padding-bottom:3mm;border-bottom:2px solid #6a268e}.logo{width:20mm;height:20mm;object-fit:cover;border-radius:5mm}.heading{text-align:center}.heading h1{font-size:20px;line-height:1.2;margin:0;color:#4b176f}.heading h2{font-size:14.5px;margin:2px 0 0}.doc-date{text-align:right;align-self:start;font-size:10px;color:#655b69}.gold-line{height:2px;background:#d7a22a;margin-top:1px}.event-title{margin:4mm 0 3mm;padding:3mm 4mm;background:#f6f0fa;border-left:4px solid #6a268e;border-radius:2.5mm}.event-title small{display:block;color:#6a268e;font-weight:700}.event-title strong{font-size:17px;line-height:1.28}.meta{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #ded7e2;border-radius:2.5mm;overflow:hidden}.meta td{width:50%;padding:2.2mm 3mm;vertical-align:top;border-right:1px solid #e7e1e9;border-bottom:1px solid #e7e1e9}.meta td:last-child{border-right:0}.meta tr:last-child td{border-bottom:0}.meta small{display:block;color:#756a79;margin-bottom:1px}.meta strong{font-size:12.8px}.section{margin-top:3.2mm;break-inside:avoid}.section h3{font-size:13.5px;color:#4b176f;margin:0 0 1.7mm;padding-bottom:1mm;border-bottom:1px solid #d9cbe1}.description,.summary{border:1px solid #e2dce5;border-radius:2.5mm;padding:2.5mm 3mm;min-height:10mm;white-space:pre-wrap}.summary{min-height:13mm;background:#fcfafc}.tasks{display:grid;grid-template-columns:1fr 1fr;gap:1.4mm}.task{display:flex;align-items:center;gap:1.7mm;padding:1.7mm 2.5mm;background:#f7f2fa;border-radius:2mm}.task b{display:inline-grid;place-items:center;width:4.4mm;height:4.4mm;border-radius:50%;background:#6a268e;color:#fff;font-size:9px}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.result-box{min-width:0}.outputs{display:flex;flex-wrap:wrap;gap:1.2mm}.output{padding:1mm 2.3mm;border:1px solid #cdb8d8;border-radius:999px;color:#4b176f;font-weight:700;font-size:11px}.link{font-size:10px;word-break:break-all;padding:1mm 0;border-bottom:1px dashed #ddd}.muted{color:#877d8a}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:13mm;margin-top:5mm;break-inside:avoid}.sign{text-align:center;padding-top:6mm;border-top:1px dotted #777}.sign small{display:block;color:#6e6571}.footer-note{text-align:center;color:#8a818d;font-size:9px;margin-top:4mm;padding-top:2mm;border-top:1px solid #eee}.no-print{position:fixed;right:20px;bottom:20px;border:0;border-radius:999px;background:#5c207f;color:#fff;padding:12px 18px;font-family:inherit;font-size:14px;font-weight:700;box-shadow:0 8px 25px rgba(75,23,111,.3)}
+      @media print{body{background:#fff}.sheet{width:auto;margin:0;padding:0;box-shadow:none}.no-print{display:none}}
+    </style></head><body><main class="sheet"><header class="top"><img class="logo" src="${logoUrl}" alt="โลโก้งานประชาสัมพันธ์"><div class="heading"><h1>ใบสรุปการปฏิบัติงานประชาสัมพันธ์</h1><h2>เทศบาลเมืองบางรักน้อย</h2></div><div class="doc-date">วันที่จัดทำ<br><strong>${esc(thaiDate(new Date(), false))}</strong></div></header><div class="gold-line"></div>
+      <section class="event-title"><small>ชื่องาน / กิจกรรม</small><strong>${esc(event.title)}</strong></section>
+      <table class="meta"><tr><td><small>วันที่</small><strong>${esc(thaiDate(event.date))}</strong></td><td><small>เวลา</small><strong>${esc(displayTime(event))}</strong></td></tr><tr><td colspan="2"><small>สถานที่</small><strong>${esc(event.location || 'ยังไม่ระบุ')}</strong></td></tr><tr><td><small>กอง / สำนักเจ้าของงาน</small><strong>${esc(event.owner || 'ยังไม่ระบุ')}</strong></td><td><small>สถานะงาน</small><strong>${esc(STATUSES[event.status] || 'รอข้อมูล')}</strong></td></tr><tr><td><small>ผู้ประสานงาน</small><strong>${esc(event.contactName || 'ยังไม่ระบุ')}</strong></td><td><small>เบอร์ติดต่อ</small><strong>${esc(event.contactPhone || 'ยังไม่ระบุ')}</strong></td></tr></table>
+      <section class="section"><h3>รายละเอียดงาน / กิจกรรม</h3><div class="description">${esc(event.description || 'ยังไม่มีรายละเอียด')}</div></section>
+      <section class="section"><h3>งานประชาสัมพันธ์ที่ดำเนินการ</h3><div class="tasks">${taskHtml}</div></section>
+      <section class="section"><h3>สรุปการปฏิบัติงาน</h3><div class="summary">${esc(summary)}</div></section>
+      <section class="section result-grid"><div class="result-box"><h3>ผลงานที่จัดทำ</h3><div class="outputs">${outputHtml}</div></div><div class="result-box"><h3>ช่องทางเผยแพร่ / ลิงก์ผลงาน</h3>${linksHtml}</div></section>
+      <section class="signatures"><div class="sign"><strong>${esc(recorder)}</strong><small>ผู้บันทึก / ผู้ปฏิบัติงานประชาสัมพันธ์</small></div><div class="sign"><strong>${esc(thaiDate(new Date(), false))}</strong><small>วันที่บันทึก</small></div></section>
+      <div class="footer-note">จัดทำจาก BRN PR Board · งานประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย</div></main><button class="no-print" onclick="window.print()">พิมพ์ / บันทึก PDF</button></body></html>`);
+    const launchPrint = () => {
+      if (popup.__brnPrintStarted) return;
+      popup.__brnPrintStarted = true;
+      setTimeout(() => { if (!popup.closed) { popup.focus(); popup.print(); } }, 450);
+    };
+    popup.addEventListener('load', launchPrint, { once: true });
+    popup.document.close();
+    setTimeout(launchPrint, 1000);
+  }
+
   function bindEvents() {
     $('prev-month').addEventListener('click', () => { state.cursor = new Date(state.cursor.getFullYear(), state.cursor.getMonth() - 1, 1); renderCalendar(); });
     $('next-month').addEventListener('click', () => { state.cursor = new Date(state.cursor.getFullYear(), state.cursor.getMonth() + 1, 1); renderCalendar(); });
@@ -697,7 +776,10 @@
       openEvent(target.date, target);
     });
     $('mark-next-status').addEventListener('click', advanceStatus);
-    $('print-work-order').addEventListener('click', () => window.print());
+    $('print-work-order').addEventListener('click', () => {
+      const event = state.events.find((item) => item.id === state.detailId);
+      if (event) printPrSummary(event);
+    });
     $('copy-media-brief').addEventListener('click', async () => {
       const event = state.events.find((item) => item.id === state.detailId);
       if (!event) return;
