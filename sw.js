@@ -1,5 +1,5 @@
-const CACHE = 'brn-pr-board-calendar-first-20260721';
-const ASSETS = ['./','./index.html','./styles.css','./app.js','./auth-bootstrap.js','./auth-config.js','./firebase-auth.js','./manifest.webmanifest','./assets/logo.png'];
-self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())));
-self.addEventListener('activate', e => e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
-self.addEventListener('fetch', e => { if (e.request.method !== 'GET') return; e.respondWith(fetch(e.request).then(r => { const copy=r.clone(); caches.open(CACHE).then(c=>c.put(e.request,copy)); return r; }).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html')))); });
+const CACHE = 'brn-pr-board-work-led-v1-1-0-20260723';
+const ASSETS = ['./','./index.html','./styles.css?v=1.1.0','./app.js?v=1.1.0','./calendar-data.js?v=1.1.0','./auth-bootstrap.js?v=1.1.0','./auth-config.js?v=1.1.0','./firebase-auth.js?v=1.1.0','./manifest.webmanifest','./assets/logo.png'];
+self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
+self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
+self.addEventListener('fetch', event => { if (event.request.method !== 'GET') return; event.respondWith(fetch(event.request).then(response => { const copy = response.clone(); caches.open(CACHE).then(cache => cache.put(event.request, copy)); return response; }).catch(() => caches.match(event.request).then(response => response || caches.match('./index.html')))); });

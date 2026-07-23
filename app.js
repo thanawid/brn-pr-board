@@ -1,47 +1,761 @@
-(()=>{if(window.__BRN_APP_LOADED__)return;window.__BRN_APP_LOADED__=true;
-const IMPORTANT=[{"date": "2026-01-01", "title": "วันขึ้นปีใหม่", "type": "วันหยุด/วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "อวยพรปีใหม่ สรุปช่องทางบริการ และเตือนเดินทางปลอดภัย"}, {"date": "2026-01-02", "title": "วันหยุดพิเศษช่วงปีใหม่", "type": "วันหยุดราชการ", "pillar": "ปลอดภัย", "note": "วางโพสต์บริการจำเป็น ช่องทางติดต่อ และการเดินทางปลอดภัย"}, {"date": "2026-01-10", "title": "วันเด็กแห่งชาติ", "type": "วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "กิจกรรมเด็ก ครอบครัว พื้นที่ปลอดภัย และการเรียนรู้ของเยาวชน"}, {"date": "2026-01-16", "title": "วันครู", "type": "วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "ขอบคุณครูและบุคลากรการศึกษา เชื่อมกับอนาคตของชุมชน"}, {"date": "2026-03-03", "title": "วันมาฆบูชา", "type": "วันหยุด/วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "วัด ชุมชน ความสงบเรียบร้อย และการดูแลพื้นที่รอบวัด"}, {"date": "2026-03-18", "title": "วันท้องถิ่นไทย", "type": "วันสำคัญ", "pillar": "เมืองสมดุล", "note": "เล่า 1 วันของเทศบาลว่าดูแลเมืองและบริการประชาชนอย่างไร"}, {"date": "2026-03-22", "title": "วันน้ำโลก", "type": "วันสำคัญ", "pillar": "สิ่งแวดล้อม", "note": "คลอง ท่อระบายน้ำ การใช้น้ำ และการไม่ทิ้งขยะลงแหล่งน้ำ"}, {"date": "2026-04-06", "title": "วันจักรี", "type": "วันหยุด/วันสำคัญ", "pillar": "เมืองสมดุล", "note": "กิจกรรมรำลึกและงานดูแลความเรียบร้อยในพื้นที่"}, {"date": "2026-04-13", "title": "สงกรานต์ / วันผู้สูงอายุ", "type": "วันหยุด/วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "ครอบครัว ผู้สูงอายุ จุดบริการ และความปลอดภัยช่วงหยุดยาว"}, {"date": "2026-04-14", "title": "วันครอบครัว", "type": "วันหยุด/วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "ชวนดูแลผู้สูงอายุ เด็ก และความปลอดภัยในบ้าน"}, {"date": "2026-04-15", "title": "สงกรานต์", "type": "วันหยุด/วันสำคัญ", "pillar": "ปลอดภัย", "note": "เตือนการเดินทาง จุดเสี่ยง และช่องทางแจ้งเหตุ"}, {"date": "2026-04-24", "title": "วันเทศบาล", "type": "วันสำคัญ", "pillar": "เมืองสมดุล", "note": "5 งานเทศบาลใกล้ชีวิตประชาชน และคนเบื้องหลังที่ทำให้เมืองเดินต่อ"}, {"date": "2026-05-01", "title": "วันแรงงานแห่งชาติ", "type": "วันหยุด/วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "ขอบคุณแรงงานและเจ้าหน้าที่ภาคสนามที่ดูแลเมืองทุกวัน"}, {"date": "2026-05-04", "title": "วันฉัตรมงคล", "type": "วันหยุด/วันสำคัญ", "pillar": "เมืองสมดุล", "note": "กิจกรรมพิธีการและจิตอาสาพัฒนาเมือง"}, {"date": "2026-05-11", "title": "วันพืชมงคล", "type": "วันหยุดราชการ", "pillar": "สิ่งแวดล้อม", "note": "เชื่อมเกษตร พื้นที่สีเขียว ตลาด และคุณภาพชีวิตในเมือง"}, {"date": "2026-05-31", "title": "วันวิสาขบูชา / วันต้นไม้", "type": "วันหยุด/วันสำคัญ", "pillar": "สิ่งแวดล้อม", "note": "ทำบุญ ปลูกต้นไม้ ดูแลวัด และรักษาความสะอาดพื้นที่สาธารณะ"}, {"date": "2026-06-01", "title": "วันหยุดชดเชยวันวิสาขบูชา", "type": "วันหยุดราชการ", "pillar": "คุณภาพชีวิต", "note": "แจ้งบริการช่วงหยุดยาวและสรุปกิจกรรมวัด/ชุมชน"}, {"date": "2026-06-02", "title": "วันหยุดพิเศษ", "type": "วันหยุดราชการ", "pillar": "เมืองสมดุล", "note": "เตรียมคอนเทนต์ล่วงหน้า แจ้งช่องทางบริการและงานด่วน"}, {"date": "2026-06-03", "title": "วันเฉลิมพระชนมพรรษาสมเด็จพระนางเจ้าฯ พระบรมราชินี", "type": "วันหยุด/วันสำคัญ", "pillar": "เมืองสมดุล", "note": "กิจกรรมจิตอาสาและการดูแลพื้นที่สาธารณะ"}, {"date": "2026-06-05", "title": "วันสิ่งแวดล้อมโลก", "type": "วันสำคัญ", "pillar": "สิ่งแวดล้อม", "note": "ลดขยะ แยกขยะ คลองสะอาด และพื้นที่สีเขียว"}, {"date": "2026-06-15", "title": "วันไข้เลือดออกอาเซียน", "type": "วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "สำรวจลูกน้ำยุงลาย 3 จุดในบ้านและชุมชน"}, {"date": "2026-06-26", "title": "วันต่อต้านยาเสพติดโลก", "type": "วันสำคัญ", "pillar": "ปลอดภัย", "note": "สื่อสารเชิงป้องกันสำหรับเยาวชนและครอบครัว"}, {"date": "2026-07-01", "title": "วันสถาปนาลูกเสือแห่งชาติ", "type": "วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "เยาวชน จิตอาสา ระเบียบวินัย และการช่วยชุมชน"}, {"date": "2026-07-28", "title": "วันเฉลิมพระชนมพรรษาพระบาทสมเด็จพระเจ้าอยู่หัว", "type": "วันหยุด/วันสำคัญ", "pillar": "เมืองสมดุล", "note": "กิจกรรมจิตอาสาพัฒนาเมืองและดูแลพื้นที่สาธารณะ"}, {"date": "2026-07-29", "title": "วันอาสาฬหบูชา / วันภาษาไทยแห่งชาติ", "type": "วันหยุด/วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "วัด ชุมชน การใช้ภาษาไทยที่เข้าใจง่าย และความเรียบร้อยพื้นที่วัด"}, {"date": "2026-07-30", "title": "วันเข้าพรรษา", "type": "วันหยุด/วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "ถวายเทียน งดเหล้าเข้าพรรษา ดูแลวัด และการเดินทางปลอดภัย"}, {"date": "2026-08-12", "title": "วันแม่แห่งชาติ", "type": "วันหยุด/วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "ครอบครัว แม่ ผู้สูงอายุ และชุมชนดูแลกัน"}, {"date": "2026-09-20", "title": "วันเยาวชนแห่งชาติ / วันอนุรักษ์คลอง", "type": "วันสำคัญ", "pillar": "สิ่งแวดล้อม", "note": "เยาวชนร่วมดูแลคลองและเสนอไอเดียเมือง"}, {"date": "2026-09-24", "title": "วันมหิดล", "type": "วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "สาธารณสุข อสม. และบริการกลุ่มเปราะบาง"}, {"date": "2026-10-13", "title": "วันคล้ายวันสวรรคต รัชกาลที่ 9", "type": "วันหยุด/วันสำคัญ", "pillar": "เมืองสมดุล", "note": "น้อมรำลึก กิจกรรมจิตอาสา และการทำความดีเพื่อชุมชน"}, {"date": "2026-10-23", "title": "วันปิยมหาราช", "type": "วันหยุด/วันสำคัญ", "pillar": "เมืองสมดุล", "note": "เชื่อมประวัติศาสตร์กับการบริการประชาชน"}, {"date": "2026-10-26", "title": "วันออกพรรษา", "type": "วันสำคัญ", "pillar": "คุณภาพชีวิต", "note": "งานวัด ประเพณี ความเรียบร้อย และการจัดการจราจร"}, {"date": "2026-11-24", "title": "วันลอยกระทง", "type": "วันสำคัญ", "pillar": "สิ่งแวดล้อม", "note": "กระทงธรรมชาติ ความปลอดภัย และการเก็บขยะหลังงาน"}, {"date": "2026-12-04", "title": "วันสิ่งแวดล้อมไทย", "type": "วันสำคัญ", "pillar": "สิ่งแวดล้อม", "note": "สรุปผลงานลดขยะ พื้นที่สีเขียว และคลองสะอาด"}, {"date": "2026-12-05", "title": "วันพ่อแห่งชาติ / วันชาติ", "type": "วันหยุด/วันสำคัญ", "pillar": "เมืองสมดุล", "note": "น้อมรำลึก กิจกรรมจิตอาสา และคุณภาพชีวิต"}, {"date": "2026-12-07", "title": "วันหยุดชดเชยวันพ่อแห่งชาติ / วันชาติ", "type": "วันหยุดราชการ", "pillar": "เมืองสมดุล", "note": "แจ้งบริการช่วงหยุดยาวและสรุปกิจกรรมจิตอาสา"}, {"date": "2026-12-10", "title": "วันรัฐธรรมนูญ", "type": "วันหยุด/วันสำคัญ", "pillar": "เมืองสมดุล", "note": "สิทธิ หน้าที่ และการมีส่วนร่วมของประชาชน"}, {"date": "2026-12-31", "title": "วันสิ้นปี", "type": "วันหยุด/วันสำคัญ", "pillar": "ปลอดภัย", "note": "สรุปผลงานทั้งปีและเตือนเดินทางปลอดภัย"}];const BUDDHIST=[{"date": "2026-01-03", "lunar": "ขึ้น 15 ค่ำ เดือนยี่"}, {"date": "2026-01-11", "lunar": "แรม 8 ค่ำ เดือนยี่"}, {"date": "2026-01-18", "lunar": "แรม 15 ค่ำ เดือนยี่"}, {"date": "2026-01-26", "lunar": "ขึ้น 8 ค่ำ เดือนสาม"}, {"date": "2026-02-02", "lunar": "ขึ้น 15 ค่ำ เดือนสาม"}, {"date": "2026-02-10", "lunar": "แรม 8 ค่ำ เดือนสาม"}, {"date": "2026-02-16", "lunar": "แรม 14 ค่ำ เดือนสาม"}, {"date": "2026-02-24", "lunar": "ขึ้น 8 ค่ำ เดือนสี่"}, {"date": "2026-03-03", "lunar": "ขึ้น 15 ค่ำ เดือนสี่"}, {"date": "2026-03-11", "lunar": "แรม 8 ค่ำ เดือนสี่"}, {"date": "2026-03-18", "lunar": "แรม 15 ค่ำ เดือนสี่"}, {"date": "2026-03-26", "lunar": "ขึ้น 8 ค่ำ เดือนห้า"}, {"date": "2026-04-02", "lunar": "ขึ้น 15 ค่ำ เดือนห้า"}, {"date": "2026-04-10", "lunar": "แรม 8 ค่ำ เดือนห้า"}, {"date": "2026-04-16", "lunar": "แรม 14 ค่ำ เดือนห้า"}, {"date": "2026-04-24", "lunar": "ขึ้น 8 ค่ำ เดือนหก"}, {"date": "2026-05-01", "lunar": "ขึ้น 15 ค่ำ เดือนหก"}, {"date": "2026-05-09", "lunar": "แรม 8 ค่ำ เดือนหก"}, {"date": "2026-05-16", "lunar": "แรม 15 ค่ำ เดือนหก"}, {"date": "2026-05-24", "lunar": "ขึ้น 8 ค่ำ เดือนเจ็ด"}, {"date": "2026-05-31", "lunar": "ขึ้น 15 ค่ำ เดือนเจ็ด"}, {"date": "2026-06-08", "lunar": "แรม 8 ค่ำ เดือนเจ็ด / วันอัฏฐมีบูชา"}, {"date": "2026-06-14", "lunar": "แรม 14 ค่ำ เดือนเจ็ด"}, {"date": "2026-06-22", "lunar": "ขึ้น 8 ค่ำ เดือนแปด"}, {"date": "2026-06-29", "lunar": "ขึ้น 15 ค่ำ เดือนแปด"}, {"date": "2026-07-07", "lunar": "แรม 8 ค่ำ เดือนแปด"}, {"date": "2026-07-14", "lunar": "แรม 15 ค่ำ เดือนแปด"}, {"date": "2026-07-22", "lunar": "ขึ้น 8 ค่ำ เดือนแปดหลัง"}, {"date": "2026-07-29", "lunar": "ขึ้น 15 ค่ำ เดือนแปดหลัง"}, {"date": "2026-07-30", "lunar": "แรม 1 ค่ำ เดือนแปดหลัง / วันเข้าพรรษา"}, {"date": "2026-08-06", "lunar": "แรม 8 ค่ำ เดือนแปดหลัง"}, {"date": "2026-08-13", "lunar": "แรม 15 ค่ำ เดือนแปดหลัง"}, {"date": "2026-08-21", "lunar": "ขึ้น 8 ค่ำ เดือนเก้า"}, {"date": "2026-08-28", "lunar": "ขึ้น 15 ค่ำ เดือนเก้า"}, {"date": "2026-09-05", "lunar": "แรม 8 ค่ำ เดือนเก้า"}, {"date": "2026-09-11", "lunar": "แรม 14 ค่ำ เดือนเก้า"}, {"date": "2026-09-19", "lunar": "ขึ้น 8 ค่ำ เดือนสิบ"}, {"date": "2026-09-26", "lunar": "ขึ้น 15 ค่ำ เดือนสิบ"}, {"date": "2026-10-04", "lunar": "แรม 8 ค่ำ เดือนสิบ"}, {"date": "2026-10-11", "lunar": "แรม 15 ค่ำ เดือนสิบ"}, {"date": "2026-10-19", "lunar": "ขึ้น 8 ค่ำ เดือนสิบเอ็ด"}, {"date": "2026-10-26", "lunar": "ขึ้น 15 ค่ำ เดือนสิบเอ็ด"}, {"date": "2026-11-03", "lunar": "แรม 8 ค่ำ เดือนสิบเอ็ด"}, {"date": "2026-11-09", "lunar": "แรม 14 ค่ำ เดือนสิบเอ็ด"}, {"date": "2026-11-17", "lunar": "ขึ้น 8 ค่ำ เดือนสิบสอง"}, {"date": "2026-11-24", "lunar": "ขึ้น 15 ค่ำ เดือนสิบสอง"}, {"date": "2026-12-02", "lunar": "แรม 8 ค่ำ เดือนสิบสอง"}, {"date": "2026-12-09", "lunar": "แรม 15 ค่ำ เดือนสิบสอง"}, {"date": "2026-12-17", "lunar": "ขึ้น 8 ค่ำ เดือนอ้าย"}, {"date": "2026-12-24", "lunar": "ขึ้น 15 ค่ำ เดือนอ้าย"}];
-const cfg=window.BRN_AUTH_CONFIG.firebaseConfig;const $=id=>document.getElementById(id);const state={cursor:new Date(),selected:new Date(),events:[],editing:null,detail:null,db:null,fs:null,cloud:false,unsub:null,query:'',category:'all',lastAdded:null};state.cursor.setDate(1);
-const el={title:$('month-title'),grid:$('calendar-grid'),search:$('event-search'),filter:$('event-filter'),prev:$('prev-month'),next:$('next-month'),today:$('today-button'),add:$('add-event-button'),sync:$('sync-status'),showH:$('show-holidays'),showB:$('show-buddhist'),guideTitle:$('guide-title'),aiSummary:$('ai-context-summary'),photo:$('photo-guide'),video:$('video-guide'),prep:$('prep-guide'),content:$('content-guide'),important:$('important-days'),dayDialog:$('day-dialog'),dayTitle:$('day-board-title'),daySignals:$('day-board-signals'),dayList:$('day-board-list'),dayGuide:$('day-board-guide'),dayAdd:$('day-board-add'),eventDialog:$('event-dialog'),eventForm:$('event-form'),eventHeading:$('event-heading'),eventKicker:$('event-kicker'),eventTitle:$('event-title'),eventDescription:$('event-description'),eventDate:$('event-date'),eventStartTime:$('event-start-time'),eventEndTime:$('event-end-time'),eventAllDay:$('event-all-day'),eventLocation:$('event-location'),eventOwner:$('event-owner'),eventCategory:$('event-category'),eventNotify:$('event-notify'),deleteEvent:$('delete-event'),detailDialog:$('detail-dialog'),detailTitle:$('detail-title'),detailCategory:$('detail-category'),detailDate:$('detail-date'),detailTime:$('detail-time'),detailLocation:$('detail-location'),detailOwner:$('detail-owner'),detailDescription:$('detail-description'),editEvent:$('edit-event'),ideasDialog:$('ideas-dialog'),ideasList:$('ideas-list'),toast:$('toast')};
-const categories={meeting:'ประชุม / อบรม',activity:'กิจกรรม',media:'ถ่ายทำ / สื่อ',other:'อื่น ๆ'};
-const defaultReminders=[{key:'day_before',label:'แจ้งล่วงหน้า 1 วัน',daysBefore:1,sendAt:'08:00'},{key:'event_morning',label:'แจ้งเช้าวันงาน',daysBefore:0,sendAt:'07:00'}];
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function iso(d){const z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`}function parseIso(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}function thaiMonth(d){return new Intl.DateTimeFormat('th-TH',{month:'long',year:'numeric'}).format(d)}function thaiDate(s){return new Intl.DateTimeFormat('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(parseIso(s))}function normalizeTime(v=''){const raw=String(v||'').trim().replace(/\s*น\.?$/,'');if(!raw)return '';const compact=raw.replace(/\D/g,'');if(/^\d{3,4}$/.test(compact)){const t=compact.padStart(4,'0');return `${t.slice(0,2)}:${t.slice(2,4)}`}const cleaned=raw.replace('.',':');const m=cleaned.match(/^(\d{1,2})(?::(\d{1,2}))?$/);if(m)return `${m[1].padStart(2,'0')}:${(m[2]||'00').padStart(2,'0')}`;return cleaned}function formatClock(v,unit=true){const t=normalizeTime(v);if(!t)return '';const [h='00',m='00']=t.split(':');return `${h.padStart(2,'0')}.${m.padStart(2,'0')}${unit?' น.':''}`}function displayTime(e){if(e?.allDay)return 'ตลอดวัน';const start=normalizeTime(e?.startTime||e?.time),end=normalizeTime(e?.endTime);if(start&&end)return `${formatClock(start,false)}–${formatClock(end)}`;if(start)return formatClock(start);return 'ไม่ระบุเวลา'}function timePrefix(e){if(e?.allDay)return 'ตลอดวัน';const start=normalizeTime(e?.startTime||e?.time),end=normalizeTime(e?.endTime);if(start&&end)return `${formatClock(start,false)}-${formatClock(end)}`;return start?formatClock(start):''}function toast(msg){el.toast.textContent=msg;el.toast.classList.add('show');setTimeout(()=>el.toast.classList.remove('show'),2600)}
-function localEvents(){try{return JSON.parse(localStorage.getItem('brn-pr-events')||'[]')}catch{return []}}function saveLocal(){localStorage.setItem('brn-pr-events',JSON.stringify(state.events))}
-function eventRank(e){if(e.kind==='holiday')return 3;if(e.kind==='buddhist')return 4;if(e.allDay)return 1;const t=normalizeTime(e.startTime||e.time);return t?0:2}function sortDayItems(a,b){const rank=eventRank(a)-eventRank(b);if(rank)return rank;if(eventRank(a)===0){const ta=normalizeTime(a.startTime||a.time)||'99:99',tb=normalizeTime(b.startTime||b.time)||'99:99';if(ta!==tb)return ta.localeCompare(tb)}return String(a.title||'').localeCompare(String(b.title||''),'th')}function selectedItems(){const key=iso(state.selected),user=state.events.filter(e=>e.date===key).map(e=>({...e,kind:e.category||'other'})),imp=IMPORTANT.filter(e=>e.date===key).map(e=>({...e,kind:'holiday'})),bud=BUDDHIST.filter(e=>e.date===key).map(e=>({...e,title:'วันพระ',note:e.lunar,kind:'buddhist'}));return [...user,...imp,...bud].sort(sortDayItems)}
-function guidance(){const items=selectedItems(),text=items.map(x=>`${x.title||''} ${x.description||''} ${x.note||''} ${x.location||''}`).join(' ');let mode='งานประชาสัมพันธ์ทั่วไป',photo=['ภาพรวมสถานที่และป้ายงาน','ภาพเจ้าของงานหรือผู้กล่าวเปิด','ภาพผู้ร่วมงานมีปฏิสัมพันธ์','ภาพรายละเอียดและภาพหมู่'];let video=['Opening 3–5 วินาทีให้รู้ว่างานอะไร','เก็บ B-roll บรรยากาศหลายระยะ','สัมภาษณ์สั้น 1–2 คน','ปิดด้วยผลลัพธ์หรือช่องทางติดต่อ'];let prep=['กล้อง แบตเตอรี่ และเมมโมรี','ไมค์หรืออุปกรณ์บันทึกเสียง','กำหนดการและชื่อบุคคลสำคัญ','ตรวจสถานที่และแสงก่อนเริ่ม'];let content=['โพสต์ภาพชุดเล่าเรื่องตามลำดับ','Reel สั้นพร้อม Hook ใน 3 วินาที','สรุปประโยชน์ที่ประชาชนได้รับ','ปิดด้วยข้อมูลติดต่อหรือคำชวน'];if(/ตักบาตร/.test(text)){mode='งานตักบาตรและกิจกรรมทางพระพุทธศาสนา';photo=['ภาพกว้างโต๊ะตักบาตรและแถวประชาชน','ภาพพระสงฆ์รับบิณฑบาตอย่างสำรวม','Close-up มือถวายอาหาร ดอกไม้ และสีหน้าผู้ร่วมงาน','ภาพผู้บริหารและประชาชนร่วมพิธีโดยไม่บังพระสงฆ์'];video=['เปิดด้วยบรรยากาศยามเช้าและเสียงระฆังหรือบทสวด','เก็บลำดับเตรียมของ–พระสงฆ์เดิน–ประชาชนตักบาตร','ใช้ช็อตนิ่ง นุ่มนวล และไม่รบกวนพิธี','ปิดด้วยภาพรวมและข้อความอนุโมทนาบุญ'];prep=['ไปถึงก่อนพิธีอย่างน้อย 20 นาที','ปิดเสียงชัตเตอร์และหลีกเลี่ยงแฟลช','เตรียมเลนส์ระยะกลางเพื่อไม่เข้าใกล้พิธีเกินไป','ตรวจลำดับพิธีและจุดยืนกับผู้ประสานงาน'];content=['เล่าบรรยากาศแห่งศรัทธาและการมีส่วนร่วมของชุมชน','ระบุวัน เวลา วัด และหน่วยงานผู้จัดให้ถูกต้อง','เลือกภาพสำรวม ไม่ใช้ภาพที่บุคคลกำลังรับประทาน','ปิดด้วยข้อคิดหรือคำอวยพรที่สุภาพ']}else if(/เวียนเทียน/.test(text)){mode='งานเวียนเทียน';photo=['ภาพกว้างขบวนเวียนเทียนรอบอุโบสถ','ภาพเทียน ดอกไม้ ธูป และมือผู้ร่วมพิธี','ภาพสีหน้าอิ่มเอมภายใต้แสงเทียน','ภาพสถาปัตยกรรมวัดกับเส้นแสงอย่างสำรวม'];video=['เปิดด้วยแสงเย็นหรือค่ำและบรรยากาศวัด','ถ่ายช็อตเดินตามขบวนแบบมั่นคง ไม่แซงหรือขวาง','เก็บ Close-up เปลวเทียนสลับภาพกว้าง','ปิดด้วยภาพสงบและข้อความวันสำคัญทางศาสนา'];prep=['เตรียมเลนส์ไวแสงหรือโหมดกลางคืน','ใช้กันสั่นและหลีกเลี่ยงแฟลช','กำหนดจุดถ่ายก่อนขบวนเริ่ม','สวมชุดสุภาพและรักษาระยะจากผู้ร่วมพิธี'];content=['ใช้โทนสงบ สุภาพ และเคารพพิธี','เล่าความหมายของการเวียนเทียนอย่างกระชับ','เลือกคลิปเสียงบรรยากาศจริงมากกว่าดนตรีเร่ง','ตรวจชื่อวันสำคัญและวัดให้ถูกต้อง']}else if(/วันพระ|วัด|อาสาฬ|เข้าพรรษา|ออกพรรษา|วิสาข|มาฆ/.test(text)){mode='วันพระหรือวันสำคัญทางพระพุทธศาสนา';photo=['ภาพวัดและบรรยากาศโดยรวม','ภาพทำบุญ ตักบาตร หรือถวายสังฆทานอย่างสำรวม','ภาพพระสงฆ์ประกอบพิธีโดยไม่รบกวน','ภาพประชาชน เวียนเทียน เทียน ดอกไม้ และรายละเอียด'];video=['เปิดด้วยบรรยากาศสงบของสถานที่','เก็บรายละเอียดพิธีแบบนิ่งและสำรวม','บันทึกภาพชุมชนมีส่วนร่วมหลายช่วงวัย','ปิดด้วยความหมายของวันสำคัญและข้อควรปฏิบัติ'];prep=['ตรวจเวลาพิธีเช้าและเย็นให้ชัดเจน','แต่งกายสุภาพและปิดเสียงอุปกรณ์','หลีกเลี่ยงแฟลชและการเดินตัดหน้าพิธี','สอบถามพื้นที่ที่อนุญาตให้ถ่าย'];content=['อธิบายความหมายของวันสำคัญด้วยภาษาง่าย','ใช้ภาพสำรวมและไม่เน้นบุคคลใดเกินจำเป็น','ระบุวัด เวลา และกิจกรรมให้ครบ','ปิดด้วยคำเชิญชวนหรือข้อปฏิบัติที่เหมาะสม']}else if(/ประชุมสภา|สภาเทศบาล|ลงคะแนน|ญัตติ/.test(text)){mode='ประชุมสภาเทศบาล';photo=['ภาพรวมองค์ประชุมและป้ายการประชุม','ประธานสภาขณะดำเนินการประชุม','สมาชิกขณะอภิปรายและเสนอญัตติ','ภาพการลงมติ เอกสาร และเจ้าหน้าที่ที่เกี่ยวข้อง'];video=['เปิดด้วยชื่อครั้งประชุมและห้องประชุม','สลับภาพประธาน สมาชิก และบรรยากาศองค์ประชุม','เก็บประเด็นสำคัญโดยไม่ตัดความหมาย','ปิดด้วยมติหรือขั้นตอนดำเนินงานต่อไป'];prep=['ตรวจชื่อประธาน สมาชิก และวาระประชุม','เตรียมขาตั้งและไมค์รับเสียงจากระยะไกล','วางตำแหน่งกล้องไม่กีดขวางทางเดิน','หลีกเลี่ยงภาพเอกสารที่มีข้อมูลส่วนบุคคล'];content=['พาดหัวด้วยมติหรือประเด็นที่ประชาชนควรรู้','สรุปเฉพาะสาระสำคัญ ไม่ตีความเกินข้อเท็จจริง','ตรวจชื่อ ตำแหน่ง เลขครั้งประชุม และปี พ.ศ.','ใช้ภาพที่สะท้อนกระบวนการประชุมอย่างเป็นกลาง']}else if(/ประชุม|อบรม|สัมมนา|ประชาคม/.test(text)){mode=/ประชาคม/.test(text)?'เวทีประชาคมและการมีส่วนร่วม':'ประชุมหรืออบรม';photo=['ป้ายงานและภาพลงทะเบียน','ผู้กล่าวเปิด วิทยากร หรือผู้ดำเนินรายการ','ภาพกว้างผู้เข้าร่วมและการมีส่วนร่วม','ช่วงถาม–ตอบ ระดมความคิดเห็น และภาพหมู่'];video=['เปิดด้วยชื่อกิจกรรมและสถานที่','ช็อตผู้พูดสลับผู้ฟังและกิจกรรมกลุ่ม','เก็บเสียงประเด็นสำคัญ 1 ประโยค','ปิดด้วยข้อสรุปหรือขั้นตอนต่อไป'];content=['สรุปว่าใครมาร่วมและหารือเรื่องอะไร','ยกประเด็นหรือข้อเสนอที่สำคัญอย่างเป็นกลาง','ระบุผลลัพธ์หรือสิ่งที่จะดำเนินการต่อ','ตรวจรายชื่อ ตำแหน่ง และตัวเลขให้ครบ']}else if(/คลอง|ขยะ|ทำความสะอาด|สิ่งแวดล้อม/.test(text)){mode='กิจกรรมสิ่งแวดล้อมและพัฒนาพื้นที่';photo=['ภาพก่อนเริ่มงาน','ทีมงานและประชาชนขณะลงมือ','รายละเอียดอุปกรณ์หรือจุดปัญหา','ภาพหลังดำเนินการแบบ Before–After'];video=['เดินกล้องเปิดให้เห็นพื้นที่ก่อนทำ','Time-lapse หรือช็อตการทำงานต่อเนื่อง','Close-up รายละเอียดที่เปลี่ยนไป','ปิดด้วยภาพหลังทำและคำขอบคุณ'];content=['Before–After ชัด ๆ','ตัวเลขพื้นที่หรือปริมาณงาน','ขอบคุณชุมชนและหน่วยงานร่วม','เกร็ดดูแลพื้นที่ที่ทำได้ที่บ้าน']}else if(/ผู้สูงอายุ|เด็ก|เยาวชน|กีฬา/.test(text)){mode='กิจกรรมประชาชนและคุณภาพชีวิต';photo=['สีหน้าและรอยยิ้มของผู้ร่วมกิจกรรม','ภาพทำกิจกรรมแบบเป็นธรรมชาติ','ภาพสัมพันธ์ระหว่างคนหลายช่วงวัย','ภาพหมู่และรายละเอียดบรรยากาศ'];video=['ช็อตเคลื่อนไหวสั้นกระชับ','Close-up สีหน้าและมือ','คำพูดสั้นจากผู้ร่วมกิจกรรม','Highlight 20–30 วินาที']}else if(/พระราช|เฉลิมพระชนม|ถวายพระพร|จิตอาสา/.test(text)){mode='งานพิธีการและกิจกรรมจิตอาสา';photo=['ภาพพระบรมฉายาลักษณ์หรือจุดประกอบพิธีอย่างสมพระเกียรติ','ประธานในพิธีและผู้ร่วมงานในจังหวะสำคัญ','ภาพกิจกรรมจิตอาสาขณะปฏิบัติงานจริง','ภาพหมู่และภาพพื้นที่หลังดำเนินการ'];video=['เปิดด้วยป้ายงานและบรรยากาศพิธีการ','เก็บลำดับพิธีอย่างครบถ้วนและสำรวม','สลับภาพกิจกรรมจิตอาสาและประชาชน','ปิดด้วยผลลัพธ์และข้อความน้อมสำนึกในพระมหากรุณาธิคุณ']}
-return{mode,photo,video,prep,content}}
-function monthlyPlan(){const m=state.cursor.getMonth(),y=state.cursor.getFullYear(),days=IMPORTANT.filter(x=>{const d=parseIso(x.date);return d.getMonth()===m&&d.getFullYear()===y}),jobs=state.events.filter(x=>{const d=parseIso(x.date);return d.getMonth()===m&&d.getFullYear()===y});const rows=[];days.slice(0,5).forEach(x=>rows.push({date:x.date,title:x.title,note:x.note,kind:'วันสำคัญ'}));jobs.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(0,5).forEach(x=>rows.push({date:x.date,title:x.title,note:x.owner?`เจ้าของงาน: ${x.owner}`:(x.description||'เตรียมสื่อให้พร้อมก่อนวันงาน'),kind:'งานในปฏิทิน'}));return rows.sort((a,b)=>String(a.date).localeCompare(String(b.date))).slice(0,8)}
-function renderWorkspaceGuides(){const title=$('workspace-guide-title'),summary=$('workspace-guide-summary'),context=$('workspace-context'),prep=$('workspace-prep'),photo=$('workspace-photo'),video=$('workspace-video'),content=$('workspace-content'),month=$('workspace-month');if(!title||!prep)return;const g=guidance(),items=selectedItems(),primary=items[0],dateText=thaiDate(iso(state.selected));title.textContent=items.length?`${dateText} · ${primary.title}`:`${dateText} · ยังไม่มีงาน`;summary.textContent=items.length?`ระบบจัดแนวทางจากข้อมูล ${items.length} รายการของวันนี้ และปรับคำแนะนำตามประเภทงาน สถานที่ วันสำคัญ และวันพระ`:'ยังไม่มีงานในวันที่เลือก ระบบจะแสดงแนวทางพื้นฐานและไอเดียประจำเดือนให้ก่อน';context.innerHTML=items.length?`<span class="ai-badge">แนวทางพร้อมใช้</span><div><strong>${esc(g.mode)}</strong><p>${primary?.owner?`เจ้าของงาน: ${esc(primary.owner)} · `:''}${primary?.location?`สถานที่: ${esc(primary.location)} · `:''}${primary?.description?esc(primary.description):'ใช้ข้อมูลจากปฏิทินเพื่อเตรียมงานประชาสัมพันธ์'}</p></div>`:`<span class="ai-badge muted">รอข้อมูลงาน</span><div><strong>เพิ่มงานลงปฏิทินได้ทันที</strong><p>เมื่อมีข้อมูลงาน ระบบจะเปลี่ยนคำแนะนำชุดนี้ให้ตรงกับงานโดยอัตโนมัติ</p></div>`;[[prep,g.prep],[photo,g.photo],[video,g.video],[content,g.content]].forEach(([node,rows])=>node.innerHTML=rows.map(x=>`<li>${esc(x)}</li>`).join(''));const plans=monthlyPlan();month.innerHTML=plans.length?plans.map(x=>`<article><time>${new Intl.DateTimeFormat('th-TH',{day:'numeric',month:'short'}).format(parseIso(x.date))}</time><div><small>${esc(x.kind)}</small><strong>${esc(x.title)}</strong><p>${esc(x.note||'')}</p></div></article>`).join(''):'<p class="empty-state">ยังไม่มีงานหรือวันสำคัญในเดือนนี้</p>'}
-function renderGuides(){const g=guidance(),items=selectedItems(),primary=items[0];el.guideTitle.textContent=items.length?`${thaiDate(iso(state.selected))} · ${primary.title}`:thaiDate(iso(state.selected));if(el.aiSummary)el.aiSummary.innerHTML=items.length?`<span class="ai-badge">จัดแนวทางให้แล้ว</span><div><strong>${esc(g.mode)}</strong><p>อ่านจาก ${items.length} รายการในวันนี้${primary?.location?` · สถานที่ ${esc(primary.location)}`:''} และจัดแนวทางถ่ายภาพ วิดีโอ การเตรียมงาน และคอนเทนต์ให้ตามบริบท</p></div>`:`<span class="ai-badge muted">ยังไม่มีงาน</span><div><strong>แนวทางพื้นฐานสำหรับทีม PR</strong><p>เมื่อเพิ่มงานหรือเลือกวันที่มีวันสำคัญ ระบบจะเปลี่ยนคำแนะนำให้เองอัตโนมัติ</p></div>`;[[el.photo,g.photo],[el.video,g.video],[el.prep,g.prep],[el.content,g.content]].forEach(([n,a])=>n.innerHTML=a.map(x=>`<li>${esc(x)}</li>`).join(''));renderWorkspaceGuides()}
-function renderImportant(){const m=state.cursor.getMonth(),y=state.cursor.getFullYear(),rows=IMPORTANT.filter(x=>{const d=parseIso(x.date);return d.getMonth()===m&&d.getFullYear()===y});el.important.innerHTML=rows.length?rows.map(x=>`<article class="important-day"><strong>${new Intl.DateTimeFormat('th-TH',{day:'numeric',month:'short'}).format(parseIso(x.date))}</strong><span>${esc(x.title)}</span><small>${esc(x.note)}</small></article>`).join(''):'<article class="important-day"><span>ยังไม่มีวันสำคัญในรายการเดือนนี้</span></article>'}
-function renderIdeas(){const m=state.cursor.getMonth(),rows=IMPORTANT.filter(x=>parseIso(x.date).getMonth()===m);el.ideasList.innerHTML=rows.map(x=>`<div class="important-day"><strong>${thaiDate(x.date)}</strong><span>${esc(x.title)}</span><small>${esc(x.note)}</small></div>`).join('')||'<p>ยังไม่มีรายการ</p>'}
-function dayEvents(key){return state.events.filter(x=>x.date===key).map(x=>({...x,kind:x.category||'other'})).sort(sortDayItems)}
-function daySignals(key){return [...IMPORTANT.filter(x=>x.date===key).map(x=>({...x,kind:'holiday'})),...BUDDHIST.filter(x=>x.date===key).map(x=>({date:x.date,title:'วันพระ',note:x.lunar,kind:'buddhist'}))].sort(sortDayItems)}
-function openDayBoard(key){if(!el.dayDialog){openEvent(key);return}state.selected=parseIso(key);renderCalendar();renderGuides();const works=dayEvents(key),signals=daySignals(key),g=guidance();el.dayTitle.textContent=thaiDate(key);el.daySignals.innerHTML=signals.length?signals.map(x=>`<span class="day-signal ${esc(x.kind)}"><strong>${esc(x.title)}</strong>${x.note?`<small>${esc(x.note)}</small>`:''}</span>`).join(''):'<span class="day-signal muted">ไม่มีวันพระหรือวันสำคัญในวันนี้</span>';el.dayList.innerHTML=works.length?works.map(e=>`<button class="day-work-item ${esc(e.kind)}" type="button" data-day-work-id="${esc(e.id)}"><span class="day-work-time">${esc(displayTime(e))}</span><strong>${esc(e.title)}</strong><dl><div><dt>สถานที่</dt><dd>${esc(e.location||'ยังไม่ระบุ')}</dd></div><div><dt>เจ้าของงาน</dt><dd>${esc(e.owner||'ทีม PR')}</dd></div><div><dt>ประเภท</dt><dd>${esc(categories[e.category]||categories.other)}</dd></div></dl>${e.description?`<p>${esc(e.description)}</p>`:''}</button>`).join(''):'<div class="empty-state">วันนี้ยังไม่มีงานในปฏิทิน กด “เพิ่มงานวันนี้” เพื่อจดงานของทีมได้เลย</div>';el.dayGuide.innerHTML=`<h3>แนวทางถ่ายวันนี้</h3><ul>${[...g.photo.slice(0,2),...g.video.slice(0,1)].map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;el.dayDialog.showModal()}
-function chipsFor(key){let chips=[];chips.push(...state.events.filter(x=>x.date===key).filter(x=>state.category==='all'||(x.category||'other')===state.category).filter(x=>!state.query||`${x.title||''} ${x.description||''} ${x.location||''} ${x.owner||''}`.toLowerCase().includes(state.query)).map(x=>({...x,kind:x.category||'other'})));if(el.showH.checked)chips.push(...IMPORTANT.filter(x=>x.date===key).map(x=>({...x,kind:'holiday'})));if(el.showB.checked)chips.push(...BUDDHIST.filter(x=>x.date===key).map(x=>({date:x.date,title:'วันพระ',note:x.lunar,kind:'buddhist'})));return chips.sort(sortDayItems)}
-function renderCalendar(){const y=state.cursor.getFullYear(),m=state.cursor.getMonth(),first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),today=iso(new Date()),selected=iso(state.selected),frag=document.createDocumentFragment();el.title.textContent=thaiMonth(state.cursor);for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);const key=iso(d),cell=document.createElement('div');cell.className='day';if(d.getMonth()!==m)cell.classList.add('outside');if(key===today)cell.classList.add('today');if(key===selected)cell.classList.add('selected');const chips=chipsFor(key);cell.innerHTML=`<span class="day-number">${d.getDate()}</span><div class="entries">${chips.slice(0,4).map(c=>c.kind==='buddhist'?`<span class="chip buddhist" title="${esc(c.note)}">วันพระ</span>`:c.kind==='holiday'?`<span class="chip holiday" title="${esc(c.note)}">${esc(c.title)}</span>`:`<button class="chip ${esc(c.kind)}${c.id===state.lastAdded?' new-entry':''}" type="button" data-id="${esc(c.id)}">${timePrefix(c)?`<b>${esc(timePrefix(c))}</b> `:''}${esc(c.title)}</button>`).join('')}${chips.length>4?`<span class="more">+${chips.length-4} รายการ</span>`:''}</div>`;cell.addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(b){e.stopPropagation();openDetail(b.dataset.id);return}openDayBoard(key)});cell.addEventListener('dblclick',e=>{if(e.target.closest('[data-id]'))return;e.preventDefault();el.dayDialog?.close();state.selected=new Date(d);renderCalendar();renderGuides();openEvent(key)});frag.appendChild(cell)}el.grid.replaceChildren(frag);renderImportant()}
-function syncAllDayFields(){const off=!!el.eventAllDay.checked;el.eventStartTime.disabled=off;el.eventEndTime.disabled=off;if(off){el.eventStartTime.value='';el.eventEndTime.value=''}}function openEvent(date,event=null){state.editing=event?.id||null;el.eventHeading.textContent=event?'แก้ไขงาน':'เพิ่มงานใหม่';el.eventKicker.textContent=event?'รายละเอียดงานในปฏิทิน':'จัดงานในปฏิทิน';el.eventTitle.value=event?.title||'';el.eventDescription.value=event?.description||'';el.eventDate.value=event?.date||date;el.eventStartTime.value=normalizeTime(event?.startTime||event?.time);el.eventEndTime.value=normalizeTime(event?.endTime);el.eventAllDay.checked=!!event?.allDay;syncAllDayFields();el.eventLocation.value=event?.location||'';el.eventOwner.value=event?.owner||'';el.eventCategory.value=event?.category||'meeting';el.eventNotify.checked=event?.notifyLine!==false;el.deleteEvent.hidden=!event;el.eventDialog.showModal();setTimeout(()=>el.eventTitle.focus(),50)}
-function openDetail(id){const e=state.events.find(x=>x.id===id);if(!e)return;state.detail=id;el.detailTitle.textContent=e.title;el.detailCategory.textContent=categories[e.category]||categories.other;el.detailDate.textContent=thaiDate(e.date);el.detailTime.textContent=displayTime(e);el.detailLocation.textContent=e.location||'ไม่ระบุสถานที่';el.detailOwner.textContent=e.owner||'ทีม PR';el.detailDescription.textContent=e.description||'ไม่มีรายละเอียดเพิ่มเติม';el.detailDialog.showModal()}
-function formData(){const allDay=el.eventAllDay.checked,startTime=allDay?'':el.eventStartTime.value,endTime=allDay?'':el.eventEndTime.value,notifyLine=el.eventNotify.checked;return{title:el.eventTitle.value.trim(),description:el.eventDescription.value.trim(),date:el.eventDate.value,time:startTime,startTime,endTime,allDay,location:el.eventLocation.value.trim(),owner:el.eventOwner.value.trim(),category:el.eventCategory.value,notifyLine,reminderEnabled:notifyLine,reminderPolicy:'default',reminderTimezone:'Asia/Bangkok',reminders:notifyLine?defaultReminders.map(x=>({...x})):[],updatedBy:window.BRN_CURRENT_USER?.displayName||'ทีม PR'}}
-async function notifyLine(e,action){if(!e.notifyLine||!state.cloud)return;const lines=[`📌 ${action}ใน BRN PR Board`,e.title,`${thaiDate(e.date)}${displayTime(e)!=='ไม่ระบุเวลา'?` เวลา ${displayTime(e)}`:''}`];if(e.location)lines.push(`📍 ${e.location}`);if(e.owner)lines.push(`เจ้าของงาน: ${e.owner}`);await state.fs.addDoc(state.fs.collection(state.db,'lineOutbox'),{text:lines.join('\n'),status:'pending',createdAt:state.fs.serverTimestamp(),eventId:e.id||null,type:'pr-event'})}
-async function save(p){if(state.cloud){if(state.editing){await state.fs.setDoc(state.fs.doc(state.db,'prEvents',state.editing),{...p,updatedAt:state.fs.serverTimestamp()},{merge:true});await notifyLine({...p,id:state.editing},'แก้ไขงาน')}else{const ref=await state.fs.addDoc(state.fs.collection(state.db,'prEvents'),{...p,createdAt:state.fs.serverTimestamp(),updatedAt:state.fs.serverTimestamp()});state.lastAdded=ref.id;setTimeout(()=>{state.lastAdded=null},1600);await notifyLine({...p,id:ref.id},'เพิ่มงานใหม่')}return}if(state.editing){const i=state.events.findIndex(x=>x.id===state.editing);state.events[i]={...state.events[i],...p}}else{const id=`local-${Date.now()}`;state.events.push({...p,id});state.lastAdded=id;setTimeout(()=>{state.lastAdded=null},1600)}saveLocal();renderCalendar();renderGuides()}
-async function remove(){if(!state.editing||!confirm('ลบงานนี้ใช่หรือไม่?'))return;if(state.cloud)await state.fs.deleteDoc(state.fs.doc(state.db,'prEvents',state.editing));else{state.events=state.events.filter(x=>x.id!==state.editing);saveLocal();renderCalendar();renderGuides()}el.eventDialog.close();toast('ลบงานแล้ว')}
-async function initCloud(){try{const [{initializeApp,getApps},fs]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js')]);const app=getApps().length?getApps()[0]:initializeApp(cfg);state.db=fs.getFirestore(app);state.fs=fs;const q=fs.query(fs.collection(state.db,'prEvents'),fs.orderBy('date','asc'));state.unsub=fs.onSnapshot(q,s=>{state.events=s.docs.map(d=>({id:d.id,...d.data()}));state.cloud=true;el.sync.textContent='ซิงก์ข้อมูลกับทีมแล้ว';renderCalendar();renderGuides()},err=>{console.error(err);state.cloud=false;state.events=localEvents();el.sync.textContent='Firestore ไม่พร้อม · ใช้ข้อมูลในเครื่อง';renderCalendar();renderGuides()})}catch(err){console.error(err);state.events=localEvents();el.sync.textContent='ใช้งานข้อมูลในเครื่อง';renderCalendar();renderGuides()}}
-function animateMonth(direction){el.grid.animate([{opacity:.25,transform:`translateX(${direction*18}px)`},{opacity:1,transform:'translateX(0)'}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)'})}el.prev.onclick=()=>{state.cursor=new Date(state.cursor.getFullYear(),state.cursor.getMonth()-1,1);renderCalendar();animateMonth(-1)};el.next.onclick=()=>{state.cursor=new Date(state.cursor.getFullYear(),state.cursor.getMonth()+1,1);renderCalendar();animateMonth(1)};el.today.onclick=()=>{state.cursor=new Date();state.cursor.setDate(1);state.selected=new Date();renderCalendar();renderGuides()};el.add.onclick=()=>openEvent(iso(state.selected));if(el.eventAllDay)el.eventAllDay.onchange=syncAllDayFields;el.showH.onchange=renderCalendar;el.showB.onchange=renderCalendar;if(el.search)el.search.oninput=e=>{state.query=e.target.value.trim().toLowerCase();renderCalendar()};if(el.filter)el.filter.onchange=e=>{state.category=e.target.value;renderCalendar()};el.eventForm.onsubmit=async e=>{e.preventDefault();const p=formData();if(!p.title||!p.date)return;const b=el.eventForm.querySelector('[type=submit]');b.disabled=true;try{const was=!!state.editing;await save(p);el.eventDialog.close();toast(was?'บันทึกการแก้ไขแล้ว':'เพิ่มงานแล้ว')}catch(err){console.error(err);toast('บันทึกไม่สำเร็จ กรุณาตรวจสิทธิ์ Firestore')}finally{b.disabled=false}};el.deleteEvent.onclick=remove;el.editEvent.onclick=()=>{const e=state.events.find(x=>x.id===state.detail);if(e){el.detailDialog.close();openEvent(e.date,e)}};if(el.dayAdd)el.dayAdd.onclick=()=>{const key=iso(state.selected);el.dayDialog.close();openEvent(key)};if(el.dayList)el.dayList.onclick=e=>{const b=e.target.closest('[data-day-work-id]');if(!b)return;el.dayDialog.close();openDetail(b.dataset.dayWorkId)};document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());document.querySelectorAll('dialog').forEach(d=>d.onclick=e=>{if(e.target===d)d.close()});const openMonthIdeas=$('open-month-ideas'),openIdeasCard=$('open-ideas-card'),refreshGuides=$('refresh-guides');const showIdeas=()=>{renderIdeas();el.ideasDialog.showModal()};if(openMonthIdeas)openMonthIdeas.onclick=showIdeas;if(openIdeasCard)openIdeasCard.onclick=()=>{location.hash='guides-page';showGuidesPage('content')};if(refreshGuides)refreshGuides.onclick=()=>{renderGuides();toast('อัปเดตแนวทางแล้ว')};
+(() => {
+  if (window.__BRN_APP_LOADED__) return;
+  window.__BRN_APP_LOADED__ = true;
 
-const guideDialog=$('guide-dialog'),guideDialogTitle=$('guide-dialog-title'),guideDialogKicker=$('guide-dialog-kicker'),guideDialogContent=$('guide-dialog-content'),myWorkDialog=$('my-work-dialog'),myWorkList=$('my-work-list');
-const guideMeta={
-  photo:{title:'แนวทางการถ่ายภาพ',kicker:'ภาพที่ควรมีในงาน',extra:['ถ่ายภาพกว้างเพื่อบอกสถานที่และจำนวนผู้ร่วมงาน','ถ่ายภาพกลางเพื่อเล่าเหตุการณ์หลัก','ถ่ายภาพใกล้เพื่อเก็บสีหน้า มือ และรายละเอียด','เผื่อภาพแนวตั้งสำหรับ Facebook Story และ Reels cover']},
-  video:{title:'แนวทางการถ่ายคลิป',kicker:'คลิปที่ช่วยเล่าเรื่อง',extra:['เริ่มด้วย Hook 3–5 วินาทีที่บอกว่างานคืออะไร','เก็บ B-roll หลายระยะและภาพเคลื่อนไหว','บันทึกเสียงบรรยากาศและสัมภาษณ์สั้น 1–2 คน','ปิดท้ายด้วยผลลัพธ์หรือช่องทางติดต่อ']},
-  prep:{title:'สิ่งที่ควรเตรียม',kicker:'เช็กลิสต์ก่อนออกงาน',extra:['ตรวจแบตเตอรี่ เมมโมรี และพื้นที่จัดเก็บ','เช็กวัน เวลา สถานที่ และผู้ประสานงาน','เตรียมไมค์ อุปกรณ์กันสั่น และสายสำรอง','เปิดดูแผนการถ่ายก่อนเริ่มงาน 10 นาที']}
-};
-function openGuide(kind){const g=guidance(),meta=guideMeta[kind]||guideMeta.photo,primary=g[kind]||[],all=[...new Set([...primary,...meta.extra])];guideDialogKicker.textContent=meta.kicker;guideDialogTitle.textContent=meta.title;guideDialogContent.innerHTML=`<section><h3>${esc(thaiDate(iso(state.selected)))}</h3><ul>${all.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section><section><h3>แนวทางใช้งานจริง</h3><p>เลือกใช้เฉพาะข้อที่เหมาะกับลักษณะงาน สถานที่ และเวลาที่มี เพื่อให้ทีมถ่ายภาพและคลิปไปในทิศทางเดียวกัน</p></section>`;guideDialog.showModal()}
-function openMyWork(){const user=window.BRN_CURRENT_USER||{},name=(user.displayName||'').trim().toLowerCase(),email=(user.email||'').trim().toLowerCase(),today=iso(new Date());let rows=state.events.filter(e=>e.date>=today).sort((a,b)=>`${a.date} ${a.startTime||a.time||''}`.localeCompare(`${b.date} ${b.startTime||b.time||''}`));const mine=rows.filter(e=>{const by=(e.updatedBy||'').toLowerCase(),owner=(e.owner||'').toLowerCase();return(name&&(by.includes(name)||owner.includes(name)))||(email&&by.includes(email))});if(mine.length)rows=mine;myWorkList.innerHTML=rows.length?rows.slice(0,30).map(e=>`<button class="my-work-item" type="button" data-work-id="${esc(e.id)}"><strong>${esc(e.title)}</strong><span>${esc(thaiDate(e.date))}${displayTime(e)!=='ไม่ระบุเวลา'?` · ${esc(displayTime(e))}`:''}</span><small>${esc(e.location||e.owner||categories[e.category]||'งานประชาสัมพันธ์')}</small></button>`).join(''):'<div class="empty-state">ยังไม่มีงานที่เกี่ยวข้องกับบัญชีนี้</div>';myWorkDialog.showModal()}
-document.querySelectorAll('[data-guide]').forEach(b=>b.addEventListener('click',()=>{const map={photo:'photo',video:'video',prep:'checklist'};location.hash='guides-page';showGuidesPage(map[b.dataset.guide]||'photo')}));
-const navHome=$('nav-home'),navGuides=$('nav-guides'),navMyWork=$('nav-my-work');
-if(navHome)navHome.onclick=e=>{e.preventDefault();location.hash='calendar';showCalendarPage()};
+  const cfg = window.BRN_AUTH_CONFIG?.firebaseConfig;
+  const calendarData = window.BRN_CALENDAR_DATA || { important: [], buddhist: [] };
+  const IMPORTANT = calendarData.important || [];
+  const BUDDHIST = calendarData.buddhist || [];
+  const $ = (id) => document.getElementById(id);
+  const qsa = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-const guidesPage=$('guides-page'),calendarSection=$('calendar'),guidesSection=$('guides'),importantSection=document.querySelector('.important'),backToCalendar=$('back-to-calendar');function showGuidesPage(target){renderWorkspaceGuides();if(guidesPage){calendarSection.hidden=true;guidesSection.hidden=true;importantSection.hidden=true;guidesPage.hidden=false;navGuides?.classList.add('active');navHome?.classList.remove('active');window.scrollTo({top:0,behavior:'smooth'});if(target)setTimeout(()=>$(`guide-${target}-detail`)?.scrollIntoView({behavior:'smooth',block:'start'}),120)}}function showCalendarPage(){if(guidesPage){guidesPage.hidden=true;calendarSection.hidden=false;guidesSection.hidden=false;importantSection.hidden=false;navGuides?.classList.remove('active');navHome?.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}}if(navGuides)navGuides.onclick=e=>{e.preventDefault();location.hash='guides-page';showGuidesPage()};if(backToCalendar)backToCalendar.onclick=()=>{location.hash='calendar';showCalendarPage()};
-if(navMyWork)navMyWork.onclick=openMyWork;
-if(myWorkList)myWorkList.onclick=e=>{const b=e.target.closest('[data-work-id]');if(!b)return;myWorkDialog.close();openDetail(b.dataset.workId)};
-let pointerTick=0;window.addEventListener('pointermove',e=>{if(innerWidth<900||matchMedia('(prefers-reduced-motion: reduce)').matches)return;cancelAnimationFrame(pointerTick);pointerTick=requestAnimationFrame(()=>{const x=(e.clientX/innerWidth-.5)*12,y=(e.clientY/innerHeight-.5)*10;document.querySelectorAll('.ambient').forEach((a,i)=>a.style.translate=`${x*(i?-.8:1)}px ${y*(i?-.7:1)}px`)})},{passive:true});
-function updateLiveDateTime(){const now=new Date(),dateEl=$('live-date-text'),timeEl=$('live-time-text');if(dateEl)dateEl.textContent=now.toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Bangkok'});if(timeEl)timeEl.textContent=`เวลา ${now.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Bangkok'}).replace(':','.')} น.`}updateLiveDateTime();setInterval(updateLiveDateTime,30000);if(location.hash==='#guides-page')showGuidesPage();state.events=localEvents();renderCalendar();renderGuides();renderImportant();if(window.BRN_CURRENT_USER)initCloud();else document.addEventListener('brn-auth-ready',initCloud,{once:true});})();
+  const CATEGORIES = {
+    meeting: 'ประชุม / อบรม',
+    activity: 'กิจกรรม',
+    media: 'ถ่ายทำ / สื่อ',
+    other: 'อื่น ๆ',
+  };
+  const STATUSES = {
+    waiting_info: 'รอข้อมูล',
+    confirmed: 'ยืนยันแล้ว',
+    preparing: 'กำลังเตรียมสื่อ',
+    ready: 'พร้อมปฏิบัติงาน',
+    waiting_publish: 'รอเผยแพร่',
+    published: 'เผยแพร่แล้ว',
+    completed: 'เสร็จสิ้น',
+    cancelled: 'ยกเลิก',
+  };
+  const STATUS_FLOW = ['waiting_info', 'confirmed', 'preparing', 'ready', 'waiting_publish', 'published', 'completed'];
+  const OUTPUTS = {
+    news: 'ข่าว Facebook',
+    album: 'อัลบั้มภาพ',
+    reel: 'Reel / คลิปสั้น',
+    video: 'วิดีโอสรุป',
+    live: 'ถ่ายทอดสด',
+    poster: 'โปสเตอร์',
+  };
+  const MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+  const SHORT_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+  const state = {
+    cursor: startOfMonth(new Date()),
+    selectedDate: new Date(),
+    selectedEventId: null,
+    events: [],
+    editingId: null,
+    detailId: null,
+    cloud: false,
+    db: null,
+    fs: null,
+    unsubscribe: null,
+    query: '',
+    category: 'all',
+    status: 'all',
+    view: window.innerWidth <= 700 ? 'list' : 'month',
+    detailTab: 'prep',
+    teamFilter: 'active',
+    metricRange: null,
+  };
+
+  function startOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+  function iso(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+  function parseDate(value) {
+    if (!value) return new Date();
+    const [y, m, d] = String(value).split('-').map(Number);
+    return new Date(y, (m || 1) - 1, d || 1);
+  }
+  function addDays(date, days) {
+    const next = new Date(date);
+    next.setDate(next.getDate() + days);
+    return next;
+  }
+  function daysBetween(from, to) {
+    const a = parseDate(iso(from));
+    const b = parseDate(iso(to));
+    return Math.round((b - a) / 86400000);
+  }
+  function thaiDate(value, includeWeekday = true) {
+    const date = typeof value === 'string' ? parseDate(value) : value;
+    return date.toLocaleDateString('th-TH', {
+      ...(includeWeekday ? { weekday: 'long' } : {}),
+      day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Bangkok',
+    });
+  }
+  function monthTitle(date) {
+    return `${MONTHS[date.getMonth()]} ${date.getFullYear() + 543}`;
+  }
+  function esc(value = '') {
+    return String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+  }
+  function normalizeEvent(raw) {
+    return {
+      ...raw,
+      title: raw.title || 'งานประชาสัมพันธ์',
+      description: raw.description || '',
+      date: raw.date || iso(new Date()),
+      category: raw.category || 'other',
+      status: raw.status || inferLegacyStatus(raw),
+      startTime: raw.startTime || raw.time || '',
+      endTime: raw.endTime || '',
+      allDay: Boolean(raw.allDay),
+      location: raw.location || '',
+      owner: raw.owner || '',
+      contactName: raw.contactName || '',
+      contactPhone: raw.contactPhone || '',
+      chairperson: raw.chairperson || '',
+      outputs: Array.isArray(raw.outputs) ? raw.outputs : [],
+      publicationLinks: raw.publicationLinks || '',
+      notifyLine: raw.notifyLine !== false,
+    };
+  }
+  function inferLegacyStatus(event) {
+    const today = iso(new Date());
+    if (event.date < today) return event.publicationLinks ? 'published' : 'waiting_publish';
+    return 'waiting_info';
+  }
+  function displayTime(event) {
+    if (event.allDay) return 'ตลอดวัน';
+    const start = event.startTime || event.time || '';
+    const end = event.endTime || '';
+    if (!start) return 'ไม่ระบุเวลา';
+    return end ? `${start}–${end} น.` : `${start} น.`;
+  }
+  function sortedEvents(events = state.events) {
+    return [...events].sort((a, b) => `${a.date} ${a.startTime || a.time || '99:99'}`.localeCompare(`${b.date} ${b.startTime || b.time || '99:99'}`));
+  }
+  function isActive(event) {
+    return !['completed', 'cancelled'].includes(event.status);
+  }
+  function eventSearchText(event) {
+    return [event.title, event.description, event.location, event.owner, event.contactName, STATUSES[event.status], CATEGORIES[event.category]].join(' ').toLowerCase();
+  }
+  function filteredEvents(events = state.events) {
+    return events.filter((event) => {
+      if (state.query && !eventSearchText(event).includes(state.query)) return false;
+      if (state.category !== 'all' && event.category !== state.category) return false;
+      if (state.status !== 'all' && event.status !== state.status) return false;
+      return true;
+    });
+  }
+  function outputLabels(event) {
+    return (event.outputs || []).map((key) => OUTPUTS[key] || key);
+  }
+
+  function readiness(event) {
+    const fields = [
+      ['เวลาเริ่มงาน', Boolean(event.allDay || event.startTime || event.time)],
+      ['สถานที่', Boolean(event.location)],
+      ['กอง/สำนักเจ้าของงาน', Boolean(event.owner)],
+      ['ผู้ประสานงาน', Boolean(event.contactName)],
+      ['เบอร์ผู้ประสานงาน', Boolean(event.contactPhone)],
+      ['ประธาน/ผู้กล่าวเปิดงาน', Boolean(event.chairperson)],
+      ['ผลงานที่ต้องจัดทำ', Boolean(event.outputs?.length)],
+    ];
+    const missing = fields.filter(([, ok]) => !ok).map(([name]) => name);
+    const score = Math.round(((fields.length - missing.length) / fields.length) * 100);
+    const level = score >= 85 ? 'good' : score >= 55 ? 'warn' : 'risk';
+    return { score, level, missing, fields };
+  }
+
+  function statusPill(event) {
+    return `<span class="status-pill status-${esc(event.status)}">${esc(STATUSES[event.status] || 'รอข้อมูล')}</span>`;
+  }
+  function readinessPill(event) {
+    const r = readiness(event);
+    return `<span class="readiness-pill ${r.level}">${r.score}% พร้อม</span>`;
+  }
+
+  function guidance(event) {
+    const text = [event.title, event.description, event.location, event.owner].join(' ').toLowerCase();
+    const prep = ['ตรวจวัน เวลา สถานที่ และเบอร์ผู้ประสานงานก่อนออกจากสำนักงาน', 'ชาร์จแบตเตอรี่ เตรียมเมมโมรี และอุปกรณ์สำรอง', 'เปิดใบงานก่อนเริ่มงาน 10 นาทีเพื่อทบทวนภาพบังคับ'];
+    const photo = ['เก็บภาพกว้างเพื่อบอกสถานที่และบรรยากาศ', 'เก็บภาพกลางของกิจกรรมหลักและบุคคลสำคัญ', 'เก็บภาพใกล้ของสีหน้า มือ และรายละเอียดที่เล่าเรื่องได้', 'เผื่อภาพแนวตั้งสำหรับ Story และหน้าปกคลิป'];
+    const video = ['เปิดด้วยภาพที่บอกได้ทันทีว่างานคืออะไรภายใน 3–5 วินาที', 'เก็บ B-roll ทั้งภาพกว้าง กลาง ใกล้ และการเคลื่อนไหว', 'บันทึกเสียงบรรยากาศและคำสัมภาษณ์สั้นอย่างน้อย 1 คน', 'ปิดด้วยผลลัพธ์ของงานหรือช่องทางติดต่อ'];
+    const content = ['พาดหัวควรบอกว่าเทศบาลทำอะไร ที่ไหน และประชาชนได้ประโยชน์อย่างไร', 'ข่าวหลังงานควรใช้ข้อมูลยืนยันแล้วเท่านั้น โดยเฉพาะชื่อ ตำแหน่ง วัน เวลา และจำนวน', 'เลือกภาพเปิดที่เห็นการลงมือทำหรือผลลัพธ์ ไม่ใช่ภาพยืนเรียงอย่างเดียว'];
+
+    const add = (condition, target, items) => { if (condition) target.unshift(...items); };
+    add(/ประชุม|อบรม|สัมมนา|ประชาคม|สภา/.test(text), prep, ['ขอวาระประชุม รายชื่อประธาน และประเด็นตัดสินใจที่ต้องสื่อ', 'เตรียมป้ายชื่อบุคคลและสะกดตำแหน่งให้ตรงเอกสาร']);
+    add(/ประชาคม|รับฟัง|ความเห็น/.test(text), photo, ['เน้นภาพประชาชนแสดงความคิดเห็นและเจ้าหน้าที่รับฟัง', 'เก็บภาพเอกสาร แผนที่ หรือประเด็นปัญหาที่ประชาชนเสนอ']);
+    add(/ประชุม|อบรม|สัมมนา|สภา/.test(text), video, ['เก็บช่วงเปิดงาน ประเด็นสำคัญ และข้อสรุป ไม่จำเป็นต้องถ่ายต่อเนื่องทั้งงาน']);
+    add(/ทำความสะอาด|คลอง|ขยะ|สิ่งแวดล้อม|ปลูกต้นไม้/.test(text), photo, ['ถ่ายภาพก่อนทำ ระหว่างทำ และหลังทำจากมุมใกล้เคียงกัน', 'เน้นภาพเจ้าหน้าที่และประชาชนลงมือทำจริง']);
+    add(/ทำความสะอาด|คลอง|ขยะ|สิ่งแวดล้อม/.test(text), content, ['ทำคอนเทนต์แบบ ก่อน–หลัง และบอกผลลัพธ์ที่วัดได้เมื่อมีข้อมูลยืนยัน']);
+    add(/ผู้สูงอายุ|เด็ก|เยาวชน|ครอบครัว|สุขภาพ/.test(text), photo, ['ขออนุญาตก่อนถ่ายภาพใกล้ โดยเฉพาะเด็กและกลุ่มเปราะบาง', 'เน้นปฏิสัมพันธ์ รอยยิ้ม และการมีส่วนร่วมอย่างเป็นธรรมชาติ']);
+    add(/ศาสนา|วัด|ตักบาตร|ถวาย|พระ|พรรษา/.test(text), prep, ['ตรวจลำดับพิธี การแต่งกาย และจุดยืนที่ไม่รบกวนพิธี']);
+    add(/ศาสนา|วัด|ตักบาตร|ถวาย|พระ|พรรษา/.test(text), photo, ['หลีกเลี่ยงแฟลชและการเคลื่อนผ่านหน้าพิธี', 'เก็บภาพรวมพิธี เครื่องสักการะ และการมีส่วนร่วมของชุมชน']);
+    add(/live|ถ่ายทอดสด|ถ่ายทอด/.test(text) || event.outputs?.includes('live'), prep, ['ทดสอบอินเทอร์เน็ต เสียง และไฟเลี้ยงก่อนเริ่มอย่างน้อย 30 นาที', 'เตรียมข้อความสำรองกรณีสัญญาณขัดข้อง']);
+    add(event.outputs?.includes('reel'), video, ['เก็บคลิปแนวตั้ง 9:16 และเผื่อพื้นที่บน–ล่างสำหรับข้อความ']);
+    add(event.outputs?.includes('poster'), content, ['ล็อกข้อความจริงที่ต้องใช้บนโปสเตอร์ก่อนสร้างภาพ และตรวจคำทุกครั้ง']);
+
+    const r = readiness(event);
+    if (r.missing.length) prep.unshift(`ข้อมูลที่ควรขอเพิ่มก่อนงาน: ${r.missing.join(', ')}`);
+    return {
+      prep: [...new Set(prep)].slice(0, 7),
+      photo: [...new Set(photo)].slice(0, 7),
+      video: [...new Set(video)].slice(0, 7),
+      content: [...new Set(content)].slice(0, 7),
+    };
+  }
+
+  function riskAlerts(event) {
+    const r = readiness(event);
+    const diff = daysBetween(new Date(), parseDate(event.date));
+    const alerts = [];
+    if (r.missing.length) alerts.push(`ยังขาด: ${r.missing.slice(0, 3).join(', ')}${r.missing.length > 3 ? ' และข้อมูลอื่น' : ''}`);
+    if (diff <= 1 && diff >= 0 && r.score < 85) alerts.push('งานเริ่มภายใน 24 ชั่วโมง แต่ข้อมูลยังไม่พร้อม');
+    if (event.date < iso(new Date()) && !['published', 'completed', 'cancelled'].includes(event.status)) alerts.push('งานผ่านไปแล้ว แต่ยังไม่ปิดสถานะหรือแนบลิงก์ผลงาน');
+    if (event.status === 'waiting_publish' && !event.publicationLinks) alerts.push('รอเผยแพร่และยังไม่มีลิงก์ผลงาน');
+    return alerts;
+  }
+
+  function localEvents() {
+    try { return JSON.parse(localStorage.getItem('brn-pr-events-v2') || '[]').map(normalizeEvent); } catch { return []; }
+  }
+  function saveLocal() {
+    localStorage.setItem('brn-pr-events-v2', JSON.stringify(state.events));
+  }
+
+  function toast(message, duration = 3200) {
+    const el = $('toast');
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => el.classList.remove('show'), duration);
+  }
+
+  function renderAll() {
+    renderDashboard();
+    renderCalendar();
+    renderImportant();
+    renderAssistant();
+    if ($('team-work-dialog')?.open) renderTeamWork();
+  }
+
+  function renderDashboard() {
+    const todayKey = iso(new Date());
+    const weekEnd = iso(addDays(new Date(), 7));
+    const todayEvents = sortedEvents(state.events.filter((e) => e.date === todayKey && e.status !== 'cancelled'));
+    const weekEvents = sortedEvents(state.events.filter((e) => e.date >= todayKey && e.date <= weekEnd && isActive(e)));
+    const missingEvents = state.events.filter((e) => e.date >= todayKey && isActive(e) && readiness(e).missing.length);
+    const waitingPublish = state.events.filter((e) => e.status === 'waiting_publish');
+    $('metric-today').textContent = todayEvents.length;
+    $('metric-week').textContent = weekEvents.length;
+    $('metric-missing').textContent = missingEvents.length;
+    $('metric-publish').textContent = waitingPublish.length;
+
+    if (todayEvents.length) {
+      $('today-title').textContent = `วันนี้มี ${todayEvents.length} งานที่ต้องดูแล`;
+      const risky = todayEvents.filter((e) => readiness(e).score < 85).length;
+      $('today-summary').textContent = risky ? `${risky} งานยังมีข้อมูลหรือการเตรียมที่ต้องตามต่อ` : 'ข้อมูลหลักพร้อมแล้ว ทีมสามารถเปิดใบงานเพื่อทบทวนก่อนออกงาน';
+    } else {
+      $('today-title').textContent = 'วันนี้ไม่มีงานตามปฏิทิน';
+      $('today-summary').textContent = weekEvents.length ? `มี ${weekEvents.length} งานใน 7 วันข้างหน้า ควรใช้วันนี้เตรียมข้อมูลและสื่อ` : 'ตารางสัปดาห์นี้ยังว่าง เหมาะสำหรับวางแผนคอนเทนต์ล่วงหน้า';
+    }
+
+    const upcoming = sortedEvents(state.events.filter((e) => e.date >= todayKey && isActive(e)));
+    const next = upcoming[0];
+    const card = $('next-event-card');
+    if (!next) {
+      card.className = 'next-event-card empty';
+      card.innerHTML = `<span class="next-label">งานถัดไป</span><h2>ยังไม่มีงานที่กำลังจะมาถึง</h2><p>เพิ่มงานใหม่เพื่อให้ทีมเห็นแผนเดียวกันทุกอุปกรณ์</p><div class="next-actions"><button class="btn primary" data-add-empty type="button">＋ เพิ่มงาน</button></div>`;
+    } else {
+      const diff = daysBetween(new Date(), parseDate(next.date));
+      const when = diff === 0 ? 'วันนี้' : diff === 1 ? 'พรุ่งนี้' : `อีก ${diff} วัน`;
+      card.className = 'next-event-card';
+      card.innerHTML = `<span class="next-label">งานถัดไป · ${when}</span><h2>${esc(next.title)}</h2><p>${esc(thaiDate(next.date))} · ${esc(displayTime(next))}</p><p>${esc(next.location || 'ยังไม่ระบุสถานที่')}</p><div class="next-actions"><button class="btn primary" data-open-next="${esc(next.id)}" type="button">เปิดใบงาน PR</button><button class="btn ghost" data-edit-next="${esc(next.id)}" type="button">แก้ไขข้อมูล</button></div>`;
+    }
+
+    const focusCandidates = sortedEvents(state.events.filter((e) => isActive(e) && (e.date >= todayKey || e.status === 'waiting_publish')))
+      .sort((a, b) => {
+        const ar = riskAlerts(a).length ? 0 : 1;
+        const br = riskAlerts(b).length ? 0 : 1;
+        return ar - br || `${a.date} ${a.startTime || ''}`.localeCompare(`${b.date} ${b.startTime || ''}`);
+      }).slice(0, 6);
+    $('focus-list').innerHTML = focusCandidates.length ? focusCandidates.map((event) => {
+      const date = parseDate(event.date);
+      const alerts = riskAlerts(event);
+      return `<article class="focus-item"><div class="focus-date"><strong>${date.getDate()}</strong><span>${SHORT_MONTHS[date.getMonth()]}</span></div><div class="focus-copy"><strong>${esc(event.title)}</strong><span>${esc(displayTime(event))} · ${esc(event.location || event.owner || 'ยังไม่ระบุสถานที่')}</span><small>${alerts.length ? `⚠ ${esc(alerts[0])}` : '✓ ข้อมูลหลักอยู่ในระดับพร้อมใช้งาน'}</small></div><div class="focus-actions">${statusPill(event)}${readinessPill(event)}<button class="btn ghost" data-focus-id="${esc(event.id)}" type="button">เปิดงาน</button></div></article>`;
+    }).join('') : '<div class="empty-state">ยังไม่มีงานที่ต้องติดตาม เพิ่มงานใหม่เพื่อเริ่มจัดลำดับให้ทีม</div>';
+  }
+
+  function renderCalendar() {
+    $('month-title').textContent = monthTitle(state.cursor);
+    renderViewState();
+    renderMonthGrid();
+    renderListView();
+  }
+
+  function renderViewState() {
+    qsa('[data-view]').forEach((button) => button.classList.toggle('active', button.dataset.view === state.view));
+    $('calendar-month-view').hidden = state.view !== 'month';
+    $('calendar-list-view').hidden = state.view !== 'list';
+  }
+
+  function renderMonthGrid() {
+    const year = state.cursor.getFullYear();
+    const month = state.cursor.getMonth();
+    const first = new Date(year, month, 1);
+    const gridStart = addDays(first, -first.getDay());
+    const visibleEvents = filteredEvents();
+    const todayKey = iso(new Date());
+    const selectedKey = iso(state.selectedDate);
+    const cells = [];
+    for (let i = 0; i < 42; i += 1) {
+      const date = addDays(gridStart, i);
+      const key = iso(date);
+      const dayEvents = sortedEvents(visibleEvents.filter((event) => event.date === key));
+      const important = IMPORTANT.filter((item) => item.date === key);
+      const buddhist = BUDDHIST.find((item) => item.date === key);
+      const chips = [];
+      if ($('show-holidays').checked) important.forEach((item) => chips.push(`<button class="chip holiday" data-date-only="${key}" type="button">${esc(item.title)}</button>`));
+      dayEvents.slice(0, 3).forEach((event) => chips.push(`<button class="chip ${esc(event.category)}" data-event-id="${esc(event.id)}" type="button">${esc(event.startTime || event.time || '')}${event.startTime || event.time ? ' ' : ''}${esc(event.title)}</button>`));
+      const hiddenCount = Math.max(0, dayEvents.length + (($('show-holidays').checked) ? important.length : 0) - 3);
+      cells.push(`<div class="day ${date.getMonth() !== month ? 'outside' : ''} ${key === todayKey ? 'today' : ''} ${key === selectedKey ? 'selected' : ''}" role="gridcell" data-day="${key}"><span class="day-number">${date.getDate()}</span>${$('show-buddhist').checked && buddhist ? `<span class="lunar">วันพระ · ${esc(buddhist.lunar)}</span>` : ''}<div class="entries">${chips.slice(0, 3).join('')}${hiddenCount ? `<span class="more">+${hiddenCount} รายการ</span>` : ''}</div></div>`);
+    }
+    $('calendar-grid').innerHTML = cells.join('');
+  }
+
+  function renderListView() {
+    const y = state.cursor.getFullYear();
+    const m = state.cursor.getMonth();
+    const rows = sortedEvents(filteredEvents().filter((event) => {
+      const date = parseDate(event.date);
+      return date.getFullYear() === y && date.getMonth() === m;
+    }));
+    const groups = new Map();
+    rows.forEach((event) => {
+      if (!groups.has(event.date)) groups.set(event.date, []);
+      groups.get(event.date).push(event);
+    });
+    $('calendar-list-view').innerHTML = groups.size ? [...groups.entries()].map(([date, events]) => `<section class="list-day-group"><div class="list-day-head">${esc(thaiDate(date))}</div>${events.map((event) => `<button class="list-event" data-list-event-id="${esc(event.id)}" type="button"><time>${esc(displayTime(event))}</time><span><strong>${esc(event.title)}</strong><span>${esc(event.location || event.owner || 'ยังไม่ระบุสถานที่')}</span></span>${statusPill(event)}</button>`).join('')}</section>`).join('') : '<div class="empty-state">ไม่พบงานในเดือนนี้ตามตัวกรองที่เลือก</div>';
+  }
+
+  function renderAssistant() {
+    const event = state.events.find((item) => item.id === state.selectedEventId);
+    const section = $('work-assistant');
+    if (!event) { section.hidden = true; return; }
+    const alerts = riskAlerts(event);
+    $('assistant-title').textContent = `แผนเตรียม “${event.title}” พร้อมแล้ว`;
+    $('assistant-summary-text').textContent = alerts.length ? 'ระบบพบข้อมูลหรือขั้นตอนที่ควรจัดการก่อนงาน' : 'ข้อมูลหลักพร้อม ระบบจัดแนวทางภาพ คลิป และคอนเทนต์จากรายละเอียดของงานแล้ว';
+    $('assistant-alerts').innerHTML = alerts.length ? alerts.map((alert) => `<span class="assistant-alert">⚠ ${esc(alert)}</span>`).join('') : '<span class="assistant-alert" style="background:#e7f6ed;color:#176b4f">✓ ไม่พบความเสี่ยงสำคัญจากข้อมูลที่มี</span>';
+    section.hidden = false;
+  }
+
+  function renderImportant() {
+    const today = iso(new Date());
+    const upcoming = IMPORTANT.filter((item) => item.date >= today).slice(0, 6);
+    $('important-days').innerHTML = upcoming.length ? upcoming.map((item) => {
+      const diff = daysBetween(new Date(), parseDate(item.date));
+      const when = diff === 0 ? 'วันนี้' : diff === 1 ? 'พรุ่งนี้' : `อีก ${diff} วัน`;
+      return `<article class="important-day"><strong>${esc(when)}</strong><span>${esc(item.title)}</span><small>${esc(thaiDate(item.date, false))}</small></article>`;
+    }).join('') : '<div class="empty-state">ยังไม่มีข้อมูลวันสำคัญถัดไปในชุดข้อมูลปีนี้</div>';
+  }
+
+  function openDay(dateKey) {
+    state.selectedDate = parseDate(dateKey);
+    state.selectedEventId = null;
+    renderCalendar();
+    renderAssistant();
+    const events = sortedEvents(state.events.filter((event) => event.date === dateKey));
+    const special = IMPORTANT.filter((item) => item.date === dateKey);
+    const buddhist = BUDDHIST.find((item) => item.date === dateKey);
+    $('day-title').textContent = thaiDate(dateKey);
+    const specialHtml = [...special.map((item) => `<div class="day-item"><strong>${esc(item.title)}</strong><span>${esc(item.note || item.type)}</span></div>`), ...(buddhist ? [`<div class="day-item"><strong>วันพระ</strong><span>${esc(buddhist.lunar)}</span></div>`] : [])];
+    const eventHtml = events.map((event) => `<button class="day-item" data-day-event-id="${esc(event.id)}" type="button"><strong>${esc(event.title)}</strong><span>${esc(displayTime(event))} · ${esc(event.location || event.owner || 'ยังไม่ระบุสถานที่')}</span><span>${STATUSES[event.status] || 'รอข้อมูล'} · ความพร้อม ${readiness(event).score}%</span></button>`);
+    $('day-list').innerHTML = [...specialHtml, ...eventHtml].join('') || '<div class="empty-state">วันนี้ยังไม่มีงาน กดเพิ่มงานเพื่อบันทึกลงปฏิทินทีม</div>';
+    $('day-dialog').showModal();
+  }
+
+  function openEvent(dateKey = iso(state.selectedDate), event = null) {
+    state.editingId = event?.id || null;
+    $('event-heading').textContent = event ? 'แก้ไขข้อมูลงาน' : 'เพิ่มงานใหม่';
+    $('event-kicker').textContent = event ? 'ปรับข้อมูลใบงานประชาสัมพันธ์' : 'จัดงานลงปฏิทินทีม';
+    $('event-id').value = event?.id || '';
+    $('event-title').value = event?.title || '';
+    $('event-description').value = event?.description || '';
+    $('event-date').value = event?.date || dateKey;
+    $('event-status').value = event?.status || 'waiting_info';
+    $('event-start-time').value = event?.startTime || event?.time || '';
+    $('event-end-time').value = event?.endTime || '';
+    $('event-all-day').checked = Boolean(event?.allDay);
+    $('event-location').value = event?.location || '';
+    $('event-owner').value = event?.owner || '';
+    $('event-category').value = event?.category || 'meeting';
+    $('event-contact-name').value = event?.contactName || '';
+    $('event-contact-phone').value = event?.contactPhone || '';
+    $('event-chairperson').value = event?.chairperson || '';
+    $('event-publication-links').value = event?.publicationLinks || '';
+    $('event-notify').checked = event?.notifyLine !== false;
+    qsa('input[name="outputs"]', $('event-form')).forEach((input) => { input.checked = Boolean(event?.outputs?.includes(input.value)); });
+    $('delete-event').hidden = !event;
+    syncAllDayFields();
+    $('event-dialog').showModal();
+    setTimeout(() => $('event-title').focus(), 80);
+  }
+
+  function syncAllDayFields() {
+    const disabled = $('event-all-day').checked;
+    $('event-start-time').disabled = disabled;
+    $('event-end-time').disabled = disabled;
+    if (disabled) { $('event-start-time').value = ''; $('event-end-time').value = ''; }
+  }
+
+  function getFormData() {
+    const current = window.BRN_CURRENT_USER || {};
+    return normalizeEvent({
+      title: $('event-title').value.trim(),
+      description: $('event-description').value.trim(),
+      date: $('event-date').value,
+      status: $('event-status').value,
+      startTime: $('event-all-day').checked ? '' : $('event-start-time').value,
+      endTime: $('event-all-day').checked ? '' : $('event-end-time').value,
+      allDay: $('event-all-day').checked,
+      location: $('event-location').value.trim(),
+      owner: $('event-owner').value.trim(),
+      category: $('event-category').value,
+      contactName: $('event-contact-name').value.trim(),
+      contactPhone: $('event-contact-phone').value.trim(),
+      chairperson: $('event-chairperson').value.trim(),
+      outputs: qsa('input[name="outputs"]:checked', $('event-form')).map((input) => input.value),
+      publicationLinks: $('event-publication-links').value.trim(),
+      notifyLine: $('event-notify').checked,
+      reminderEnabled: $('event-notify').checked,
+      reminderPolicy: 'default',
+      reminderTimezone: 'Asia/Bangkok',
+      reminders: [
+        { type: 'day_before', daysBefore: 1, time: '08:00' },
+        { type: 'event_morning', daysBefore: 0, time: '07:00' },
+      ],
+      updatedBy: current.email || current.displayName || 'unknown',
+    });
+  }
+
+  async function saveEvent(payload) {
+    let savedId = state.editingId;
+    const isEdit = Boolean(state.editingId);
+    if (state.cloud) {
+      if (isEdit) {
+        await state.fs.setDoc(state.fs.doc(state.db, 'prEvents', state.editingId), { ...payload, updatedAt: state.fs.serverTimestamp() }, { merge: true });
+      } else {
+        const ref = await state.fs.addDoc(state.fs.collection(state.db, 'prEvents'), { ...payload, createdAt: state.fs.serverTimestamp(), updatedAt: state.fs.serverTimestamp() });
+        savedId = ref.id;
+      }
+    } else if (isEdit) {
+      const index = state.events.findIndex((event) => event.id === state.editingId);
+      state.events[index] = { ...state.events[index], ...payload };
+      saveLocal();
+      renderAll();
+    } else {
+      savedId = `local-${Date.now()}`;
+      state.events.push({ ...payload, id: savedId });
+      saveLocal();
+      renderAll();
+    }
+    state.selectedEventId = savedId;
+    state.selectedDate = parseDate(payload.date);
+    return { savedId, isEdit };
+  }
+
+  async function queueLine(event, action) {
+    if (!event.notifyLine || !state.cloud) return { skipped: true };
+    const r = readiness(event);
+    const lines = [`📣 ${action}`, event.title, `📅 ${thaiDate(event.date)}${displayTime(event) !== 'ไม่ระบุเวลา' ? ` เวลา ${displayTime(event)}` : ''}`];
+    if (event.location) lines.push(`📍 ${event.location}`);
+    if (event.owner) lines.push(`เจ้าของงาน: ${event.owner}`);
+    lines.push(`สถานะ: ${STATUSES[event.status] || 'รอข้อมูล'} · ความพร้อม ${r.score}%`);
+    await state.fs.addDoc(state.fs.collection(state.db, 'lineOutbox'), {
+      text: lines.join('\n'), status: 'pending', createdAt: state.fs.serverTimestamp(), eventId: event.id || null, type: 'pr-event',
+    });
+    return { queued: true };
+  }
+
+  async function deleteEvent() {
+    if (!state.editingId || !confirm('ลบงานนี้ออกจากปฏิทินทีมใช่หรือไม่?')) return;
+    if (state.cloud) await state.fs.deleteDoc(state.fs.doc(state.db, 'prEvents', state.editingId));
+    else {
+      state.events = state.events.filter((event) => event.id !== state.editingId);
+      saveLocal();
+      renderAll();
+    }
+    if (state.selectedEventId === state.editingId) state.selectedEventId = null;
+    $('event-dialog').close();
+    toast('ลบงานแล้ว');
+  }
+
+  function openDetail(id) {
+    const event = state.events.find((item) => item.id === id);
+    if (!event) return;
+    state.detailId = id;
+    state.selectedEventId = id;
+    state.selectedDate = parseDate(event.date);
+    state.detailTab = 'prep';
+    renderAssistant();
+    renderDetail();
+    $('detail-dialog').showModal();
+  }
+
+  function renderDetail() {
+    const event = state.events.find((item) => item.id === state.detailId);
+    if (!event) return;
+    const r = readiness(event);
+    $('detail-category').textContent = CATEGORIES[event.category] || 'งานประชาสัมพันธ์';
+    $('detail-title').textContent = event.title;
+    $('detail-status-row').innerHTML = `${statusPill(event)}${readinessPill(event)}<span class="category-pill">${esc(CATEGORIES[event.category] || 'อื่น ๆ')}</span>`;
+    const meta = [
+      ['วันที่', thaiDate(event.date)], ['เวลา', displayTime(event)], ['สถานที่', event.location || 'ยังไม่ระบุ'], ['กอง/สำนัก', event.owner || 'ยังไม่ระบุ'], ['ผู้ประสานงาน', event.contactName || 'ยังไม่ระบุ'], ['เบอร์ติดต่อ', event.contactPhone || 'ยังไม่ระบุ'], ['ประธาน/ผู้กล่าวเปิด', event.chairperson || 'ยังไม่ระบุ'], ['สถานะ', STATUSES[event.status] || 'รอข้อมูล'],
+    ];
+    $('detail-meta').innerHTML = meta.map(([label, value]) => `<div class="meta-card"><small>${esc(label)}</small><strong>${esc(value)}</strong></div>`).join('');
+    $('detail-description').textContent = event.description || 'ยังไม่มีรายละเอียดกิจกรรม';
+    $('detail-readiness').innerHTML = `<span class="readiness-pill ${r.level}">${r.score}% พร้อม</span>`;
+    $('detail-missing').innerHTML = r.fields.map(([name, ok]) => `<div class="check-row ${ok ? 'ok' : 'missing'}"><span>${ok ? '✓' : '!'}</span><span>${esc(name)}${ok ? ' พร้อมแล้ว' : ' ยังไม่มีข้อมูล'}</span></div>`).join('');
+    $('detail-outputs').innerHTML = event.outputs?.length ? outputLabels(event).map((label) => `<span class="output-tag">${esc(label)}</span>`).join('') : '<span class="empty-state" style="width:100%">ยังไม่ได้กำหนดผลงานที่ต้องจัดทำ</span>';
+    const links = String(event.publicationLinks || '').split(/\n+/).map((item) => item.trim()).filter(Boolean);
+    $('detail-links-section').hidden = !links.length;
+    $('detail-links').innerHTML = links.map((url) => /^https?:\/\//i.test(url) ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a>` : `<span>${esc(url)}</span>`).join('');
+    renderDetailSupport();
+    const index = STATUS_FLOW.indexOf(event.status);
+    $('mark-next-status').hidden = index < 0 || index >= STATUS_FLOW.length - 1;
+    $('mark-next-status').textContent = index >= 0 && index < STATUS_FLOW.length - 1 ? `เลื่อนไป: ${STATUSES[STATUS_FLOW[index + 1]]}` : 'เลื่อนสถานะ';
+    $('retry-line').hidden = !event.notifyLine;
+  }
+
+  function renderDetailSupport() {
+    const event = state.events.find((item) => item.id === state.detailId);
+    if (!event) return;
+    const guide = guidance(event);
+    qsa('[data-support-tab]').forEach((button) => button.classList.toggle('active', button.dataset.supportTab === state.detailTab));
+    $('detail-support-content').innerHTML = `<ul>${guide[state.detailTab].map((item) => `<li>${esc(item)}</li>`).join('')}</ul>`;
+  }
+
+  async function advanceStatus() {
+    const event = state.events.find((item) => item.id === state.detailId);
+    if (!event) return;
+    const index = STATUS_FLOW.indexOf(event.status);
+    if (index < 0 || index >= STATUS_FLOW.length - 1) return;
+    const next = STATUS_FLOW[index + 1];
+    if (state.cloud) await state.fs.setDoc(state.fs.doc(state.db, 'prEvents', event.id), { status: next, updatedAt: state.fs.serverTimestamp() }, { merge: true });
+    else {
+      event.status = next;
+      saveLocal();
+      renderAll();
+      renderDetail();
+    }
+    toast(`เปลี่ยนสถานะเป็น “${STATUSES[next]}” แล้ว`);
+  }
+
+  function renderTeamWork() {
+    const today = iso(new Date());
+    let rows = sortedEvents(state.events);
+    if (state.metricRange === 'today') rows = rows.filter((event) => event.date === today && event.status !== 'cancelled');
+    else if (state.metricRange === 'week') rows = rows.filter((event) => event.date >= today && event.date <= iso(addDays(new Date(), 7)) && isActive(event));
+    else if (state.teamFilter === 'active') rows = rows.filter((event) => isActive(event) && (event.date >= today || event.status === 'waiting_publish'));
+    else if (state.teamFilter === 'missing') rows = rows.filter((event) => event.date >= today && isActive(event) && readiness(event).missing.length);
+    else if (state.teamFilter === 'publish') rows = rows.filter((event) => event.status === 'waiting_publish');
+    qsa('[data-team-filter]').forEach((button) => button.classList.toggle('active', !state.metricRange && button.dataset.teamFilter === state.teamFilter));
+    $('team-work-list').innerHTML = rows.length ? rows.slice(0, 60).map((event) => `<button class="team-item" data-team-event-id="${esc(event.id)}" type="button"><strong>${esc(event.title)}</strong><span>${esc(thaiDate(event.date))} · ${esc(displayTime(event))}</span><span>${esc(event.location || event.owner || 'ยังไม่ระบุสถานที่')} · ${STATUSES[event.status]} · พร้อม ${readiness(event).score}%</span></button>`).join('') : '<div class="empty-state">ไม่พบงานในกลุ่มนี้</div>';
+  }
+
+  function openTeamWork(filter = 'active', metricRange = null) {
+    state.teamFilter = filter;
+    state.metricRange = metricRange;
+    renderTeamWork();
+    $('team-work-dialog').showModal();
+  }
+
+  async function initCloud() {
+    if (!cfg || state.unsubscribe) return;
+    try {
+      const [{ initializeApp, getApps }, fs] = await Promise.all([
+        import('https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js'),
+        import('https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js'),
+      ]);
+      const app = getApps().length ? getApps()[0] : initializeApp(cfg);
+      state.db = fs.getFirestore(app);
+      state.fs = fs;
+      const query = fs.query(fs.collection(state.db, 'prEvents'), fs.orderBy('date', 'asc'));
+      state.unsubscribe = fs.onSnapshot(query, (snapshot) => {
+        state.events = snapshot.docs.map((doc) => normalizeEvent({ id: doc.id, ...doc.data() }));
+        state.cloud = true;
+        $('sync-status').textContent = 'ซิงก์ข้อมูลกับทีมแล้ว';
+        renderAll();
+        if ($('detail-dialog').open) renderDetail();
+      }, (error) => {
+        console.error(error);
+        state.cloud = false;
+        state.events = localEvents();
+        $('sync-status').textContent = 'Firestore ไม่พร้อม · ใช้ข้อมูลในเครื่อง';
+        renderAll();
+      });
+    } catch (error) {
+      console.error(error);
+      state.cloud = false;
+      state.events = localEvents();
+      $('sync-status').textContent = 'ใช้งานข้อมูลในเครื่อง';
+      renderAll();
+    }
+  }
+
+  function updateLiveDateTime() {
+    const now = new Date();
+    $('live-date-text').textContent = now.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Bangkok' });
+    $('live-time-text').textContent = `เวลา ${now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Bangkok' }).replace(':', '.')} น.`;
+  }
+
+  function bindEvents() {
+    $('prev-month').addEventListener('click', () => { state.cursor = new Date(state.cursor.getFullYear(), state.cursor.getMonth() - 1, 1); renderCalendar(); });
+    $('next-month').addEventListener('click', () => { state.cursor = new Date(state.cursor.getFullYear(), state.cursor.getMonth() + 1, 1); renderCalendar(); });
+    $('today-button').addEventListener('click', () => { state.cursor = startOfMonth(new Date()); state.selectedDate = new Date(); renderCalendar(); $('calendar').scrollIntoView({ behavior: 'smooth' }); });
+    ['add-event-button', 'add-event-top'].forEach((id) => $(id).addEventListener('click', () => openEvent(iso(state.selectedDate))));
+    $('event-all-day').addEventListener('change', syncAllDayFields);
+    $('show-holidays').addEventListener('change', renderCalendar);
+    $('show-buddhist').addEventListener('change', renderCalendar);
+    $('event-search').addEventListener('input', (event) => { state.query = event.target.value.trim().toLowerCase(); renderCalendar(); });
+    $('event-filter').addEventListener('change', (event) => { state.category = event.target.value; renderCalendar(); });
+    $('status-filter').addEventListener('change', (event) => { state.status = event.target.value; renderCalendar(); });
+    qsa('[data-view]').forEach((button) => button.addEventListener('click', () => { state.view = button.dataset.view; renderViewState(); }));
+
+    $('calendar-grid').addEventListener('click', (event) => {
+      const chip = event.target.closest('[data-event-id]');
+      if (chip) { event.stopPropagation(); openDetail(chip.dataset.eventId); return; }
+      const day = event.target.closest('[data-day]');
+      if (day) openDay(day.dataset.day);
+    });
+    $('calendar-list-view').addEventListener('click', (event) => {
+      const item = event.target.closest('[data-list-event-id]');
+      if (item) openDetail(item.dataset.listEventId);
+    });
+    $('day-list').addEventListener('click', (event) => {
+      const item = event.target.closest('[data-day-event-id]');
+      if (!item) return;
+      $('day-dialog').close();
+      openDetail(item.dataset.dayEventId);
+    });
+    $('day-add').addEventListener('click', () => { const key = iso(state.selectedDate); $('day-dialog').close(); openEvent(key); });
+
+    $('next-event-card').addEventListener('click', (event) => {
+      const open = event.target.closest('[data-open-next]');
+      const edit = event.target.closest('[data-edit-next]');
+      const add = event.target.closest('[data-add-empty]');
+      if (open) openDetail(open.dataset.openNext);
+      if (edit) { const target = state.events.find((item) => item.id === edit.dataset.editNext); if (target) openEvent(target.date, target); }
+      if (add) openEvent(iso(state.selectedDate));
+    });
+    $('focus-list').addEventListener('click', (event) => {
+      const button = event.target.closest('[data-focus-id]');
+      if (button) openDetail(button.dataset.focusId);
+    });
+    qsa('[data-metric]').forEach((button) => button.addEventListener('click', () => {
+      const metric = button.dataset.metric;
+      if (metric === 'today' || metric === 'week') openTeamWork('all', metric);
+      else if (metric === 'missing') openTeamWork('missing');
+      else if (metric === 'publish') openTeamWork('publish');
+    }));
+
+    $('event-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const payload = getFormData();
+      if (!payload.title || !payload.date) return;
+      const submit = $('event-form').querySelector('[type="submit"]');
+      submit.disabled = true;
+      try {
+        const { savedId, isEdit } = await saveEvent(payload);
+        $('event-dialog').close();
+        toast(isEdit ? 'บันทึกการแก้ไขแล้ว' : 'เพิ่มงานลงปฏิทินทีมแล้ว');
+        try {
+          await queueLine({ ...payload, id: savedId }, isEdit ? 'แก้ไขงานประชาสัมพันธ์' : 'เพิ่มงานประชาสัมพันธ์ใหม่');
+        } catch (lineError) {
+          console.error(lineError);
+          toast('บันทึกงานแล้ว แต่แจ้ง LINE ไม่สำเร็จ กรุณาตรวจระบบส่งข้อความ', 5000);
+        }
+      } catch (error) {
+        console.error(error);
+        toast('บันทึกงานไม่สำเร็จ กรุณาตรวจสิทธิ์ Firestore');
+      } finally { submit.disabled = false; }
+    });
+    $('delete-event').addEventListener('click', deleteEvent);
+    $('edit-event').addEventListener('click', () => {
+      const target = state.events.find((item) => item.id === state.detailId);
+      if (!target) return;
+      $('detail-dialog').close();
+      openEvent(target.date, target);
+    });
+    $('mark-next-status').addEventListener('click', advanceStatus);
+    $('print-work-order').addEventListener('click', () => window.print());
+    $('copy-media-brief').addEventListener('click', async () => {
+      const event = state.events.find((item) => item.id === state.detailId);
+      if (!event) return;
+      const guide = guidance(event);
+      const r = readiness(event);
+      const brief = [
+        `ชื่องาน: ${event.title}`,
+        `วันและเวลา: ${thaiDate(event.date)} · ${displayTime(event)}`,
+        `สถานที่: ${event.location || 'ยังไม่ระบุ'}`,
+        `เจ้าของงาน: ${event.owner || 'ยังไม่ระบุ'}`,
+        `ประธาน/ผู้กล่าวเปิด: ${event.chairperson || 'ยังไม่ระบุ'}`,
+        `รายละเอียด: ${event.description || 'ยังไม่มีรายละเอียด'}`,
+        `ผลงานที่ต้องจัดทำ: ${outputLabels(event).join(', ') || 'ยังไม่กำหนด'}`,
+        `ข้อมูลที่ยังขาด: ${r.missing.join(', ') || 'ไม่มี'}`,
+        '', 'แนวทางภาพ:', ...guide.photo.map((item, index) => `${index + 1}. ${item}`),
+        '', 'แนวทางคลิป:', ...guide.video.map((item, index) => `${index + 1}. ${item}`),
+        '', 'แนวทางคอนเทนต์:', ...guide.content.map((item, index) => `${index + 1}. ${item}`),
+        '', 'ข้อกำชับ: ห้ามสร้างหรือเปลี่ยนชื่อบุคคล ตำแหน่ง วัน เวลา ตัวเลข และข้อมูลราชการเอง ต้องใช้ข้อมูลที่ยืนยันแล้วเท่านั้น',
+      ].join('\n');
+      try { await navigator.clipboard.writeText(brief); toast('คัดลอกบรีฟสร้างสื่อแล้ว'); } catch { toast('เบราว์เซอร์ไม่อนุญาตให้คัดลอกอัตโนมัติ'); }
+    });
+    $('retry-line').addEventListener('click', async () => {
+      const event = state.events.find((item) => item.id === state.detailId);
+      if (!event) return;
+      const button = $('retry-line');
+      button.disabled = true;
+      try {
+        const result = await queueLine(event, 'แจ้งเตือนงานประชาสัมพันธ์');
+        toast(result.skipped ? 'งานนี้ไม่ได้เปิดการแจ้ง LINE หรือกำลังใช้ข้อมูลในเครื่อง' : 'ส่งคิวแจ้ง LINE อีกครั้งแล้ว');
+      } catch (error) {
+        console.error(error);
+        toast('ส่งแจ้ง LINE ไม่สำเร็จ กรุณาตรวจระบบหลังบ้าน');
+      } finally { button.disabled = false; }
+    });
+    qsa('[data-support-tab]').forEach((button) => button.addEventListener('click', () => { state.detailTab = button.dataset.supportTab; renderDetailSupport(); }));
+    $('copy-support').addEventListener('click', async () => {
+      const event = state.events.find((item) => item.id === state.detailId);
+      if (!event) return;
+      const items = guidance(event)[state.detailTab];
+      const text = `${event.title}\n${items.map((item, index) => `${index + 1}. ${item}`).join('\n')}`;
+      try { await navigator.clipboard.writeText(text); toast('คัดลอกแนวทางแล้ว'); } catch { toast('เบราว์เซอร์ไม่อนุญาตให้คัดลอกอัตโนมัติ'); }
+    });
+    $('assistant-open-detail').addEventListener('click', () => { if (state.selectedEventId) openDetail(state.selectedEventId); });
+    $('assistant-dismiss').addEventListener('click', () => { state.selectedEventId = null; renderAssistant(); });
+
+    $('nav-team-work').addEventListener('click', () => openTeamWork('active'));
+    $('team-work-list').addEventListener('click', (event) => {
+      const item = event.target.closest('[data-team-event-id]');
+      if (!item) return;
+      $('team-work-dialog').close();
+      openDetail(item.dataset.teamEventId);
+    });
+    qsa('[data-team-filter]').forEach((button) => button.addEventListener('click', () => { state.metricRange = null; state.teamFilter = button.dataset.teamFilter; renderTeamWork(); }));
+    $('nav-dashboard').addEventListener('click', () => { $('nav-dashboard').classList.add('active'); $('nav-calendar').classList.remove('active'); });
+    $('nav-calendar').addEventListener('click', () => { $('nav-calendar').classList.add('active'); $('nav-dashboard').classList.remove('active'); });
+
+    qsa('[data-close]').forEach((button) => button.addEventListener('click', () => button.closest('dialog').close()));
+    qsa('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); }));
+  }
+
+  function init() {
+    state.events = localEvents();
+    bindEvents();
+    updateLiveDateTime();
+    setInterval(updateLiveDateTime, 30000);
+    renderAll();
+    if (window.BRN_CURRENT_USER) initCloud();
+    else document.addEventListener('brn-auth-ready', initCloud, { once: true });
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js').catch(console.error);
+  }
+
+  init();
+})();

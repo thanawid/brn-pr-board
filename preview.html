@@ -1,226 +1,186 @@
 <!doctype html>
 <html lang="th" class="auth-authenticated">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f7f4fb" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#4b176f">
   <title>BRN PR Board</title>
-  <meta name="description" content="กระดานปฏิทินงานประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="icon" href="./assets/logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./styles.css" />
-  
+  <meta name="description" content="กระดานปฏิทินและใบงานประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css?v=1.1.0">
 </head>
 <body>
   <div id="auth-gate" class="auth-gate" hidden>
     <section class="login-card" aria-labelledby="login-title">
       <div class="login-brand">
-        <img src="./assets/logo.png" alt="Bangraknoi News" />
+        <img src="./assets/logo.png" alt="Bangraknoi News">
         <div>
           <p>เทศบาลเมืองบางรักน้อย</p>
           <h1 id="login-title">BRN PR Board</h1>
           <span>กระดานงานประชาสัมพันธ์ของทีม</span>
         </div>
       </div>
-
       <div id="auth-login-options" class="login-options">
-        <button id="google-signin-button" class="google-button" type="button">
-          <span class="google-mark">G</span>
-          เข้าสู่ระบบผู้ดูแลด้วย Google
-        </button>
+        <button id="google-signin-button" class="google-button" type="button"><span class="google-mark">G</span>เข้าสู่ระบบผู้ดูแลด้วย Google</button>
         <div class="login-divider"><span>หรือ</span></div>
         <form id="staff-login-form" autocomplete="off">
-          <label>ชื่อผู้ใช้
-            <input id="staff-username" name="username" type="text" inputmode="text" autocomplete="off" />
-          </label>
-          <label>รหัสผ่าน
-            <span class="password-wrap">
-              <input id="staff-password" name="password" type="password" autocomplete="new-password" />
-              <button id="toggle-password" type="button" aria-label="แสดงรหัสผ่าน">แสดง</button>
-            </span>
-          </label>
-          <button id="staff-signin-button" class="primary-button full" type="submit">เข้าสู่ระบบเจ้าหน้าที่</button>
+          <label>ชื่อผู้ใช้<input id="staff-username" type="text" autocomplete="off"></label>
+          <label>รหัสผ่าน<span class="password-wrap"><input id="staff-password" type="password" autocomplete="new-password"><button id="toggle-password" type="button">แสดง</button></span></label>
+          <button id="staff-signin-button" class="btn primary full" type="submit">เข้าสู่ระบบเจ้าหน้าที่</button>
         </form>
       </div>
-
       <div id="auth-status" class="auth-status" hidden><span class="status-dot"></span><span id="auth-status-text"></span></div>
-      <button id="auth-retry-button" type="button" class="secondary-button" hidden>ลองใหม่</button>
-
-      <div id="auth-user-blocked" class="blocked-card" hidden>
-        <img id="blocked-user-photo" alt="" />
-        <strong id="blocked-user-name"></strong>
-        <span id="blocked-user-email"></span>
-        <button id="use-other-account-button" class="secondary-button" type="button">ใช้บัญชีอื่น</button>
-      </div>
+      <button id="auth-retry-button" class="btn ghost" type="button" hidden>ลองใหม่</button>
+      <div id="auth-user-blocked" class="blocked-card" hidden><img id="blocked-user-photo" alt=""><strong id="blocked-user-name"></strong><span id="blocked-user-email"></span><button id="use-other-account-button" class="btn ghost" type="button">ใช้บัญชีอื่น</button></div>
     </section>
   </div>
 
   <main class="app-shell" aria-hidden="false">
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
-
     <header class="site-header">
-      <a class="brand" href="#calendar" aria-label="BRN PR Board">
-        <img src="./assets/logo.png" alt="" />
-        <div>
-          <strong>BRN PR Board</strong>
-          <span>ผู้ช่วยงานประชาสัมพันธ์</span>
-        </div>
+      <a class="brand" href="#dashboard" aria-label="BRN PR Board">
+        <img src="./assets/logo.png" alt="">
+        <span><strong>BRN PR Board</strong><small>กระดานงานประชาสัมพันธ์</small></span>
       </a>
-      <nav class="top-nav" aria-label="เมนูหลัก">
-        <a class="active" href="#calendar">ปฏิทิน</a>
-        <a href="#guides">แนวทาง</a>
-        <button id="open-month-ideas" type="button" class="nav-link">คอนเทนต์เดือนนี้</button>
+      <nav aria-label="เมนูหลัก">
+        <a id="nav-dashboard" class="active" href="#dashboard">ภาพรวม</a>
+        <a id="nav-calendar" href="#calendar">ปฏิทิน</a>
+        <button id="nav-team-work" type="button">งานของทีม</button>
       </nav>
       <div id="account-area" class="account-area" hidden>
-        <button id="account-button" class="account-button" type="button" aria-expanded="false">
-          <img id="account-photo" alt="" />
-          <span><strong id="account-name"></strong><small id="account-role"></small></span>
-          <span class="chevron">⌄</span>
-        </button>
-        <div id="account-menu" class="account-menu" hidden>
-          <strong id="account-menu-name"></strong>
-          <span id="account-email"></span>
-          <button id="signout-button" type="button">ออกจากระบบ</button>
-        </div>
+        <button id="account-button" class="account-button" type="button" aria-expanded="false"><img id="account-photo" alt=""><span><strong id="account-name"></strong><small id="account-role"></small></span><b>⌄</b></button>
+        <div id="account-menu" class="account-menu" hidden><strong id="account-menu-name"></strong><span id="account-email"></span><button id="signout-button" type="button">ออกจากระบบ</button></div>
       </div>
     </header>
 
-    <section id="calendar" class="calendar-stage reveal">
-      <div class="calendar-toolbar">
-        <div class="month-title-wrap">
-          <button id="prev-month" class="icon-button" type="button" aria-label="เดือนก่อนหน้า">‹</button>
-          <div>
-            <p>TEAM WORK CALENDAR</p>
-            <h1 id="month-title">กรกฎาคม 2569</h1>
-          </div>
-          <button id="next-month" class="icon-button" type="button" aria-label="เดือนถัดไป">›</button>
+    <section id="dashboard" class="dashboard-shell">
+      <div class="today-command">
+        <div class="today-copy">
+          <span class="eyebrow">ศูนย์งานประชาสัมพันธ์วันนี้</span>
+          <h1 id="today-title">กำลังอ่านตารางงาน…</h1>
+          <p id="today-summary">ระบบกำลังจัดลำดับงานและตรวจความพร้อมให้ทีม</p>
+          <div id="live-datetime" class="live-datetime"><strong id="live-date-text"></strong><time id="live-time-text"></time></div>
         </div>
-        <div class="toolbar-actions">
-          <button id="today-button" class="secondary-button" type="button">วันนี้</button>
-          <button id="add-event-button" class="primary-button" type="button"><span>＋</span> เพิ่มงาน</button>
-        </div>
+        <div id="next-event-card" class="next-event-card" aria-live="polite"></div>
       </div>
 
-      <div class="calendar-card">
-        <div class="weekdays" aria-hidden="true">
-          <span>อาทิตย์</span><span>จันทร์</span><span>อังคาร</span><span>พุธ</span><span>พฤหัสบดี</span><span>ศุกร์</span><span>เสาร์</span>
-        </div>
-        <div id="calendar-grid" class="calendar-grid" role="grid" aria-label="ปฏิทินรายเดือน"></div>
+      <div class="metric-grid" aria-label="สรุปสถานการณ์งาน">
+        <button class="metric-card" data-metric="today" type="button"><span class="metric-icon">●</span><small>งานวันนี้</small><strong id="metric-today">0</strong><em>รายการ</em></button>
+        <button class="metric-card" data-metric="week" type="button"><span class="metric-icon">↗</span><small>7 วันข้างหน้า</small><strong id="metric-week">0</strong><em>รายการ</em></button>
+        <button class="metric-card warning" data-metric="missing" type="button"><span class="metric-icon">!</span><small>ข้อมูลยังไม่ครบ</small><strong id="metric-missing">0</strong><em>งาน</em></button>
+        <button class="metric-card pending" data-metric="publish" type="button"><span class="metric-icon">□</span><small>รอเผยแพร่</small><strong id="metric-publish">0</strong><em>งาน</em></button>
       </div>
 
-      <div class="calendar-footer">
-        <div class="legend">
-          <span><i class="dot meeting"></i>ประชุม / อบรม</span>
-          <span><i class="dot activity"></i>กิจกรรม</span>
-          <span><i class="dot important"></i>วันสำคัญ</span>
-          <span><i class="dot media"></i>ถ่ายทำ / สื่อ</span>
-          <span><i class="dot other"></i>อื่น ๆ</span>
+      <section class="focus-board" aria-labelledby="focus-title">
+        <div class="section-head compact">
+          <div><span>สิ่งที่ต้องจับตา</span><h2 id="focus-title">ลำดับงานที่ทีมควรทำต่อ</h2></div>
+          <button id="add-event-top" class="btn primary" type="button">＋ เพิ่มงาน</button>
         </div>
-        <p id="sync-status" class="sync-status">กำลังเตรียมข้อมูล…</p>
-      </div>
+        <div id="focus-list" class="focus-list"></div>
+      </section>
     </section>
 
-    <section id="guides" class="guide-section reveal">
-      <div class="section-heading">
-        <div>
-          <p>แนวทางสำหรับวันที่เลือก</p>
-          <h2 id="guide-title">เลือกวันที่ในปฏิทินเพื่อดูแนวทาง</h2>
+    <section id="calendar" class="calendar-wrap">
+      <div class="calendar-top">
+        <div class="month-nav"><button id="prev-month" class="round" type="button" aria-label="เดือนก่อน">‹</button><div><span>ปฏิทินงานของทีม</span><h2 id="month-title"></h2></div><button id="next-month" class="round" type="button" aria-label="เดือนถัดไป">›</button></div>
+        <div class="actions">
+          <div class="toolbox"><label class="search-box" aria-label="ค้นหางาน"><span>⌕</span><input id="event-search" type="search" placeholder="ค้นหางาน สถานที่ หรือกองงาน"></label><select id="event-filter" aria-label="กรองประเภทงาน"><option value="all">ทุกประเภท</option><option value="meeting">ประชุม / อบรม</option><option value="activity">กิจกรรม</option><option value="media">ถ่ายทำ / สื่อ</option><option value="other">อื่น ๆ</option></select><select id="status-filter" aria-label="กรองสถานะ"><option value="all">ทุกสถานะ</option><option value="waiting_info">รอข้อมูล</option><option value="confirmed">ยืนยันแล้ว</option><option value="preparing">กำลังเตรียมสื่อ</option><option value="ready">พร้อมปฏิบัติงาน</option><option value="waiting_publish">รอเผยแพร่</option><option value="published">เผยแพร่แล้ว</option><option value="completed">เสร็จสิ้น</option></select></div>
+          <button id="today-button" class="btn ghost" type="button">วันนี้</button>
+          <button id="add-event-button" class="btn primary" type="button">＋ เพิ่มงาน</button>
         </div>
-        <button id="refresh-guides" class="secondary-button" type="button">ปรับคำแนะนำ</button>
       </div>
-
-      <div class="guide-grid">
-        <article class="guide-card photo-card">
-          <div class="guide-icon picture-icon" aria-hidden="true">
-            <svg viewBox="0 0 120 120"><defs><linearGradient id="camG" x1="0" x2="1"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#f97316"/></linearGradient></defs><rect x="18" y="35" width="84" height="58" rx="16" fill="url(#camG)"/><path d="M39 35l8-14h25l9 14" fill="#f4e8ff"/><circle cx="60" cy="64" r="21" fill="#fff" opacity=".95"/><circle cx="60" cy="64" r="13" fill="#6d28d9"/><circle cx="91" cy="47" r="5" fill="#fff"/></svg>
-          </div>
-          <div><span>ภาพถ่าย</span><h3>แนวทางการถ่ายภาพ</h3><ul id="photo-guide"></ul></div>
-          <button class="text-button guide-more" data-guide="photo" type="button">ดูแนวทางเต็ม</button>
-        </article>
-
-        <article class="guide-card video-card">
-          <div class="guide-icon picture-icon" aria-hidden="true">
-            <svg viewBox="0 0 120 120"><rect x="20" y="29" width="80" height="66" rx="14" fill="#10b981"/><path d="M78 48l28-14v56L78 76z" fill="#065f46"/><rect x="31" y="43" width="42" height="8" rx="4" fill="#d1fae5"/><circle cx="47" cy="69" r="13" fill="#ecfdf5"/><path d="M44 61l12 8-12 8z" fill="#059669"/></svg>
-          </div>
-          <div><span>วิดีโอ</span><h3>แนวทางการถ่ายคลิป</h3><ul id="video-guide"></ul></div>
-          <button class="text-button guide-more" data-guide="video" type="button">ดูแนวทางเต็ม</button>
-        </article>
-
-        <article class="guide-card prep-card">
-          <div class="guide-icon picture-icon" aria-hidden="true">
-            <svg viewBox="0 0 120 120"><rect x="28" y="18" width="64" height="86" rx="12" fill="#fb923c"/><rect x="42" y="10" width="36" height="18" rx="8" fill="#ffedd5"/><path d="M43 50l7 7 14-16M43 72l7 7 14-16" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M70 51h12M70 73h12" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg>
-          </div>
-          <div><span>เตรียมพร้อม</span><h3>สิ่งที่ควรเตรียม</h3><ul id="prep-guide"></ul></div>
-          <button class="text-button guide-more" data-guide="prep" type="button">เช็กลิสต์</button>
-        </article>
-
-        <article class="guide-card idea-card">
-          <div class="guide-icon picture-icon" aria-hidden="true">
-            <svg viewBox="0 0 120 120"><circle cx="60" cy="52" r="34" fill="#3b82f6"/><path d="M47 83h26v14H47z" fill="#1d4ed8"/><path d="M52 101h16" stroke="#1e3a8a" stroke-width="7" stroke-linecap="round"/><path d="M60 8v10M19 26l8 7M101 26l-8 7M15 62h12M93 62h12" stroke="#93c5fd" stroke-width="6" stroke-linecap="round"/><path d="M47 49c0-9 6-16 14-16 9 0 15 7 15 16 0 7-4 10-8 15-3 3-4 7-4 11h-9c0-4-1-8-4-11-3-4-4-8-4-15z" fill="#fff"/></svg>
-          </div>
-          <div><span>มุมคิด</span><h3>คอนเทนต์แนะนำ</h3><ul id="content-guide"></ul></div>
-          <button id="open-ideas-card" class="text-button" type="button">ดูไอเดียเดือนนี้</button>
-        </article>
+      <div class="calendar-controls">
+        <div class="view-switch" role="group" aria-label="มุมมองปฏิทิน"><button class="active" data-view="month" type="button">เดือน</button><button data-view="list" type="button">รายการ</button></div>
+        <div class="filter-row"><label><input id="show-holidays" type="checkbox" checked> วันสำคัญ</label><label><input id="show-buddhist" type="checkbox" checked> วันพระ</label><span id="sync-status">กำลังเชื่อมข้อมูลทีม…</span></div>
       </div>
+      <div id="calendar-month-view" class="calendar-frame"><div class="weekdays"><span>อาทิตย์</span><span>จันทร์</span><span>อังคาร</span><span>พุธ</span><span>พฤหัสบดี</span><span>ศุกร์</span><span>เสาร์</span></div><div id="calendar-grid" class="calendar-grid" role="grid"></div></div>
+      <div id="calendar-list-view" class="calendar-list-view" hidden></div>
+      <div class="legend"><span><i class="meeting"></i>ประชุม/อบรม</span><span><i class="activity"></i>กิจกรรม</span><span><i class="media"></i>ถ่ายทำ/สื่อ</span><span><i class="holiday"></i>วันสำคัญ</span><span><i class="buddhist"></i>วันพระ</span></div>
     </section>
 
-    <section class="important-section reveal">
-      <div class="important-copy">
-        <p>มองล่วงหน้า</p>
-        <h2>วันสำคัญและจังหวะคอนเทนต์ประจำเดือน</h2>
-        <span>ช่วยให้ทีมเห็นวันสำคัญก่อนถึงวันจริง และเตรียมภาพ คลิป หรือข้อความได้ทันเวลา</span>
+    <section id="work-assistant" class="work-assistant" hidden>
+      <div class="assistant-summary">
+        <div><span>ระบบสนับสนุนหลังฉาก</span><h2 id="assistant-title">แผนเตรียมงานพร้อมแล้ว</h2><p id="assistant-summary-text"></p></div>
+        <div class="assistant-actions"><button id="assistant-open-detail" class="btn primary" type="button">เปิดใบงาน PR</button><button id="assistant-dismiss" class="btn ghost" type="button">ซ่อน</button></div>
       </div>
+      <div id="assistant-alerts" class="assistant-alerts"></div>
+    </section>
+
+    <section class="important">
+      <div><span>มองล่วงหน้า</span><h2>วันสำคัญที่ใกล้ถึง</h2><p>ระบบคัดเฉพาะวันที่ควรเริ่มเตรียมภาพ คลิป หรือข้อความล่วงหน้า</p></div>
       <div id="important-days" class="important-days"></div>
     </section>
 
-    <footer>BRN PR Board · เทศบาลเมืองบางรักน้อย</footer>
+    <footer class="site-footer"><strong>BRN PR Board</strong><span>งานนำ ปฏิทินนำ ระบบสนับสนุนอยู่เบื้องหลัง</span><small>เทศบาลเมืองบางรักน้อย</small></footer>
   </main>
 
-  <dialog id="event-dialog" class="modal-dialog">
-    <form id="event-form" method="dialog" class="modal-card">
-      <header><div><span id="event-dialog-kicker">จัดงานในปฏิทิน</span><h2 id="event-dialog-title">เพิ่มงานใหม่</h2></div><button class="modal-close" type="button" data-close-dialog aria-label="ปิด">×</button></header>
-      <input id="event-id" type="hidden" />
-      <div class="field-grid">
-        <label class="wide">ชื่องาน <em>*</em><input id="event-title" required /></label>
-        <label class="wide">รายละเอียด<textarea id="event-description" rows="3"></textarea></label>
-        <label>วัน <em>*</em><input id="event-date" type="date" required /></label>
-        <label>เวลา<input id="event-time" type="time" /></label>
-        <label class="wide">สถานที่<input id="event-location" /></label>
-        <label>เจ้าของงาน<input id="event-owner" placeholder="เช่น กองสาธารณสุขฯ" /></label>
-        <label>ประเภทงาน<select id="event-category"><option value="meeting">ประชุม / อบรม</option><option value="activity">กิจกรรม</option><option value="important">วันสำคัญ</option><option value="media">ถ่ายทำ / สื่อ</option><option value="other">อื่น ๆ</option></select></label>
-        <label class="wide">แจ้งเตือนล่วงหน้า<select id="event-reminder"><option value="0">ไม่แจ้งเตือน</option><option value="30">30 นาที</option><option value="60" selected>1 ชั่วโมง</option><option value="180">3 ชั่วโมง</option><option value="1440">1 วัน</option></select></label>
+  <dialog id="event-dialog">
+    <form id="event-form" class="modal event-modal">
+      <header><div><span id="event-kicker">จัดงานในปฏิทิน</span><h2 id="event-heading">เพิ่มงานใหม่</h2></div><button type="button" data-close>×</button></header>
+      <input id="event-id" type="hidden">
+      <div class="form-grid">
+        <label class="wide">ชื่องาน *<input id="event-title" required></label>
+        <label class="wide">รายละเอียด<textarea id="event-description" rows="3" placeholder="วัตถุประสงค์ กลุ่มเป้าหมาย และสารสำคัญของงาน"></textarea></label>
+        <label>วัน *<input id="event-date" type="date" required></label>
+        <label>สถานะ<select id="event-status"><option value="waiting_info">รอข้อมูล</option><option value="confirmed">ยืนยันแล้ว</option><option value="preparing">กำลังเตรียมสื่อ</option><option value="ready">พร้อมปฏิบัติงาน</option><option value="waiting_publish">รอเผยแพร่</option><option value="published">เผยแพร่แล้ว</option><option value="completed">เสร็จสิ้น</option><option value="cancelled">ยกเลิก</option></select></label>
+        <label>เวลาเริ่ม<input id="event-start-time" type="time"></label>
+        <label>เวลาสิ้นสุด<input id="event-end-time" type="time"></label>
+        <label class="wide check"><input id="event-all-day" type="checkbox"> งานตลอดวัน</label>
+        <label class="wide">สถานที่<input id="event-location"></label>
+        <label>กอง/สำนักเจ้าของงาน<input id="event-owner" placeholder="เช่น กองสาธารณสุขฯ"></label>
+        <label>ประเภทงาน<select id="event-category"><option value="meeting">ประชุม / อบรม</option><option value="activity">กิจกรรม</option><option value="media">ถ่ายทำ / สื่อ</option><option value="other">อื่น ๆ</option></select></label>
+        <label>ผู้ประสานงาน<input id="event-contact-name"></label>
+        <label>เบอร์ผู้ประสานงาน<input id="event-contact-phone" inputmode="tel"></label>
+        <label class="wide">ประธาน/ผู้กล่าวเปิดงาน<input id="event-chairperson" placeholder="ระบุเมื่อยืนยันแล้ว"></label>
+        <fieldset class="wide output-fieldset"><legend>ผลงานที่ต้องจัดทำ</legend><div class="output-grid"><label><input type="checkbox" name="outputs" value="news"> ข่าว Facebook</label><label><input type="checkbox" name="outputs" value="album"> อัลบั้มภาพ</label><label><input type="checkbox" name="outputs" value="reel"> Reel / คลิปสั้น</label><label><input type="checkbox" name="outputs" value="video"> วิดีโอสรุป</label><label><input type="checkbox" name="outputs" value="live"> ถ่ายทอดสด</label><label><input type="checkbox" name="outputs" value="poster"> โปสเตอร์</label></div></fieldset>
+        <label class="wide">ลิงก์ผลงาน/โพสต์<textarea id="event-publication-links" rows="2" placeholder="วางลิงก์หลังเผยแพร่แล้ว บรรทัดละ 1 ลิงก์"></textarea></label>
+        <label class="wide check"><input id="event-notify" type="checkbox" checked> แจ้ง LINE ตอนบันทึก และใช้การเตือนตามนโยบายเดิม</label>
       </div>
-      <div class="modal-actions">
-        <button id="delete-event" class="danger-button" type="button" hidden>ลบงาน</button>
-        <span class="action-spacer"></span>
-        <button class="secondary-button" type="button" data-close-dialog>ยกเลิก</button>
-        <button class="primary-button" type="submit">บันทึกงาน</button>
-      </div>
+      <footer><button id="delete-event" class="btn danger" type="button" hidden>ลบงาน</button><span></span><button class="btn ghost" type="button" data-close>ยกเลิก</button><button class="btn primary" type="submit">บันทึกงาน</button></footer>
     </form>
   </dialog>
 
-  <dialog id="detail-dialog" class="modal-dialog">
-    <article class="modal-card detail-card">
-      <header><div><span id="detail-category"></span><h2 id="detail-title"></h2></div><button class="modal-close" type="button" data-close-dialog aria-label="ปิด">×</button></header>
-      <div class="detail-meta"><p>📅 <span id="detail-date"></span></p><p>🕘 <span id="detail-time"></span></p><p>📍 <span id="detail-location"></span></p><p>🏷️ <span id="detail-owner"></span></p></div>
-      <p id="detail-description" class="detail-description"></p>
-      <div class="modal-actions"><span class="action-spacer"></span><button class="secondary-button" type="button" data-close-dialog>ปิด</button><button id="edit-event" class="primary-button" type="button">แก้ไขงาน</button></div>
+  <dialog id="detail-dialog">
+    <article class="modal work-order-modal">
+      <header><div><span id="detail-category"></span><h2 id="detail-title"></h2></div><button type="button" data-close>×</button></header>
+      <div id="detail-status-row" class="detail-status-row"></div>
+      <div class="work-order-grid">
+        <section class="work-order-main">
+          <div id="detail-meta" class="detail-meta"></div>
+          <p id="detail-description" class="detail-description"></p>
+          <section><div class="subhead"><h3>ตรวจความพร้อม</h3><span id="detail-readiness"></span></div><div id="detail-missing" class="check-panel"></div></section>
+          <section><div class="subhead"><h3>ผลงานที่ต้องจัดทำ</h3></div><div id="detail-outputs" class="output-tags"></div></section>
+          <section id="detail-links-section"><div class="subhead"><h3>ลิงก์ผลงาน</h3></div><div id="detail-links" class="link-list"></div></section>
+        </section>
+        <aside class="work-order-support">
+          <div class="support-head"><span>แนวทางจากข้อมูลงาน</span><strong>ระบบสนับสนุน PR</strong></div>
+          <div class="support-tabs" role="tablist"><button class="active" data-support-tab="prep" type="button">เตรียมงาน</button><button data-support-tab="photo" type="button">ภาพ</button><button data-support-tab="video" type="button">คลิป</button><button data-support-tab="content" type="button">คอนเทนต์</button></div>
+          <div id="detail-support-content" class="support-content"></div>
+          <button id="copy-support" class="btn ghost full" type="button">คัดลอกแนวทางนี้</button>
+        </aside>
+      </div>
+      <footer class="work-order-footer"><button id="mark-next-status" class="btn ghost" type="button">เลื่อนสถานะ</button><button id="print-work-order" class="btn ghost" type="button">พิมพ์ใบงาน</button><button id="copy-media-brief" class="btn ghost" type="button">คัดลอกบรีฟสร้างสื่อ</button><button id="retry-line" class="btn ghost" type="button">ส่งแจ้ง LINE อีกครั้ง</button><span></span><button id="edit-event" class="btn primary" type="button">แก้ไขงาน</button></footer>
     </article>
   </dialog>
 
-  <dialog id="ideas-dialog" class="modal-dialog ideas-dialog">
-    <article class="modal-card">
-      <header><div><span>CONTENT PLANNER</span><h2>ไอเดียคอนเทนต์เดือนนี้</h2></div><button class="modal-close" type="button" data-close-dialog aria-label="ปิด">×</button></header>
-      <div id="ideas-list" class="ideas-list"></div>
-    </article>
-  </dialog>
-
+  <dialog id="day-dialog"><article class="modal day-modal"><header><div><span>งานประจำวัน</span><h2 id="day-title"></h2></div><button type="button" data-close>×</button></header><div id="day-list" class="day-list"></div><footer><button id="day-add" class="btn primary" type="button">＋ เพิ่มงานวันนี้</button><span></span><button class="btn ghost" type="button" data-close>ปิด</button></footer></article></dialog>
+  <dialog id="team-work-dialog"><article class="modal team-modal"><header><div><span>รายการที่ทีมต้องติดตาม</span><h2>งานของทีม</h2></div><button type="button" data-close>×</button></header><div class="team-filters"><button class="active" data-team-filter="active" type="button">กำลังดำเนินการ</button><button data-team-filter="missing" type="button">ข้อมูลไม่ครบ</button><button data-team-filter="publish" type="button">รอเผยแพร่</button><button data-team-filter="all" type="button">ทั้งหมด</button></div><div id="team-work-list" class="team-work-list"></div></article></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <script>window.BRN_CURRENT_USER={displayName:"THANAWID CHANNEL",role:"admin"};</script><script src="./auth-config.js"></script><script src="./app.js"></script>
+  <script>
+    window.BRN_CURRENT_USER={displayName:"ธนวิชญ์",email:"preview@local",role:"admin"};
+    window.BRN_AUTH_CONFIG={firebaseConfig:null};
+    localStorage.setItem('brn-pr-events-v2', JSON.stringify([
+      {id:'demo-1',title:'ประชุมประชาคมระดับเมือง',description:'สรุปปัญหา ความต้องการ และประเด็นการพัฒนา เพื่อประกอบการจัดทำแผนพัฒนาท้องถิ่น',date:'2026-07-23',startTime:'09:00',endTime:'12:00',location:'ห้องประชุมชั้น 5',owner:'สำนักปลัดเทศบาล',category:'meeting',status:'preparing',contactName:'คุณอรทัย',contactPhone:'02-193-4512 ต่อ 102',chairperson:'นายสุชาติ แก้วประดิษฐ์',outputs:['news','album','reel'],notifyLine:true},
+      {id:'demo-2',title:'กิจกรรมทำความสะอาดคลองป่าช้า หมู่ที่ 3',description:'ร่วมกันเก็บขยะและปรับภูมิทัศน์ริมคลอง',date:'2026-07-24',startTime:'08:30',location:'จุดรวมพลริมคลองป่าช้า หมู่ที่ 3',owner:'กองสาธารณสุขและสิ่งแวดล้อม',category:'activity',status:'waiting_info',outputs:['news','album','reel'],notifyLine:true},
+      {id:'demo-3',title:'ถ่ายทำคลิปแนะนำบริการประชาชน',description:'ถ่ายคลิปสั้นแนะนำช่องทางติดต่อเทศบาล',date:'2026-07-27',startTime:'13:30',location:'สำนักงานเทศบาลเมืองบางรักน้อย',owner:'งานประชาสัมพันธ์',category:'media',status:'confirmed',contactName:'ทีมประชาสัมพันธ์',outputs:['reel','video'],notifyLine:true},
+      {id:'demo-4',title:'โครงการร่วมกิจกรรมร่วมใจเพื่อผู้สูงวัยบางรักน้อย',description:'สรุปข่าวและอัลบั้มภาพหลังจบกิจกรรม',date:'2026-07-14',startTime:'08:30',location:'ลานอเนกประสงค์ เทศบาลเมืองบางรักน้อย',owner:'กองสวัสดิการสังคม',category:'activity',status:'waiting_publish',contactName:'กองสวัสดิการสังคม',contactPhone:'02-193-4512',chairperson:'นายสุชาติ แก้วประดิษฐ์',outputs:['news','album','video'],notifyLine:false}
+    ]));
+  </script>
+  <script src="./calendar-data.js?v=1.1.0"></script>
+  <script src="./app.js?v=1.1.0"></script>
 </body>
 </html>
