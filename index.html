@@ -7,12 +7,13 @@
   <title>BRN PR Board</title>
   <meta name="description" content="กระดานปฏิทินและใบงานประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" href="./assets/logo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=1.2.2">
-  <script src="./auth-bootstrap.js?v=1.2.2"></script>
+  <link rel="stylesheet" href="./styles.css?v=1.2.3">
+  <script src="./auth-bootstrap.js?v=1.2.3"></script>
 </head>
 <body>
   <div id="auth-gate" class="auth-gate" hidden>
@@ -42,13 +43,13 @@
 
   <main class="app-shell" aria-hidden="true">
     <header class="site-header">
-      <a id="brand-home" class="brand" href="#dashboard" aria-label="BRN PR Board">
+      <a id="brand-home" class="brand" href="#calendar" aria-label="กลับไปที่ปฏิทิน BRN PR Board">
         <img src="./assets/logo.png" alt="">
         <span><strong>BRN PR Board</strong><small>กระดานงานประชาสัมพันธ์</small></span>
       </a>
       <nav aria-label="เมนูหลัก">
-        <a id="nav-dashboard" class="active" href="#dashboard">ภาพรวม</a>
-        <a id="nav-calendar" href="#calendar">ปฏิทิน</a>
+        <a id="nav-calendar" class="active" href="#calendar">ปฏิทิน</a>
+        <a id="nav-dashboard" href="#dashboard">ภาพรวม</a>
         <button id="nav-team-work" type="button">งานของทีม</button>
       </nav>
       <div id="account-area" class="account-area" hidden>
@@ -106,12 +107,12 @@
         <div id="focus-list" class="focus-list"></div>
       </section>
     </section>
-    <section id="work-assistant" class="work-assistant" hidden>
+    <section id="work-assistant" class="work-assistant monthly-content-board" aria-labelledby="monthly-content-title">
       <div class="assistant-summary">
-        <div><span>ระบบสนับสนุนหลังฉาก</span><h2 id="assistant-title">แผนเตรียมงานพร้อมแล้ว</h2><p id="assistant-summary-text"></p></div>
-        <div class="assistant-actions"><button id="assistant-open-detail" class="btn primary" type="button">เปิดใบงาน PR</button><button id="assistant-dismiss" class="btn ghost" type="button">ซ่อน</button></div>
+        <div><span id="content-month-label">ไอเดียสำหรับเดือนนี้</span><h2 id="monthly-content-title">เดือนนี้สื่อสารอะไรดี?</h2><p>ไอเดียคอนเทนต์ที่น่าหยิบมาทำในเดือนนี้</p></div>
+        <div class="assistant-actions"><button id="content-view-all" class="btn ghost" type="button">ดูไอเดียทั้งหมด</button><button id="content-refresh" class="btn primary" type="button">คิดไอเดียใหม่</button></div>
       </div>
-      <div id="assistant-alerts" class="assistant-alerts"></div>
+      <div id="monthly-content-ideas" class="monthly-content-ideas"></div>
     </section>
 
     <section id="important-section" class="important">
@@ -167,7 +168,7 @@
           <section id="detail-links-section"><div class="subhead"><h3>ลิงก์ผลงาน</h3></div><div id="detail-links" class="link-list"></div></section>
         </section>
         <aside class="work-order-support">
-          <div class="support-head"><span>แนวทางจากข้อมูลงาน</span><strong>ระบบสนับสนุน PR</strong></div>
+          <div class="support-head"><span>จัดจากรายละเอียดกิจกรรม</span><strong>แนวทางงาน PR</strong></div>
           <div class="support-tabs" role="tablist"><button class="active" data-support-tab="prep" type="button">เตรียมงาน</button><button data-support-tab="photo" type="button">ภาพ</button><button data-support-tab="video" type="button">คลิป</button><button data-support-tab="content" type="button">คอนเทนต์</button></div>
           <div id="detail-support-content" class="support-content"></div>
           <button id="copy-support" class="btn ghost full" type="button">คัดลอกแนวทางนี้</button>
@@ -179,10 +180,11 @@
 
   <dialog id="day-dialog"><article class="modal day-modal"><header><div><span>งานประจำวัน</span><h2 id="day-title"></h2></div><button type="button" data-close>×</button></header><div id="day-list" class="day-list"></div><footer><button id="day-add" class="btn primary" type="button">＋ เพิ่มงานวันนี้</button><span></span><button class="btn ghost" type="button" data-close>ปิด</button></footer></article></dialog>
   <dialog id="team-work-dialog"><article class="modal team-modal"><header><div><span>รายการที่ทีมต้องติดตาม</span><h2>งานของทีม</h2></div><button type="button" data-close>×</button></header><div class="team-filters"><button class="active" data-team-filter="active" type="button">กำลังดำเนินการ</button><button data-team-filter="overdue" type="button">งานค้าง/เลยกำหนด</button><button data-team-filter="missing" type="button">ข้อมูลไม่ครบ</button><button data-team-filter="publish" type="button">รอเผยแพร่</button><button data-team-filter="all" type="button">ทั้งหมด</button></div><div id="team-work-list" class="team-work-list"></div></article></dialog>
+  <dialog id="content-ideas-dialog"><article class="modal content-ideas-modal"><header><div><span id="content-dialog-month"></span><h2>ไอเดียคอนเทนต์ประจำเดือน</h2></div><button type="button" data-close>×</button></header><div id="content-ideas-all" class="content-ideas-all"></div><footer><span></span><button class="btn ghost" type="button" data-close>ปิด</button><button id="content-dialog-refresh" class="btn primary" type="button">คิดไอเดียใหม่</button></footer></article></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-  <script src="./auth-config.js?v=1.2.2"></script>
-  <script src="./calendar-data.js?v=1.2.2"></script>
-  <script type="module" src="./firebase-auth.js?v=1.2.2"></script>
+  <script src="./auth-config.js?v=1.2.3"></script>
+  <script src="./calendar-data.js?v=1.2.3"></script>
+  <script type="module" src="./firebase-auth.js?v=1.2.3"></script>
 </body>
 </html>

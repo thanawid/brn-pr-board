@@ -67,7 +67,8 @@
     detailTab: 'prep',
     teamFilter: 'active',
     metricRange: null,
-    mainView: location.hash === '#calendar' ? 'calendar' : 'dashboard',
+    contentIdeaOffset: 0,
+    mainView: location.hash === '#dashboard' ? 'dashboard' : 'calendar',
   };
 
   function startOfMonth(date) {
@@ -291,7 +292,7 @@
     renderDashboard();
     renderCalendar();
     renderImportant();
-    renderAssistant();
+    renderMonthlyContent();
     if ($('team-work-dialog')?.open) renderTeamWork();
   }
 
@@ -340,7 +341,7 @@
       overdueSummary.innerHTML = '';
     }
 
-    const focusCandidates = sortedEvents(state.events.filter((e) => e.date >= todayKey && isActive(e))).slice(0, 5);
+    const focusCandidates = sortedEvents(state.events.filter((e) => e.date >= todayKey && isActive(e))).slice(0, 3);
     $('focus-list').innerHTML = focusCandidates.length ? focusCandidates.map((event) => {
       const date = parseDate(event.date);
       const alerts = riskAlerts(event);
@@ -402,15 +403,50 @@
     $('calendar-list-view').innerHTML = groups.size ? [...groups.entries()].map(([date, events]) => `<section class="list-day-group"><div class="list-day-head">${esc(thaiDate(date))}</div>${events.map((event) => `<button class="list-event" data-list-event-id="${esc(event.id)}" type="button"><time>${esc(displayTime(event))}</time><span><strong>${esc(event.title)}</strong><span>${esc(event.location || event.owner || 'ยังไม่ระบุสถานที่')}</span></span>${statusPill(event)}</button>`).join('')}</section>`).join('') : '<div class="empty-state">ไม่พบงานในเดือนนี้ตามตัวกรองที่เลือก</div>';
   }
 
-  function renderAssistant() {
-    const event = state.events.find((item) => item.id === state.selectedEventId);
-    const section = $('work-assistant');
-    if (!event) { section.hidden = true; return; }
-    const alerts = riskAlerts(event);
-    $('assistant-title').textContent = `แผนเตรียม “${event.title}” พร้อมแล้ว`;
-    $('assistant-summary-text').textContent = alerts.length ? 'ระบบพบข้อมูลหรือขั้นตอนที่ควรจัดการก่อนงาน' : 'ข้อมูลหลักพร้อม ระบบจัดแนวทางภาพ คลิป และคอนเทนต์จากรายละเอียดของงานแล้ว';
-    $('assistant-alerts').innerHTML = alerts.length ? alerts.map((alert) => `<span class="assistant-alert">⚠ ${esc(alert)}</span>`).join('') : '<span class="assistant-alert" style="background:#e7f6ed;color:#176b4f">✓ ไม่พบความเสี่ยงสำคัญจากข้อมูลที่มี</span>';
-    section.hidden = false;
+  function monthlyContentPool() {
+    const year = state.cursor.getFullYear();
+    const month = state.cursor.getMonth();
+    const events = sortedEvents(state.events.filter((event) => {
+      const date = parseDate(event.date);
+      return date.getFullYear() === year && date.getMonth() === month && event.status !== 'cancelled';
+    }));
+    const important = IMPORTANT.filter((item) => {
+      const date = parseDate(item.date);
+      return date.getFullYear() === year && date.getMonth() === month;
+    });
+    const ideas = [];
+    const addIdea = (title, description, tag) => {
+      if (!ideas.some((item) => item.title === title)) ideas.push({ title, description, tag });
+    };
+
+    events.slice(0, 4).forEach((event) => {
+      addIdea(`ก่อนถึงงาน “${event.title}”`, 'ทำโพสต์สั้นบอกสิ่งที่ประชาชนควรรู้ โดยใช้วัน เวลา สถานที่ และรายละเอียดที่ยืนยันแล้ว', 'จากปฏิทิน');
+      addIdea(`เบื้องหลัง “${event.title}”`, 'เก็บภาพหรือคลิปช่วงเตรียมงาน 3–5 ช็อต แล้วเล่าให้เห็นขั้นตอนทำงานของทีมแบบกระชับ', 'เบื้องหลัง');
+      if (['published', 'completed', 'waiting_publish'].includes(event.status)) addIdea(`สรุปผล “${event.title}”`, 'สรุปสิ่งที่ดำเนินการและประโยชน์ที่เกิดขึ้น พร้อมภาพผลงานจริงและข้อมูลที่ตรวจสอบแล้ว', 'สรุปผลงาน');
+    });
+
+    important.slice(0, 3).forEach((item) => {
+      addIdea(`เตรียมคอนเทนต์ “${item.title}”`, 'วางภาพหลัก ข้อความสั้น และรูปแบบโพสต์ล่วงหน้า โดยตรวจถ้อยคำและข้อมูลทางการก่อนเผยแพร่', 'วันสำคัญ');
+    });
+
+    addIdea('รู้จักบริการเทศบาลใน 1 นาที', 'เลือกหนึ่งบริการมาเล่าให้อ่านจบง่าย พร้อมขั้นตอนและช่องทางติดต่อที่ตรวจสอบแล้ว', 'บริการประชาชน');
+    addIdea('เบื้องหลังคนทำงาน', 'เล่าหนึ่งวันของเจ้าหน้าที่ผ่านภาพสั้น ๆ เพื่อให้ประชาชนเห็นขั้นตอนและความตั้งใจในการทำงาน', 'เรื่องเล่าทีมงาน');
+    addIdea('ถาม–ตอบเรื่องใกล้ตัว', 'หยิบคำถามที่ประชาชนถามบ่อย มาตอบสั้น ชัด และใส่ช่องทางสอบถามเพิ่มเติม', 'ความรู้ใกล้ตัว');
+    addIdea('ก่อน–หลังการพัฒนาพื้นที่', 'ใช้ภาพมุมเดียวกันเปรียบเทียบก่อนและหลัง พร้อมอธิบายผลลัพธ์ตามข้อมูลจริง', 'ภาพเล่าเรื่อง');
+    addIdea('สรุปงานเด่นประจำสัปดาห์', 'รวม 3–5 เรื่องสำคัญเป็นโพสต์เดียว เพื่อให้ติดตามงานเทศบาลได้ง่ายขึ้น', 'สรุปรายสัปดาห์');
+    addIdea('เรื่องที่ประชาชนควรรู้เดือนนี้', 'รวบรวมกำหนดการ การแจ้งเตือน หรือบริการที่ควรรู้ โดยใช้เฉพาะข้อมูลที่หน่วยงานยืนยันแล้ว', 'ข้อมูลประชาชน');
+    return ideas;
+  }
+
+  function renderMonthlyContent() {
+    const ideas = monthlyContentPool();
+    const offset = ideas.length ? state.contentIdeaOffset % ideas.length : 0;
+    const rotated = ideas.length ? [...ideas.slice(offset), ...ideas.slice(0, offset)] : [];
+    const visible = rotated.slice(0, 3);
+    $('content-month-label').textContent = monthTitle(state.cursor);
+    $('monthly-content-ideas').innerHTML = visible.length ? visible.map((idea, index) => `<article class="content-idea-card"><span>${esc(idea.tag)}</span><strong>${esc(idea.title)}</strong><p>${esc(idea.description)}</p><small>${String(index + 1).padStart(2, '0')}</small></article>`).join('') : '<div class="empty-state">ยังไม่มีไอเดียสำหรับเดือนนี้</div>';
+    $('content-dialog-month').textContent = monthTitle(state.cursor);
+    $('content-ideas-all').innerHTML = rotated.slice(0, 12).map((idea, index) => `<article class="content-idea-row"><b>${String(index + 1).padStart(2, '0')}</b><div><span>${esc(idea.tag)}</span><strong>${esc(idea.title)}</strong><p>${esc(idea.description)}</p></div></article>`).join('');
   }
 
   function renderImportant() {
@@ -427,7 +463,7 @@
     state.selectedDate = parseDate(dateKey);
     state.selectedEventId = null;
     renderCalendar();
-    renderAssistant();
+    renderMonthlyContent();
     const events = sortedEvents(state.events.filter((event) => event.date === dateKey));
     const special = IMPORTANT.filter((item) => item.date === dateKey);
     const buddhist = BUDDHIST.find((item) => item.date === dateKey);
@@ -565,7 +601,7 @@
     state.selectedEventId = id;
     state.selectedDate = parseDate(event.date);
     state.detailTab = 'prep';
-    renderAssistant();
+    renderMonthlyContent();
     renderDetail();
     $('detail-dialog').showModal();
   }
@@ -698,7 +734,7 @@
     const linksHtml = links.length ? links.map((link) => `<div class="link">${esc(link)}</div>`).join('') : '<span class="muted">ยังไม่มีลิงก์ผลงาน</span>';
     popup.document.open();
     popup.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ใบสรุปการปฏิบัติงานประชาสัมพันธ์ - ${esc(event.title)}</title><style>
-      @page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{margin:0;background:#eef0f3;color:#1f1724;font-family:"Noto Sans Thai",Tahoma,sans-serif;font-size:12.4px;line-height:1.42}.sheet{width:190mm;margin:12px auto;background:#fff;padding:7mm 9mm 5mm;box-shadow:0 8px 35px rgba(0,0,0,.16)}.top{display:grid;grid-template-columns:22mm 1fr 25mm;align-items:center;gap:4mm;padding-bottom:3mm;border-bottom:2px solid #6a268e}.logo{width:20mm;height:20mm;object-fit:cover;border-radius:5mm}.heading{text-align:center}.heading h1{font-size:20px;line-height:1.2;margin:0;color:#4b176f}.heading h2{font-size:14.5px;margin:2px 0 0}.doc-date{text-align:right;align-self:start;font-size:10px;color:#655b69}.gold-line{height:2px;background:#d7a22a;margin-top:1px}.event-title{margin:4mm 0 3mm;padding:3mm 4mm;background:#f6f0fa;border-left:4px solid #6a268e;border-radius:2.5mm}.event-title small{display:block;color:#6a268e;font-weight:700}.event-title strong{font-size:17px;line-height:1.28}.meta{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #ded7e2;border-radius:2.5mm;overflow:hidden}.meta td{width:50%;padding:2.2mm 3mm;vertical-align:top;border-right:1px solid #e7e1e9;border-bottom:1px solid #e7e1e9}.meta td:last-child{border-right:0}.meta tr:last-child td{border-bottom:0}.meta small{display:block;color:#756a79;margin-bottom:1px}.meta strong{font-size:12.8px}.section{margin-top:3.2mm;break-inside:avoid}.section h3{font-size:13.5px;color:#4b176f;margin:0 0 1.7mm;padding-bottom:1mm;border-bottom:1px solid #d9cbe1}.description,.summary{border:1px solid #e2dce5;border-radius:2.5mm;padding:2.5mm 3mm;min-height:10mm;white-space:pre-wrap}.summary{min-height:13mm;background:#fcfafc}.tasks{display:grid;grid-template-columns:1fr 1fr;gap:1.4mm}.task{display:flex;align-items:center;gap:1.7mm;padding:1.7mm 2.5mm;background:#f7f2fa;border-radius:2mm}.task b{display:inline-grid;place-items:center;width:4.4mm;height:4.4mm;border-radius:50%;background:#6a268e;color:#fff;font-size:9px}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.result-box{min-width:0}.outputs{display:flex;flex-wrap:wrap;gap:1.2mm}.output{padding:1mm 2.3mm;border:1px solid #cdb8d8;border-radius:999px;color:#4b176f;font-weight:700;font-size:11px}.link{font-size:10px;word-break:break-all;padding:1mm 0;border-bottom:1px dashed #ddd}.muted{color:#877d8a}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:13mm;margin-top:5mm;break-inside:avoid}.sign{text-align:center;padding-top:6mm;border-top:1px dotted #777}.sign small{display:block;color:#6e6571}.footer-note{text-align:center;color:#8a818d;font-size:9px;margin-top:4mm;padding-top:2mm;border-top:1px solid #eee}.no-print{position:fixed;right:20px;bottom:20px;border:0;border-radius:999px;background:#5c207f;color:#fff;padding:12px 18px;font-family:inherit;font-size:14px;font-weight:700;box-shadow:0 8px 25px rgba(75,23,111,.3)}
+      @page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{margin:0;background:#eef0f3;color:#1f1724;font-family:"Noto Sans Thai",Tahoma,sans-serif;font-size:12.4px;line-height:1.42}.sheet{width:190mm;margin:12px auto;background:#fff;padding:7mm 9mm 5mm;box-shadow:0 8px 35px rgba(0,0,0,.16)}.top{display:grid;grid-template-columns:22mm 1fr 25mm;align-items:center;gap:4mm;padding-bottom:3mm;border-bottom:2px solid #6a268e}.logo{width:20mm;height:20mm;object-fit:contain}.heading{text-align:center}.heading h1{font-size:20px;line-height:1.2;margin:0;color:#4b176f}.heading h2{font-size:14.5px;margin:2px 0 0}.doc-date{text-align:right;align-self:start;font-size:10px;color:#655b69}.gold-line{height:2px;background:#d7a22a;margin-top:1px}.event-title{margin:4mm 0 3mm;padding:3mm 4mm;background:#f6f0fa;border-left:4px solid #6a268e;border-radius:2.5mm}.event-title small{display:block;color:#6a268e;font-weight:700}.event-title strong{font-size:17px;line-height:1.28}.meta{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #ded7e2;border-radius:2.5mm;overflow:hidden}.meta td{width:50%;padding:2.2mm 3mm;vertical-align:top;border-right:1px solid #e7e1e9;border-bottom:1px solid #e7e1e9}.meta td:last-child{border-right:0}.meta tr:last-child td{border-bottom:0}.meta small{display:block;color:#756a79;margin-bottom:1px}.meta strong{font-size:12.8px}.section{margin-top:3.2mm;break-inside:avoid}.section h3{font-size:13.5px;color:#4b176f;margin:0 0 1.7mm;padding-bottom:1mm;border-bottom:1px solid #d9cbe1}.description,.summary{border:1px solid #e2dce5;border-radius:2.5mm;padding:2.5mm 3mm;min-height:10mm;white-space:pre-wrap}.summary{min-height:13mm;background:#fcfafc}.tasks{display:grid;grid-template-columns:1fr 1fr;gap:1.4mm}.task{display:flex;align-items:center;gap:1.7mm;padding:1.7mm 2.5mm;background:#f7f2fa;border-radius:2mm}.task b{display:inline-grid;place-items:center;width:4.4mm;height:4.4mm;border-radius:50%;background:#6a268e;color:#fff;font-size:9px}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.result-box{min-width:0}.outputs{display:flex;flex-wrap:wrap;gap:1.2mm}.output{padding:1mm 2.3mm;border:1px solid #cdb8d8;border-radius:999px;color:#4b176f;font-weight:700;font-size:11px}.link{font-size:10px;word-break:break-all;padding:1mm 0;border-bottom:1px dashed #ddd}.muted{color:#877d8a}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:13mm;margin-top:5mm;break-inside:avoid}.sign{text-align:center;padding-top:6mm;border-top:1px dotted #777}.sign small{display:block;color:#6e6571}.footer-note{text-align:center;color:#8a818d;font-size:9px;margin-top:4mm;padding-top:2mm;border-top:1px solid #eee}.no-print{position:fixed;right:20px;bottom:20px;border:0;border-radius:999px;background:#5c207f;color:#fff;padding:12px 18px;font-family:inherit;font-size:14px;font-weight:700;box-shadow:0 8px 25px rgba(75,23,111,.3)}
       @media print{body{background:#fff}.sheet{width:auto;margin:0;padding:0;box-shadow:none}.no-print{display:none}}
     </style></head><body><main class="sheet"><header class="top"><img class="logo" src="${logoUrl}" alt="โลโก้งานประชาสัมพันธ์"><div class="heading"><h1>ใบสรุปการปฏิบัติงานประชาสัมพันธ์</h1><h2>เทศบาลเมืองบางรักน้อย</h2></div><div class="doc-date">วันที่จัดทำ<br><strong>${esc(thaiDate(new Date(), false))}</strong></div></header><div class="gold-line"></div>
       <section class="event-title"><small>ชื่องาน / กิจกรรม</small><strong>${esc(event.title)}</strong></section>
@@ -729,7 +765,7 @@
     const logoUrl = new URL('./assets/logo.png', window.location.href).href;
     popup.document.open();
     popup.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>แบบแจ้งงานประชาสัมพันธ์</title><style>
-      @page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{margin:0;background:#eef0f3;color:#211725;font-family:"Noto Sans Thai",Tahoma,sans-serif;font-size:13px;line-height:1.5}.sheet{width:190mm;min-height:277mm;margin:12px auto;background:#fff;padding:8mm 10mm 7mm;box-shadow:0 8px 35px rgba(0,0,0,.16)}.top{display:grid;grid-template-columns:22mm 1fr 28mm;align-items:center;gap:4mm;padding-bottom:3mm;border-bottom:2px solid #5b207d}.logo{width:20mm;height:20mm;object-fit:cover;border-radius:5mm}.heading{text-align:center}.heading h1{font-size:21px;line-height:1.2;margin:0;color:#4b176f}.heading h2{font-size:15px;margin:2px 0 0}.doc-no{text-align:right;align-self:start;font-size:10px;color:#6f6573}.gold-line{height:2px;background:#d5a53b;margin-top:1px}.note{margin:4mm 0 3mm;padding:2.7mm 3.5mm;border-radius:2.5mm;background:#f7f1fa;color:#5d4d64}.row{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.field{margin-top:3.2mm}.field label{display:block;color:#4b176f;font-weight:700;margin-bottom:1mm}.line{height:11mm;border:1px solid #d9d1dd;border-radius:2.5mm}.line.tall{height:30mm}.write-line{height:8mm;border-bottom:1px dotted #777}.checks{display:grid;grid-template-columns:1fr 1fr;gap:2mm 5mm;padding:3mm;border:1px solid #ddd4e2;border-radius:2.5mm}.check{display:flex;align-items:center;gap:2mm;min-height:8mm}.box{width:4.5mm;height:4.5mm;border:1.4px solid #5b207d;border-radius:1mm;flex:0 0 auto}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:15mm;margin-top:10mm}.sign{text-align:center;padding-top:8mm;border-top:1px dotted #777}.sign small{display:block;color:#6f6573}.footer{text-align:center;color:#8d8391;font-size:9.5px;margin-top:8mm;padding-top:2mm;border-top:1px solid #eee}.no-print{position:fixed;right:20px;bottom:20px;border:0;border-radius:999px;background:#5b207d;color:#fff;padding:12px 18px;font-family:inherit;font-size:14px;font-weight:700;box-shadow:0 8px 25px rgba(75,23,111,.3)}@media print{body{background:#fff}.sheet{width:auto;min-height:auto;margin:0;padding:0;box-shadow:none}.no-print{display:none}}
+      @page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{margin:0;background:#eef0f3;color:#211725;font-family:"Noto Sans Thai",Tahoma,sans-serif;font-size:13px;line-height:1.5}.sheet{width:190mm;min-height:277mm;margin:12px auto;background:#fff;padding:8mm 10mm 7mm;box-shadow:0 8px 35px rgba(0,0,0,.16)}.top{display:grid;grid-template-columns:22mm 1fr 28mm;align-items:center;gap:4mm;padding-bottom:3mm;border-bottom:2px solid #5b207d}.logo{width:20mm;height:20mm;object-fit:contain}.heading{text-align:center}.heading h1{font-size:21px;line-height:1.2;margin:0;color:#4b176f}.heading h2{font-size:15px;margin:2px 0 0}.doc-no{text-align:right;align-self:start;font-size:10px;color:#6f6573}.gold-line{height:2px;background:#d5a53b;margin-top:1px}.note{margin:4mm 0 3mm;padding:2.7mm 3.5mm;border-radius:2.5mm;background:#f7f1fa;color:#5d4d64}.row{display:grid;grid-template-columns:1fr 1fr;gap:4mm}.field{margin-top:3.2mm}.field label{display:block;color:#4b176f;font-weight:700;margin-bottom:1mm}.line{height:11mm;border:1px solid #d9d1dd;border-radius:2.5mm}.line.tall{height:30mm}.write-line{height:8mm;border-bottom:1px dotted #777}.checks{display:grid;grid-template-columns:1fr 1fr;gap:2mm 5mm;padding:3mm;border:1px solid #ddd4e2;border-radius:2.5mm}.check{display:flex;align-items:center;gap:2mm;min-height:8mm}.box{width:4.5mm;height:4.5mm;border:1.4px solid #5b207d;border-radius:1mm;flex:0 0 auto}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:15mm;margin-top:10mm}.sign{text-align:center;padding-top:8mm;border-top:1px dotted #777}.sign small{display:block;color:#6f6573}.footer{text-align:center;color:#8d8391;font-size:9.5px;margin-top:8mm;padding-top:2mm;border-top:1px solid #eee}.no-print{position:fixed;right:20px;bottom:20px;border:0;border-radius:999px;background:#5b207d;color:#fff;padding:12px 18px;font-family:inherit;font-size:14px;font-weight:700;box-shadow:0 8px 25px rgba(75,23,111,.3)}@media print{body{background:#fff}.sheet{width:auto;min-height:auto;margin:0;padding:0;box-shadow:none}.no-print{display:none}}
     </style></head><body><main class="sheet"><header class="top"><img class="logo" src="${logoUrl}" alt="โลโก้งานประชาสัมพันธ์"><div class="heading"><h1>แบบแจ้งงานประชาสัมพันธ์</h1><h2>เทศบาลเมืองบางรักน้อย</h2></div><div class="doc-no">วันที่รับเรื่อง<br>____ / ____ / ______</div></header><div class="gold-line"></div>
       <div class="note">สำหรับกอง / สำนัก หรือผู้เกี่ยวข้องใช้แจ้งรายละเอียดงานให้ทีมประชาสัมพันธ์</div>
       <div class="field"><label>ชื่องาน / กิจกรรม</label><div class="line"></div></div>
@@ -752,9 +788,9 @@
   }
 
   function bindEvents() {
-    $('prev-month').addEventListener('click', () => { state.cursor = new Date(state.cursor.getFullYear(), state.cursor.getMonth() - 1, 1); renderCalendar(); });
-    $('next-month').addEventListener('click', () => { state.cursor = new Date(state.cursor.getFullYear(), state.cursor.getMonth() + 1, 1); renderCalendar(); });
-    $('today-button').addEventListener('click', () => { state.cursor = startOfMonth(new Date()); state.selectedDate = new Date(); renderCalendar(); $('calendar').scrollIntoView({ behavior: 'smooth' }); });
+    $('prev-month').addEventListener('click', () => { state.cursor = new Date(state.cursor.getFullYear(), state.cursor.getMonth() - 1, 1); state.contentIdeaOffset = 0; renderCalendar(); renderMonthlyContent(); });
+    $('next-month').addEventListener('click', () => { state.cursor = new Date(state.cursor.getFullYear(), state.cursor.getMonth() + 1, 1); state.contentIdeaOffset = 0; renderCalendar(); renderMonthlyContent(); });
+    $('today-button').addEventListener('click', () => { state.cursor = startOfMonth(new Date()); state.selectedDate = new Date(); state.contentIdeaOffset = 0; renderCalendar(); renderMonthlyContent(); $('calendar').scrollIntoView({ behavior: 'smooth' }); });
     ['add-event-button', 'add-event-top'].forEach((id) => $(id).addEventListener('click', () => openEvent(iso(state.selectedDate))));
     $('print-request-form-button')?.addEventListener('click', () => {
       if ($('account-menu')) $('account-menu').hidden = true;
@@ -885,8 +921,15 @@
       const text = `${event.title}\n${items.map((item, index) => `${index + 1}. ${item}`).join('\n')}`;
       try { await navigator.clipboard.writeText(text); toast('คัดลอกแนวทางแล้ว'); } catch { toast('เบราว์เซอร์ไม่อนุญาตให้คัดลอกอัตโนมัติ'); }
     });
-    $('assistant-open-detail').addEventListener('click', () => { if (state.selectedEventId) openDetail(state.selectedEventId); });
-    $('assistant-dismiss').addEventListener('click', () => { state.selectedEventId = null; renderAssistant(); });
+    const refreshContentIdeas = () => {
+      const ideas = monthlyContentPool();
+      state.contentIdeaOffset = ideas.length ? (state.contentIdeaOffset + 3) % ideas.length : 0;
+      renderMonthlyContent();
+      toast('จัดไอเดียชุดใหม่ให้แล้ว');
+    };
+    $('content-refresh').addEventListener('click', refreshContentIdeas);
+    $('content-dialog-refresh').addEventListener('click', refreshContentIdeas);
+    $('content-view-all').addEventListener('click', () => { renderMonthlyContent(); $('content-ideas-dialog').showModal(); });
 
     $('nav-team-work').addEventListener('click', () => openTeamWork('active'));
     $('team-work-list').addEventListener('click', (event) => {
@@ -898,8 +941,8 @@
     qsa('[data-team-filter]').forEach((button) => button.addEventListener('click', () => { state.metricRange = null; state.teamFilter = button.dataset.teamFilter; renderTeamWork(); }));
     $('nav-dashboard').addEventListener('click', (event) => { event.preventDefault(); setMainView('dashboard'); });
     $('nav-calendar').addEventListener('click', (event) => { event.preventDefault(); setMainView('calendar'); });
-    $('brand-home')?.addEventListener('click', (event) => { event.preventDefault(); setMainView('dashboard'); });
-    window.addEventListener('popstate', () => setMainView(location.hash === '#calendar' ? 'calendar' : 'dashboard', { updateHash: false }));
+    $('brand-home')?.addEventListener('click', (event) => { event.preventDefault(); setMainView('calendar'); });
+    window.addEventListener('popstate', () => setMainView(location.hash === '#dashboard' ? 'dashboard' : 'calendar', { updateHash: false }));
 
     qsa('[data-close]').forEach((button) => button.addEventListener('click', () => button.closest('dialog').close()));
     qsa('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); }));

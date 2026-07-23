@@ -71,3 +71,25 @@ h1,h2,h3,.brand strong,.month-nav h2,.support-head strong{font-family:var(--disp
 @media(max-width:1120px){.hero-visual-wrap{left:47%;width:220px;height:235px;opacity:.22}}
 @media(max-width:900px){.hero-visual-wrap{display:none}.dashboard-shell>.calendar-wrap{margin-top:16px}}
 @media(prefers-reduced-motion:reduce){.hero-main-visual{animation:none!important}}
+
+/* V1.2.3 — calendar-first navigation, new brand icon, glass hero card and monthly content ideas */
+.brand img,.login-brand img,.footer-mark img{object-fit:contain;background:transparent;border-radius:0;box-shadow:none}
+.brand img{width:50px;height:50px}.login-brand img{width:78px;height:78px}.footer-mark img{width:44px;height:44px}
+.today-command{background:
+  radial-gradient(circle at 78% 18%,rgba(227,181,66,.17),transparent 24%),
+  radial-gradient(circle at 58% 104%,rgba(179,124,39,.12),transparent 30%),
+  linear-gradient(122deg,#1e092a 0%,#341047 47%,#57206c 100%);box-shadow:0 26px 66px rgba(42,15,55,.24)}
+.today-command:before{background:#d8aa45;opacity:.12}.today-command:after{background:#b9802f;opacity:.09}
+.next-event-card{background:linear-gradient(145deg,rgba(255,255,255,.17),rgba(255,255,255,.08));border:1px solid rgba(255,255,255,.24);color:#fff;box-shadow:0 18px 44px rgba(18,5,26,.18);backdrop-filter:blur(18px) saturate(1.08)}
+.next-event-card .next-label{color:#f4d477}.next-event-card p{color:rgba(255,255,255,.80)}.next-event-card .btn.ghost{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.31);color:#fff}.next-event-card .btn.ghost:hover{background:rgba(255,255,255,.18)}
+.monthly-content-board{overflow:hidden;background:linear-gradient(135deg,rgba(255,255,255,.97),rgba(249,244,252,.97));position:relative}
+.monthly-content-board:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-100px;top:-120px;background:radial-gradient(circle,rgba(215,170,62,.18),transparent 68%);pointer-events:none}
+.monthly-content-board .assistant-summary{position:relative;z-index:1}.monthly-content-board .assistant-summary h2{font-family:var(--display-font);font-size:clamp(25px,3vw,38px);line-height:1.25;margin:3px 0}.monthly-content-board .assistant-summary p{line-height:1.65}
+.monthly-content-ideas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px;position:relative;z-index:1}
+.content-idea-card{position:relative;min-width:0;padding:18px 18px 46px;border:1px solid #e8deec;border-radius:19px;background:linear-gradient(160deg,#fff,#faf6fc);box-shadow:0 10px 24px rgba(63,28,80,.06);transition:transform .18s ease,box-shadow .18s ease}
+.content-idea-card:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(63,28,80,.10)}
+.content-idea-card>span{display:inline-flex;padding:5px 9px;border-radius:999px;background:#f1e7f7;color:var(--purple);font-size:11px;font-weight:700;line-height:1.2}.content-idea-card>strong{display:block;margin-top:11px;color:var(--ink);font-family:var(--display-font);font-size:18px;line-height:1.45}.content-idea-card p{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.7}.content-idea-card>small{position:absolute;right:16px;bottom:12px;color:#d2c4d8;font-family:var(--display-font);font-size:24px;font-weight:700}
+.content-ideas-modal{width:min(850px,calc(100vw - 28px))}.content-ideas-all{display:grid;gap:10px;max-height:min(65vh,680px);overflow:auto;padding-right:4px}.content-idea-row{display:grid;grid-template-columns:44px minmax(0,1fr);gap:13px;padding:14px;border:1px solid var(--line);border-radius:16px;background:#fcfafc}.content-idea-row>b{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:#efe5f5;color:var(--purple);font-family:var(--display-font)}.content-idea-row span,.content-idea-row strong{display:block}.content-idea-row span{font-size:11px;font-weight:700;color:var(--purple-2)}.content-idea-row strong{margin-top:2px;line-height:1.45}.content-idea-row p{margin:5px 0 0;color:var(--muted);font-size:13px;line-height:1.65}
+@media(max-width:900px){.monthly-content-ideas{grid-template-columns:1fr}.brand img{width:44px;height:44px}.login-brand img{width:68px;height:68px}}
+@media(max-width:560px){.monthly-content-board .assistant-actions{display:grid;grid-template-columns:1fr;width:100%}.content-idea-card{padding:16px 16px 42px}.content-idea-row{grid-template-columns:38px minmax(0,1fr)}.content-idea-row>b{width:36px;height:36px}}
+@media(prefers-reduced-motion:reduce){.content-idea-card{transition:none!important}}
