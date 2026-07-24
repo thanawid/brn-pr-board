@@ -95,22 +95,27 @@ h1,h2,h3,.brand strong,.month-nav h2,.support-head strong{font-family:var(--disp
 @media(prefers-reduced-motion:reduce){.content-idea-card{transition:none!important}}
 
 
-/* V1.2.5 — Chalk / pastel line icons for Thai calendar accents */
+/* V1.2.6 — Image-based Thai calendar accents with subdued outside-month dates */
 .day{overflow:hidden}
 .day.has-buddhist{background:linear-gradient(180deg,#fffdf8 0%,#ffffff 100%)}
 .day.has-important:not(.has-buddhist){background:linear-gradient(180deg,#fffdfa 0%,#ffffff 100%)}
+.day.outside{background:#faf8fc;color:rgba(58,36,73,.56)}
+.day.outside .day-number{color:rgba(58,36,73,.45)}
+.day.outside .entries,.day.outside .lunar{opacity:.56}
+.day.outside .chip{opacity:.58;filter:saturate(.7)}
+.day.outside .corner-icons,.day.outside .buddhist-watermark{display:none}
 .corner-icons{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:2;pointer-events:none}
-.corner-icon{width:28px;height:28px;display:grid;place-items:center;border-radius:10px;background:rgba(255,255,255,.55);border:1px solid rgba(121,89,140,.08);box-shadow:0 4px 12px rgba(73,33,93,.05);backdrop-filter:blur(4px)}
-.corner-icon svg{width:22px;height:22px;display:block}
-.buddhist-watermark{position:absolute;right:8px;bottom:8px;width:40px;height:40px;opacity:.26;pointer-events:none;z-index:0;transform:translateY(1px)}
-.buddhist-watermark svg{width:100%;height:100%;display:block}
-.day-number,.lunar,.entries{position:relative;z-index:1}.day-number{display:inline-block;padding-right:40px}
+.corner-icon{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:rgba(255,255,255,.72);border:1px solid rgba(121,89,140,.08);box-shadow:0 4px 12px rgba(73,33,93,.05)}
+.corner-icon img{width:18px;height:18px;display:block;object-fit:contain}
+.buddhist-watermark{position:absolute;right:8px;bottom:8px;width:40px;height:40px;opacity:.34;pointer-events:none;z-index:0;transform:translateY(1px)}
+.buddhist-watermark img{width:100%;height:100%;display:block;object-fit:contain}
+.day-number,.lunar,.entries{position:relative;z-index:1}.day-number{display:inline-block;padding-right:38px}
 .lunar{display:block;margin-top:5px;font-size:10px;color:#8b6d22;line-height:1.35;max-width:calc(100% - 6px)}
 .chip.holiday{background:#fff2d5;color:#815708;border:1px solid rgba(194,151,52,.18)}
-.important-day.has-icon{display:grid;grid-template-columns:52px minmax(0,1fr);gap:12px;align-items:start}
-.important-day-icon,.item-icon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(180deg,#fffdfa 0%,#fbf6ff 100%);border:1px solid rgba(98,62,120,.08);box-shadow:0 8px 18px rgba(73,33,93,.06)}
-.important-day-icon svg,.item-icon svg{width:32px;height:32px;display:block}
+.important-day.has-icon{display:grid;grid-template-columns:54px minmax(0,1fr);gap:12px;align-items:start}
+.important-day-icon,.item-icon{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(180deg,#fffdfa 0%,#fbf6ff 100%);border:1px solid rgba(98,62,120,.08);box-shadow:0 8px 18px rgba(73,33,93,.06)}
+.important-day-icon img,.item-icon img{width:34px;height:34px;display:block;object-fit:contain}
 .important-day-copy{display:grid;gap:3px;min-width:0}.important-day-copy span,.important-day-copy small{display:block}
-.special-item{grid-template-columns:48px minmax(0,1fr);align-items:start;gap:12px}.item-copy{display:grid;gap:3px;min-width:0}.item-copy span{line-height:1.55}
-@media(max-width:820px){.corner-icons{top:6px;right:6px;gap:3px}.corner-icon{width:24px;height:24px;border-radius:8px}.corner-icon svg{width:18px;height:18px}.buddhist-watermark{width:34px;height:34px;opacity:.24;right:6px;bottom:6px}.day-number{padding-right:34px}.lunar{font-size:9px;line-height:1.25}.important-day.has-icon{grid-template-columns:44px minmax(0,1fr)}.important-day-icon,.item-icon{width:40px;height:40px;border-radius:14px}.important-day-icon svg,.item-icon svg{width:26px;height:26px}}
-@media(max-width:560px){.buddhist-watermark{width:30px;height:30px;opacity:.2}.important-day.has-icon{grid-template-columns:38px minmax(0,1fr);gap:10px}.important-day-icon,.item-icon{width:34px;height:34px;border-radius:12px}.important-day-icon svg,.item-icon svg{width:22px;height:22px}.special-item{grid-template-columns:34px minmax(0,1fr);gap:10px}}
+.special-item{grid-template-columns:50px minmax(0,1fr);align-items:start;gap:12px}.item-copy{display:grid;gap:3px;min-width:0}.item-copy span{line-height:1.55}
+@media(max-width:820px){.corner-icons{top:6px;right:6px;gap:3px}.corner-icon{width:22px;height:22px;border-radius:7px}.corner-icon img{width:15px;height:15px}.buddhist-watermark{width:34px;height:34px;opacity:.3;right:6px;bottom:6px}.day-number{padding-right:30px}.lunar{font-size:9px;line-height:1.25}.important-day.has-icon{grid-template-columns:44px minmax(0,1fr)}.important-day-icon,.item-icon{width:42px;height:42px;border-radius:14px}.important-day-icon img,.item-icon img{width:28px;height:28px}.special-item{grid-template-columns:42px minmax(0,1fr)}}
+@media(max-width:560px){.buddhist-watermark{width:30px;height:30px;opacity:.24}.important-day.has-icon{grid-template-columns:38px minmax(0,1fr);gap:10px}.important-day-icon,.item-icon{width:34px;height:34px;border-radius:12px}.important-day-icon img,.item-icon img{width:22px;height:22px}.special-item{grid-template-columns:34px minmax(0,1fr);gap:10px}}

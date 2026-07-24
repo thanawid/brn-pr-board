@@ -121,47 +121,27 @@
     return 'special';
   }
 
-  function inlineIcon(kind) {
-    const palette = {
-      stroke: '#582a68',
-      plum: '#6a34a0',
-      gold: '#e7c35c',
-      cream: '#fff8e7',
-      lavender: '#eadff7',
-      pink: '#f6c7d8',
-      blue: '#8fb5f0',
-      red: '#ef7e88',
-      green: '#b9d998',
-      teal: '#90d6d5',
-    };
-    const S = palette.stroke;
-    const stroke = `stroke="${S}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"`;
-    const icons = {
-      buddhist: `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 8.5c2.5 0 4.5 1.9 4.5 4.3 0 1-.3 1.9-1 2.7 3.7 1.8 6.4 5.4 6.4 9.7 0 3-1.2 5.7-3.2 7.6l2.1 5H15.2l2.1-5A10.3 10.3 0 0 1 14 25.2c0-4.3 2.7-7.9 6.4-9.7-.6-.8-1-1.7-1-2.7 0-2.4 2-4.3 4.6-4.3Z" fill="#fff2bf" ${stroke}/><path d="M17.8 30.8c1.8 1.2 3.9 1.8 6.2 1.8s4.4-.6 6.2-1.8" fill="none" ${stroke}/><path d="M19.2 24.8c1.3-3.1 3.1-4.7 4.8-4.7 1.7 0 3.5 1.6 4.8 4.7" fill="none" ${stroke}/><path d="M19.5 39.3h9" fill="none" ${stroke}/></svg>`,
-      temple: `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M11 35h26M15 35v-8m6.2 8v-8m6.2 8v-8m6.1 8v-8M9.5 24.5h29M24 12l13 9H11L24 12Z" fill="#fff4cf" ${stroke}/><path d="M20.5 18.5h7" fill="none" ${stroke}/></svg>`,
-      scout: `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 10.5c2.5 5.6 5.8 8.5 9.8 10-4.1.8-6.7 2.5-9.8 5.6-3.1-3.1-5.7-4.8-9.8-5.6 4-1.5 7.3-4.4 9.8-10Z" fill="#f6d48d" ${stroke}/><path d="M17.8 27.5c2 1.5 3.8 2.3 6.2 2.3 2.4 0 4.2-.8 6.2-2.3M21.7 30.2l2.3 6.3 2.3-6.3" fill="none" ${stroke}/></svg>`,
-      'thai-language': `<svg viewBox="0 0 48 48" aria-hidden="true"><rect x="13" y="10" width="22" height="28" rx="4.5" fill="#efe4fb" ${stroke}/><path d="M19 17h10M24 17v14" fill="none" ${stroke}/><path d="M20 24.5c0 4.7 2.4 7.5 5.4 7.5 2.1 0 3.8-1.7 3.8-3.8 0-1.8-1.4-3.2-3.2-3.2-1.4 0-2.6 1.2-2.6 2.6 0 .9.8 1.7 1.7 1.7" fill="none" ${stroke}/></svg>`,
-      mother: `<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="4" fill="#ffe3ec" ${stroke}/><path d="M24 10.5c2.8 4 2.8 7.2 0 10.8-2.8-3.6-2.8-6.8 0-10.8Zm0 13.5c4 2.8 7.2 2.8 10.8 0-3.6-2.8-6.8-2.8-10.8 0Zm0 0c-2.8 4-2.8 7.2 0 10.8 2.8-3.6 2.8-6.8 0-10.8Zm0 0c-4-2.8-7.2-2.8-10.8 0 3.6 2.8 6.8 2.8 10.8 0Z" fill="#fff7fb" ${stroke}/></svg>`,
-      'thai-flag': `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 37V11" fill="none" ${stroke}/><path d="M15 13h18v12H15Z" fill="#ffffff" ${stroke}/><path d="M15 13h18v3.2H15Zm0 8.8h18V25H15Z" fill="#ef7e88" stroke="none"/><path d="M15 16.2h18v5.6H15Z" fill="#7fa7eb" stroke="none"/></svg>`,
-      water: `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M15 25.5c3.3-4.4 5.9-7.6 9-10.9 3.1 3.3 5.7 6.5 9 10.9 0 5.2-4 9.5-9 9.5s-9-4.3-9-9.5Z" fill="#d9f4f5" ${stroke}/><path d="M17 31.5c2 1.2 4.2 1.9 7 1.9 2.8 0 5-.7 7-1.9" fill="none" ${stroke}/></svg>`,
-      municipality: `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 36V16l11-4 11 4v20M18 36V23h12v13" fill="#efe4fb" ${stroke}/><path d="M13 19.5h22" fill="none" ${stroke}/><circle cx="24" cy="18" r="1.7" fill="#e7c35c" stroke="none"/></svg>`,
-      special: `<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 10.5l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.5L24 28.1l-6.8 3.3 1.3-7.5-5.5-5.4 7.6-1.1L24 10.5Z" fill="#f6e8ac" ${stroke}/></svg>`,
-    };
-    return icons[kind] || icons.special;
+  function iconAsset(kind) {
+    return `assets/day-icons/${kind}.svg`;
   }
+
+  function inlineIcon(kind, alt = '') {
+    return `<img src="${iconAsset(kind)}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
+  }
+
   function buildDayMarkers(important = [], buddhist = null) {
     const markers = [];
     if (important.length) {
       const primary = important[0];
       const kind = specialIconType(primary);
-      markers.push(`<span class="corner-icon ${kind}" title="${esc(primary.title)}" aria-label="${esc(primary.title)}">${inlineIcon(kind)}</span>`);
+      markers.push(`<span class="corner-icon ${kind}" title="${esc(primary.title)}" aria-label="${esc(primary.title)}">${inlineIcon(kind, primary.title)}</span>`);
     }
     return markers.length ? `<div class="corner-icons">${markers.join('')}</div>` : '';
   }
 
   function buildBuddhistWatermark(buddhist) {
     if (!buddhist) return '';
-    return `<div class="buddhist-watermark" aria-hidden="true">${inlineIcon('buddhist')}</div>`;
+    return `<div class="buddhist-watermark" aria-hidden="true">${inlineIcon('buddhist', 'วันพระ')}</div>`;
   }
   function normalizeEvent(raw) {
     return {
@@ -521,7 +501,7 @@
       const diff = daysBetween(new Date(), parseDate(item.date));
       const when = diff === 0 ? 'วันนี้' : diff === 1 ? 'พรุ่งนี้' : `อีก ${diff} วัน`;
       const kind = specialIconType(item);
-      return `<article class="important-day has-icon"><div class="important-day-icon ${kind}" aria-hidden="true">${inlineIcon(kind)}</div><div class="important-day-copy"><strong>${esc(when)}</strong><span>${esc(item.title)}</span><small>${esc(thaiDate(item.date, false))}</small></div></article>`;
+      return `<article class="important-day has-icon"><div class="important-day-icon ${kind}" aria-hidden="true">${inlineIcon(kind, item.title)}</div><div class="important-day-copy"><strong>${esc(when)}</strong><span>${esc(item.title)}</span><small>${esc(thaiDate(item.date, false))}</small></div></article>`;
     }).join('') : '<div class="empty-state">ยังไม่มีข้อมูลวันสำคัญถัดไปในชุดข้อมูลปีนี้</div>';
   }
 
@@ -537,9 +517,9 @@
     const specialHtml = [
       ...special.map((item) => {
         const kind = specialIconType(item);
-        return `<div class="day-item special-item"><div class="item-icon ${kind}" aria-hidden="true">${inlineIcon(kind)}</div><div class="item-copy"><strong>${esc(item.title)}</strong><span>${esc(item.note || item.type)}</span></div></div>`;
+        return `<div class="day-item special-item"><div class="item-icon ${kind}" aria-hidden="true">${inlineIcon(kind, item.title)}</div><div class="item-copy"><strong>${esc(item.title)}</strong><span>${esc(item.note || item.type)}</span></div></div>`;
       }),
-      ...(buddhist ? [`<div class="day-item special-item"><div class="item-icon buddhist" aria-hidden="true">${inlineIcon('buddhist')}</div><div class="item-copy"><strong>วันพระ</strong><span>${esc(buddhist.lunar)}</span></div></div>`] : []),
+      ...(buddhist ? [`<div class="day-item special-item"><div class="item-icon buddhist" aria-hidden="true">${inlineIcon('buddhist', 'วันพระ')}</div><div class="item-copy"><strong>วันพระ</strong><span>${esc(buddhist.lunar)}</span></div></div>`] : []),
     ];
     const eventHtml = events.map((event) => `<button class="day-item" data-day-event-id="${esc(event.id)}" type="button"><strong>${esc(event.title)}</strong><span>${esc(displayTime(event))} · ${esc(event.location || event.owner || 'ยังไม่ระบุสถานที่')}</span><span>${STATUSES[event.status] || 'รอข้อมูล'} · ความพร้อม ${readiness(event).score}%</span></button>`);
     $('day-list').innerHTML = [...specialHtml, ...eventHtml].join('') || '<div class="empty-state">วันนี้ยังไม่มีงาน กดเพิ่มงานเพื่อบันทึกลงปฏิทินทีม</div>';
