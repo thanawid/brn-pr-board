@@ -109,7 +109,7 @@
     return String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
   }
 
-  function specialIconType(item = {}) {
+  function specialImageType(item = {}) {
     const hay = `${item.title || ''} ${item.type || ''} ${item.note || ''}`;
     if (/ลูกเสือ/.test(hay)) return 'scout';
     if (/ภาษาไทย/.test(hay)) return 'thai-language';
@@ -121,28 +121,27 @@
     return 'special';
   }
 
-  function iconAsset(kind) {
-    return `assets/day-icons/${kind}.svg`;
+  function dayPictureAsset(kind) {
+    return `assets/day-pictures/${kind}.png`;
   }
 
-  function inlineIcon(kind, alt = '') {
-    return `<img src="${iconAsset(kind)}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
+  function dayPictureMarkup(kind, alt = '') {
+    return `<img src="${dayPictureAsset(kind)}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
   }
 
-  function buildDayMarkers(important = [], buddhist = null) {
-    const markers = [];
+  function buildDayPicture(important = [], buddhist = null) {
     if (important.length) {
       const primary = important[0];
-      const kind = specialIconType(primary);
-      markers.push(`<span class="corner-icon ${kind}" title="${esc(primary.title)}" aria-label="${esc(primary.title)}">${inlineIcon(kind, primary.title)}</span>`);
+      const kind = specialImageType(primary);
+      const extra = important.length > 1 ? `<small class="day-picture-count">+${important.length - 1}</small>` : '';
+      return `<div class="day-picture day-picture-important ${kind}" title="${esc(primary.title)}" aria-label="${esc(primary.title)}">${dayPictureMarkup(kind, primary.title)}${extra}</div>`;
     }
-    return markers.length ? `<div class="corner-icons">${markers.join('')}</div>` : '';
+    if (buddhist) {
+      return `<div class="day-picture day-picture-buddhist" title="วันพระ" aria-label="วันพระ">${dayPictureMarkup('buddhist', 'วันพระ')}</div>`;
+    }
+    return '';
   }
 
-  function buildBuddhistWatermark(buddhist) {
-    if (!buddhist) return '';
-    return `<div class="buddhist-watermark" aria-hidden="true">${inlineIcon('buddhist', 'วันพระ')}</div>`;
-  }
   function normalizeEvent(raw) {
     return {
       ...raw,
@@ -428,7 +427,7 @@
       if (key === selectedKey) dayClasses.push('selected');
       if (visibleBuddhist) dayClasses.push('has-buddhist');
       if (visibleImportant.length) dayClasses.push('has-important');
-      cells.push(`<div class="${dayClasses.join(' ')}" role="gridcell" data-day="${key}">${buildBuddhistWatermark(visibleBuddhist)}${buildDayMarkers(visibleImportant, visibleBuddhist)}<span class="day-number">${date.getDate()}</span>${visibleBuddhist ? `<span class="lunar">วันพระ · ${esc(visibleBuddhist.lunar)}</span>` : ''}<div class="entries">${chips.slice(0, 3).join('')}${hiddenCount ? `<span class="more">+${hiddenCount} รายการ</span>` : ''}</div></div>`);
+      cells.push(`<div class="${dayClasses.join(' ')}" role="gridcell" data-day="${key}">${buildDayPicture(visibleImportant, visibleBuddhist)}<span class="day-number">${date.getDate()}</span>${visibleBuddhist ? `<span class="lunar">วันพระ · ${esc(visibleBuddhist.lunar)}</span>` : ''}<div class="entries">${chips.slice(0, 3).join('')}${hiddenCount ? `<span class="more">+${hiddenCount} รายการ</span>` : ''}</div></div>`);
     }
     $('calendar-grid').innerHTML = cells.join('');
   }
@@ -500,8 +499,8 @@
     $('important-days').innerHTML = upcoming.length ? upcoming.map((item) => {
       const diff = daysBetween(new Date(), parseDate(item.date));
       const when = diff === 0 ? 'วันนี้' : diff === 1 ? 'พรุ่งนี้' : `อีก ${diff} วัน`;
-      const kind = specialIconType(item);
-      return `<article class="important-day has-icon"><div class="important-day-icon ${kind}" aria-hidden="true">${inlineIcon(kind, item.title)}</div><div class="important-day-copy"><strong>${esc(when)}</strong><span>${esc(item.title)}</span><small>${esc(thaiDate(item.date, false))}</small></div></article>`;
+      const kind = specialImageType(item);
+      return `<article class="important-day has-picture"><div class="important-day-image ${kind}" aria-hidden="true">${dayPictureMarkup(kind, item.title)}</div><div class="important-day-copy"><strong>${esc(when)}</strong><span>${esc(item.title)}</span><small>${esc(thaiDate(item.date, false))}</small></div></article>`;
     }).join('') : '<div class="empty-state">ยังไม่มีข้อมูลวันสำคัญถัดไปในชุดข้อมูลปีนี้</div>';
   }
 
@@ -516,10 +515,10 @@
     $('day-title').textContent = thaiDate(dateKey);
     const specialHtml = [
       ...special.map((item) => {
-        const kind = specialIconType(item);
-        return `<div class="day-item special-item"><div class="item-icon ${kind}" aria-hidden="true">${inlineIcon(kind, item.title)}</div><div class="item-copy"><strong>${esc(item.title)}</strong><span>${esc(item.note || item.type)}</span></div></div>`;
+        const kind = specialImageType(item);
+        return `<div class="day-item special-item"><div class="item-image ${kind}" aria-hidden="true">${dayPictureMarkup(kind, item.title)}</div><div class="item-copy"><strong>${esc(item.title)}</strong><span>${esc(item.note || item.type)}</span></div></div>`;
       }),
-      ...(buddhist ? [`<div class="day-item special-item"><div class="item-icon buddhist" aria-hidden="true">${inlineIcon('buddhist', 'วันพระ')}</div><div class="item-copy"><strong>วันพระ</strong><span>${esc(buddhist.lunar)}</span></div></div>`] : []),
+      ...(buddhist ? [`<div class="day-item special-item"><div class="item-image buddhist" aria-hidden="true">${dayPictureMarkup('buddhist', 'วันพระ')}</div><div class="item-copy"><strong>วันพระ</strong><span>${esc(buddhist.lunar)}</span></div></div>`] : []),
     ];
     const eventHtml = events.map((event) => `<button class="day-item" data-day-event-id="${esc(event.id)}" type="button"><strong>${esc(event.title)}</strong><span>${esc(displayTime(event))} · ${esc(event.location || event.owner || 'ยังไม่ระบุสถานที่')}</span><span>${STATUSES[event.status] || 'รอข้อมูล'} · ความพร้อม ${readiness(event).score}%</span></button>`);
     $('day-list').innerHTML = [...specialHtml, ...eventHtml].join('') || '<div class="empty-state">วันนี้ยังไม่มีงาน กดเพิ่มงานเพื่อบันทึกลงปฏิทินทีม</div>';
