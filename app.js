@@ -130,16 +130,17 @@
   }
 
   function buildDayPicture(important = [], buddhist = null) {
+    const parts = [];
     if (important.length) {
       const primary = important[0];
       const kind = specialImageType(primary);
       const extra = important.length > 1 ? `<small class="day-picture-count">+${important.length - 1}</small>` : '';
-      return `<div class="day-picture day-picture-important ${kind}" title="${esc(primary.title)}" aria-label="${esc(primary.title)}">${dayPictureMarkup(kind, primary.title)}${extra}</div>`;
+      parts.push(`<div class="day-picture day-picture-important ${kind}" title="${esc(primary.title)}" aria-label="${esc(primary.title)}">${dayPictureMarkup(kind, primary.title)}${extra}</div>`);
     }
     if (buddhist) {
-      return `<div class="day-picture day-picture-buddhist" title="วันพระ" aria-label="วันพระ">${dayPictureMarkup('buddhist', 'วันพระ')}</div>`;
+      parts.push(`<div class="day-picture day-picture-buddhist" title="วันพระ" aria-label="วันพระ">${dayPictureMarkup('buddhist', 'วันพระ')}</div>`);
     }
-    return '';
+    return parts.join('');
   }
 
   function normalizeEvent(raw) {
