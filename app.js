@@ -177,9 +177,9 @@
     return dayPictureMarkup(specialImageType(item), title);
   }
 
-  function upcomingImportantForHero() {
+  function importantForHeroToday() {
     const today = iso(new Date());
-    return IMPORTANT.find((item) => item.date >= today) || IMPORTANT[0] || null;
+    return IMPORTANT.find((item) => item.date === today) || null;
   }
 
   function buildDayPicture(important = [], buddhist = null) {
@@ -406,7 +406,7 @@
       $('today-summary').textContent = weekEvents.length ? `มี ${weekEvents.length} งานใน 7 วันข้างหน้า ควรใช้วันนี้เตรียมข้อมูลและสื่อ` : 'ตารางสัปดาห์นี้ยังว่าง เหมาะสำหรับวางแผนคอนเทนต์ล่วงหน้า';
     }
 
-    const heroImportant = upcomingImportantForHero();
+    const heroImportant = importantForHeroToday();
     const heroVisual = $('hero-main-visual');
     const heroCaption = $('hero-visual-caption');
     if (heroVisual) {
@@ -415,10 +415,8 @@
         heroVisual.src = heroSrc;
         heroVisual.alt = heroImportant.title || '';
         if (heroCaption) {
-          const diff = daysBetween(new Date(), parseDate(heroImportant.date));
-          const when = diff === 0 ? 'วันสำคัญวันนี้' : diff === 1 ? 'วันสำคัญพรุ่งนี้' : `อีก ${diff} วัน`;
           heroCaption.hidden = false;
-          heroCaption.innerHTML = `<strong>${esc(heroImportant.title)}</strong><span>${esc(when)} · ${esc(thaiDate(heroImportant.date, false))}</span>`;
+          heroCaption.innerHTML = `<strong>${esc(heroImportant.title)}</strong><span>วันสำคัญวันนี้ · ${esc(thaiDate(heroImportant.date, false))}</span>`;
         }
       } else {
         heroVisual.src = './assets/guide-camera-clean.png';
@@ -574,7 +572,13 @@
 
   function renderImportant() {
     const today = iso(new Date());
-    const upcoming = IMPORTANT.filter((item) => item.date >= today).slice(0, 6);
+    const upcoming = IMPORTANT
+      .filter((item) => {
+        if (item.date < today) return false;
+        const diff = daysBetween(parseDate(today), parseDate(item.date));
+        return diff <= 30;
+      })
+      .slice(0, 6);
     $('important-days').innerHTML = upcoming.length ? upcoming.map((item) => {
       const diff = daysBetween(new Date(), parseDate(item.date));
       const when = diff === 0 ? 'วันนี้' : diff === 1 ? 'พรุ่งนี้' : `อีก ${diff} วัน`;
