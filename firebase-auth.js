@@ -244,7 +244,7 @@ async function loadWorkspace() {
   if (workspaceLoaded) return;
   workspaceLoaded = true;
   if (window.__BRN_APP_STARTED__) return;
-  await loadScript('./app.js?v=1.3.1');
+  await loadScript('./app.js?v=1.3.2');
 }
 
 async function showWorkspace(user, role) {
