@@ -359,7 +359,8 @@
     try { return JSON.parse(localStorage.getItem('brn-pr-events-v2') || '[]').map(normalizeEvent); } catch { return []; }
   }
   function saveLocal() {
-    localStorage.setItem('brn-pr-events-v2', JSON.stringify(state.events));
+    try { localStorage.setItem('brn-pr-events-v2', JSON.stringify(state.events.map(backupSafeEvent))); }
+    catch (error) { console.warn('Local backup unavailable', error); }
   }
 
   function toast(message, duration = 3200) {
@@ -843,6 +844,7 @@
       const query = fs.query(fs.collection(state.db, 'prEvents'), fs.orderBy('date', 'asc'));
       state.unsubscribe = fs.onSnapshot(query, (snapshot) => {
         state.events = snapshot.docs.map((doc) => normalizeEvent({ id: doc.id, ...doc.data() }));
+        saveLocal(); // local mirror for offline fallback / recovery
         state.cloud = true;
         $('sync-status').textContent = 'ซิงก์ข้อมูลกับทีมแล้ว';
         renderAll();
@@ -867,6 +869,198 @@
     const now = new Date();
     $('live-date-text').textContent = now.toLocaleDateString('th-TH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Bangkok' });
     $('live-time-text').textContent = `เวลา ${now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Bangkok' }).replace(':', '.')} น.`;
+  }
+
+  const BACKUP_EVENT_FIELDS = [
+    'id','title','description','date','category','status','startTime','endTime','allDay','location','owner',
+    'contactName','contactPhone','chairperson','outputs','prTasks','prSummary','prTasksOther','requestSource',
+    'publicationLinks','notifyLine','reminderEnabled','reminderPolicy','reminderTimezone','reminders','updatedBy'
+  ];
+
+  function backupSafeEvent(event) {
+    const clean = {};
+    BACKUP_EVENT_FIELDS.forEach((key) => {
+      if (event[key] !== undefined) clean[key] = event[key];
+    });
+    return clean;
+  }
+
+  function downloadTextFile(filename, text, type = 'application/json') {
+    const blob = new Blob([text], { type: `${type};charset=utf-8` });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1200);
+  }
+
+  function exportBackup() {
+    const now = new Date();
+    const stamp = `${iso(now)}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+    const payload = {
+      format: 'BRN_PR_BOARD_BACKUP',
+      schemaVersion: '1.3.0',
+      exportedAt: now.toISOString(),
+      source: state.cloud ? 'firestore' : 'local',
+      eventCount: state.events.length,
+      events: state.events.map(backupSafeEvent),
+    };
+    downloadTextFile(`brn-pr-board-backup-${stamp}.json`, JSON.stringify(payload, null, 2));
+    toast(`สำรองข้อมูล ${state.events.length} งานแล้ว`);
+  }
+
+  async function restoreBackupFile(file) {
+    if (!file) return;
+    let parsed;
+    try {
+      parsed = JSON.parse(await file.text());
+    } catch {
+      toast('ไฟล์สำรองไม่ใช่ JSON ที่อ่านได้');
+      return;
+    }
+    const rows = Array.isArray(parsed) ? parsed : parsed?.events;
+    if (!Array.isArray(rows)) {
+      toast('ไม่พบรายการงานในไฟล์สำรอง');
+      return;
+    }
+    const imported = rows.map((item) => normalizeEvent(item)).filter((item) => item.title && item.date);
+    if (!imported.length) {
+      toast('ไฟล์สำรองไม่มีงานที่นำเข้าได้');
+      return;
+    }
+    if (!confirm(`พบ ${imported.length} งาน\nระบบจะกู้คืนแบบ “รวมข้อมูล” โดยไม่ลบงานเดิม ดำเนินการต่อหรือไม่?`)) return;
+
+    if (state.cloud) {
+      const chunks = [];
+      for (let i = 0; i < imported.length; i += 350) chunks.push(imported.slice(i, i + 350));
+      for (const chunk of chunks) {
+        const batch = state.fs.writeBatch(state.db);
+        chunk.forEach((event) => {
+          const data = backupSafeEvent(event);
+          delete data.id;
+          const ref = event.id && !String(event.id).startsWith('local-')
+            ? state.fs.doc(state.db, 'prEvents', event.id)
+            : state.fs.doc(state.fs.collection(state.db, 'prEvents'));
+          batch.set(ref, { ...data, restoredAt: state.fs.serverTimestamp(), updatedAt: state.fs.serverTimestamp() }, { merge: true });
+        });
+        await batch.commit();
+      }
+    } else {
+      const byId = new Map(state.events.map((event) => [event.id, event]));
+      imported.forEach((event) => {
+        const id = event.id || `local-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
+        byId.set(id, { ...(byId.get(id) || {}), ...event, id });
+      });
+      state.events = [...byId.values()].map(normalizeEvent);
+      saveLocal();
+      renderAll();
+    }
+    toast(`กู้คืนข้อมูล ${imported.length} งานแล้ว`);
+  }
+
+  function reportAvailableYears() {
+    const years = new Set([new Date().getFullYear()]);
+    state.events.forEach((event) => {
+      const d = parseDate(event.date);
+      if (!Number.isNaN(d.getTime())) years.add(d.getFullYear());
+    });
+    return [...years].sort((a,b) => b-a);
+  }
+
+  function populateReportSelectors() {
+    const yearSelect = $('report-year');
+    const monthSelect = $('report-month');
+    if (!yearSelect || !monthSelect) return;
+    const prevYear = Number(yearSelect.value) || new Date().getFullYear();
+    const prevMonth = monthSelect.value === '' ? new Date().getMonth() : Number(monthSelect.value);
+    yearSelect.innerHTML = reportAvailableYears().map((year) => `<option value="${year}">${year + 543}</option>`).join('');
+    if ([...yearSelect.options].some((o) => Number(o.value) === prevYear)) yearSelect.value = String(prevYear);
+    monthSelect.innerHTML = MONTHS.map((name,index) => `<option value="${index}">${name}</option>`).join('');
+    monthSelect.value = String(Math.max(0, Math.min(11, prevMonth)));
+  }
+
+  function reportSelection() {
+    const type = $('report-period-type')?.value || 'month';
+    const year = Number($('report-year')?.value || new Date().getFullYear());
+    const month = Number($('report-month')?.value || new Date().getMonth());
+    const events = sortedEvents(state.events.filter((event) => {
+      const d = parseDate(event.date);
+      if (d.getFullYear() !== year) return false;
+      return type === 'year' || d.getMonth() === month;
+    }));
+    const label = type === 'year' ? `ประจำปี พ.ศ. ${year + 543}` : `ประจำเดือน${MONTHS[month]} พ.ศ. ${year + 543}`;
+    return { type, year, month, events, label };
+  }
+
+  function reportCounts(events) {
+    const finished = events.filter((e) => ['published','completed'].includes(e.status)).length;
+    const waiting = events.filter((e) => !['published','completed','cancelled'].includes(e.status)).length;
+    const cancelled = events.filter((e) => e.status === 'cancelled').length;
+    const published = events.filter((e) => Boolean(String(e.publicationLinks || '').trim())).length;
+    return { total: events.length, finished, waiting, cancelled, published };
+  }
+
+  function categoryBreakdown(events) {
+    return Object.entries(CATEGORIES).map(([key,label]) => ({ label, count: events.filter((e) => e.category === key).length })).filter((item) => item.count);
+  }
+
+  function renderReport() {
+    if (!$('report-dialog')) return;
+    $('report-month-field').hidden = $('report-period-type').value === 'year';
+    const { events, label } = reportSelection();
+    const counts = reportCounts(events);
+    $('report-period-label').textContent = `${label} · ${events.length} งาน`;
+    $('report-summary').innerHTML = [
+      ['งานทั้งหมด', counts.total, 'รายการ'],
+      ['เผยแพร่/เสร็จสิ้น', counts.finished, 'งาน'],
+      ['กำลังดำเนินการ', counts.waiting, 'งาน'],
+      ['มีลิงก์ผลงาน', counts.published, 'งาน'],
+    ].map(([label,value,unit]) => `<div class="report-stat"><span>${esc(label)}</span><strong>${value}</strong><small>${unit}</small></div>`).join('');
+    const cats = categoryBreakdown(events);
+    $('report-breakdown').innerHTML = cats.length
+      ? `<strong>สัดส่วนประเภทงาน</strong><div>${cats.map((item) => `<span>${esc(item.label)} <b>${item.count}</b></span>`).join('')}</div>`
+      : '<span class="muted">ยังไม่มีข้อมูลในช่วงที่เลือก</span>';
+    $('report-table-body').innerHTML = events.length ? events.map((event) => {
+      const outputs = outputLabels(event).join(', ') || '-';
+      return `<tr><td>${esc(thaiDate(event.date, false))}<small>${esc(displayTime(event))}</small></td><td><strong>${esc(event.title)}</strong><small>${esc(event.location || '')}</small></td><td>${esc(event.owner || '-')}</td><td>${esc(CATEGORIES[event.category] || 'อื่น ๆ')}</td><td>${esc(STATUSES[event.status] || 'รอข้อมูล')}</td><td>${esc(outputs)}</td></tr>`;
+    }).join('') : '<tr><td colspan="6" class="report-empty">ยังไม่มีงานในช่วงที่เลือก</td></tr>';
+  }
+
+  function openReport() {
+    populateReportSelectors();
+    const now = new Date();
+    $('report-period-type').value = 'month';
+    $('report-year').value = String(now.getFullYear());
+    $('report-month').value = String(now.getMonth());
+    renderReport();
+    $('report-dialog').showModal();
+  }
+
+  function printPeriodReport() {
+    const { events, label } = reportSelection();
+    const counts = reportCounts(events);
+    const cats = categoryBreakdown(events);
+    const popup = window.open('', '_blank', 'width=1200,height=900');
+    if (!popup) {
+      toast('เบราว์เซอร์บล็อกหน้าพิมพ์ กรุณาอนุญาตป๊อปอัปสำหรับเว็บไซต์นี้');
+      return;
+    }
+    const logoUrl = new URL('./assets/logo.png', location.href).href;
+    const rows = events.length ? events.map((event,index) => `<tr><td>${index+1}</td><td>${esc(thaiDate(event.date,false))}<br><small>${esc(displayTime(event))}</small></td><td><strong>${esc(event.title)}</strong>${event.location ? `<br><small>${esc(event.location)}</small>` : ''}</td><td>${esc(event.owner || '-')}</td><td>${esc(CATEGORIES[event.category] || 'อื่น ๆ')}</td><td>${esc(STATUSES[event.status] || 'รอข้อมูล')}</td><td>${esc(outputLabels(event).join(', ') || '-')}</td></tr>`).join('') : '<tr><td colspan="7" style="text-align:center;padding:18px">ไม่มีข้อมูลในช่วงที่เลือก</td></tr>';
+    popup.document.open();
+    popup.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>รายงานสรุปงานประชาสัมพันธ์ ${esc(label)}</title><style>
+      @page{size:A4 landscape;margin:9mm}*{box-sizing:border-box}body{margin:0;color:#24192b;font-family:"Noto Sans Thai",Tahoma,sans-serif;font-size:10.5px;line-height:1.45}.sheet{max-width:277mm;margin:auto}.head{display:grid;grid-template-columns:18mm 1fr auto;gap:4mm;align-items:center;border-bottom:2px solid #5b207d;padding-bottom:3mm}.logo{width:17mm;height:17mm;object-fit:contain}.head h1{margin:0;color:#4a176d;font-size:19px}.head h2{margin:1mm 0 0;font-size:13px}.made{text-align:right;color:#756c7a;font-size:9px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:4mm 0}.stat{padding:2.5mm 3mm;background:#f7f1fa;border:1px solid #e2d6e8;border-radius:2mm}.stat span,.stat strong{display:block}.stat strong{font-size:17px;color:#4a176d}.break{display:flex;gap:2mm;flex-wrap:wrap;margin:0 0 3mm}.break span{border:1px solid #dfd3e5;border-radius:999px;padding:1mm 2.2mm}.tbl{width:100%;border-collapse:collapse;table-layout:fixed}.tbl th{background:#5b207d;color:#fff;padding:2mm 1.5mm;text-align:left;font-size:9.5px}.tbl td{padding:1.8mm 1.5mm;border:1px solid #ded8e2;vertical-align:top;word-break:break-word}.tbl th:nth-child(1){width:8mm}.tbl th:nth-child(2){width:31mm}.tbl th:nth-child(4){width:34mm}.tbl th:nth-child(5){width:27mm}.tbl th:nth-child(6){width:28mm}.tbl th:nth-child(7){width:47mm}.tbl small{color:#736a78}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:28mm;margin-top:9mm;page-break-inside:avoid}.sign{text-align:center;padding-top:8mm;border-top:1px dotted #777}.foot{text-align:center;color:#817887;font-size:8.5px;margin-top:5mm}.no-print{position:fixed;right:18px;bottom:18px;border:0;border-radius:999px;background:#5b207d;color:#fff;padding:11px 16px;font-weight:700}@media print{.no-print{display:none}}
+    </style></head><body><main class="sheet"><header class="head"><img class="logo" src="${logoUrl}"><div><h1>รายงานสรุปงานประชาสัมพันธ์</h1><h2>เทศบาลเมืองบางรักน้อย · ${esc(label)}</h2></div><div class="made">จัดทำเมื่อ<br><strong>${esc(thaiDate(new Date(),false))}</strong></div></header>
+      <section class="stats"><div class="stat"><span>งานทั้งหมด</span><strong>${counts.total}</strong></div><div class="stat"><span>เผยแพร่/เสร็จสิ้น</span><strong>${counts.finished}</strong></div><div class="stat"><span>กำลังดำเนินการ</span><strong>${counts.waiting}</strong></div><div class="stat"><span>มีลิงก์ผลงาน</span><strong>${counts.published}</strong></div></section>
+      <div class="break">${cats.map((item)=>`<span>${esc(item.label)} <b>${item.count}</b></span>`).join('')}</div>
+      <table class="tbl"><thead><tr><th>#</th><th>วันที่/เวลา</th><th>งาน</th><th>กอง/สำนัก</th><th>ประเภท</th><th>สถานะ</th><th>ผลงานที่จัดทำ</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="signatures"><div class="sign">ผู้จัดทำ<br><small>(........................................................)</small></div><div class="sign">ผู้ตรวจสอบ<br><small>(........................................................)</small></div></div>
+      <div class="foot">จัดทำจาก BRN PR Board · งานประชาสัมพันธ์ เทศบาลเมืองบางรักน้อย</div></main><button class="no-print" onclick="window.print()">พิมพ์ / บันทึก PDF</button></body></html>`);
+    popup.document.close();
+    setTimeout(() => { if (!popup.closed) { popup.focus(); popup.print(); } }, 500);
   }
 
   function printPrSummary(event) {
@@ -1083,6 +1277,26 @@
     $('content-view-all').addEventListener('click', () => { renderMonthlyContent(); $('content-ideas-dialog').showModal(); });
 
     $('nav-team-work').addEventListener('click', () => openTeamWork('active'));
+    $('nav-report')?.addEventListener('click', openReport);
+    $('open-report-menu-button')?.addEventListener('click', () => {
+      if ($('account-menu')) $('account-menu').hidden = true;
+      $('account-button')?.setAttribute('aria-expanded', 'false');
+      openReport();
+    });
+    $('report-period-type')?.addEventListener('change', renderReport);
+    $('report-month')?.addEventListener('change', renderReport);
+    $('report-year')?.addEventListener('change', renderReport);
+    $('report-refresh')?.addEventListener('click', renderReport);
+    $('print-period-report')?.addEventListener('click', printPeriodReport);
+    $('backup-data-button')?.addEventListener('click', exportBackup);
+    $('restore-data-button')?.addEventListener('click', () => $('restore-data-file')?.click());
+    $('restore-data-file')?.addEventListener('change', async (event) => {
+      const input = event.target;
+      const file = input.files?.[0];
+      input.value = '';
+      try { await restoreBackupFile(file); }
+      catch (error) { console.error(error); toast('กู้คืนข้อมูลไม่สำเร็จ กรุณาตรวจไฟล์และสิทธิ์ Firestore', 5000); }
+    });
     $('team-work-list').addEventListener('click', (event) => {
       const item = event.target.closest('[data-team-event-id]');
       if (!item) return;

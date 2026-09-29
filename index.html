@@ -12,8 +12,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css?v=1.2.20">
-  <script src="./auth-bootstrap.js?v=1.2.20"></script>
+  <link rel="stylesheet" href="./styles.css?v=1.3.0">
+  <script src="./auth-bootstrap.js?v=1.3.0"></script>
 </head>
 <body>
   <div id="auth-gate" class="auth-gate" hidden>
@@ -50,11 +50,11 @@
       <nav aria-label="เมนูหลัก">
         <a id="nav-calendar" class="active" href="#calendar">ปฏิทิน</a>
         <a id="nav-dashboard" href="#dashboard">ภาพรวม</a>
-        <button id="nav-team-work" type="button">งานของทีม</button>
+        <button id="nav-team-work" type="button">งานของทีม</button><button id="nav-report" type="button">รายงาน</button>
       </nav>
       <div id="account-area" class="account-area" hidden>
         <button id="account-button" class="account-button" type="button" aria-expanded="false"><img id="account-photo" alt=""><span><strong id="account-name"></strong><small id="account-role"></small></span><b>⌄</b></button>
-        <div id="account-menu" class="account-menu" hidden><strong id="account-menu-name"></strong><span id="account-email"></span><button id="print-request-form-button" class="menu-tool" type="button">พิมพ์แบบแจ้งงาน</button><button id="signout-button" type="button">ออกจากระบบ</button></div>
+        <div id="account-menu" class="account-menu" hidden><strong id="account-menu-name"></strong><span id="account-email"></span><button id="open-report-menu-button" class="menu-tool" type="button">รายงานสรุป / สำรองข้อมูล</button><button id="print-request-form-button" class="menu-tool" type="button">พิมพ์แบบแจ้งงาน</button><button id="signout-button" type="button">ออกจากระบบ</button></div>
       </div>
     </header>
 
@@ -181,10 +181,39 @@
   <dialog id="day-dialog"><article class="modal day-modal"><header><div><span>งานประจำวัน</span><h2 id="day-title"></h2></div><button type="button" data-close>×</button></header><div id="day-list" class="day-list"></div><footer><button id="day-add" class="btn primary" type="button">＋ เพิ่มงานวันนี้</button><span></span><button class="btn ghost" type="button" data-close>ปิด</button></footer></article></dialog>
   <dialog id="team-work-dialog"><article class="modal team-modal"><header><div><span>รายการที่ทีมต้องติดตาม</span><h2>งานของทีม</h2></div><button type="button" data-close>×</button></header><div class="team-filters"><button class="active" data-team-filter="active" type="button">กำลังดำเนินการ</button><button data-team-filter="overdue" type="button">งานค้าง/เลยกำหนด</button><button data-team-filter="missing" type="button">ข้อมูลไม่ครบ</button><button data-team-filter="publish" type="button">รอเผยแพร่</button><button data-team-filter="all" type="button">ทั้งหมด</button></div><div id="team-work-list" class="team-work-list"></div></article></dialog>
   <dialog id="content-ideas-dialog"><article class="modal content-ideas-modal"><header><div><span id="content-dialog-month"></span><h2>ไอเดียคอนเทนต์ประจำเดือน</h2></div><button type="button" data-close>×</button></header><div id="content-ideas-all" class="content-ideas-all"></div><footer><span></span><button class="btn ghost" type="button" data-close>ปิด</button><button id="content-dialog-refresh" class="btn primary" type="button">คิดไอเดียใหม่</button></footer></article></dialog>
+
+  <dialog id="report-dialog">
+    <article class="modal report-modal">
+      <header><div><span>รายงานและสำรองข้อมูล</span><h2>สรุปงานประชาสัมพันธ์</h2></div><button type="button" data-close>×</button></header>
+      <div class="report-toolbar">
+        <label>รูปแบบ<select id="report-period-type"><option value="month">รายเดือน</option><option value="year">รายปี</option></select></label>
+        <label id="report-month-field">เดือน<select id="report-month"></select></label>
+        <label>ปี<select id="report-year"></select></label>
+        <button id="report-refresh" class="btn ghost" type="button">อัปเดต</button>
+      </div>
+      <div id="report-period-label" class="report-period-label"></div>
+      <div id="report-summary" class="report-summary-grid"></div>
+      <div id="report-breakdown" class="report-breakdown"></div>
+      <div class="report-table-wrap">
+        <table class="report-table">
+          <thead><tr><th>วันที่</th><th>งาน</th><th>กอง/สำนัก</th><th>ประเภท</th><th>สถานะ</th><th>ผลงาน</th></tr></thead>
+          <tbody id="report-table-body"></tbody>
+        </table>
+      </div>
+      <footer class="report-footer">
+        <button id="backup-data-button" class="btn ghost" type="button">สำรองข้อมูล JSON</button>
+        <button id="restore-data-button" class="btn ghost" type="button">กู้คืนข้อมูล</button>
+        <input id="restore-data-file" type="file" accept="application/json,.json" hidden>
+        <span></span>
+        <button class="btn ghost" type="button" data-close>ปิด</button>
+        <button id="print-period-report" class="btn primary" type="button">พิมพ์ / บันทึก PDF</button>
+      </footer>
+    </article>
+  </dialog>
   <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-  <script src="./auth-config.js?v=1.2.20"></script>
-  <script src="./calendar-data.js?v=1.2.20"></script>
-  <script type="module" src="./firebase-auth.js?v=1.2.20"></script>
+  <script src="./auth-config.js?v=1.3.0"></script>
+  <script src="./calendar-data.js?v=1.3.0"></script>
+  <script type="module" src="./firebase-auth.js?v=1.3.0"></script>
 </body>
 </html>
