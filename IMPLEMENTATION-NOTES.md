@@ -1,3 +1,8 @@
+# Implementation Notes — V1.4.1
+- Theme-only release: ใช้สีม่วงแบรนด์จากโลโก้เทศบาลเป็น primary (`#9A00BA`) พร้อมม่วงเข้ม `#7E168F`, ม่วงอ่อน `#F6EAFB` และทอง accent `#E0B33D`.
+- ไม่แก้ Firestore schema, ฟังก์ชันรายงาน, backup/restore, ปฏิทิน หรือกติกาวันสำคัญ.
+- อัปเดต cache bust / Service Worker / PWA theme color เป็น V1.4.1.
+
 # Implementation Notes — V1.4.0
 
 - Remove the Overview navigation item while retaining useful dashboard content on the main page.

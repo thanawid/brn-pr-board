@@ -469,3 +469,90 @@ body{
 @media(max-width:1100px){.report-toolbar{grid-template-columns:repeat(3,1fr)}.report-output-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:700px){.report-toolbar{grid-template-columns:1fr 1fr}.report-output-grid{grid-template-columns:repeat(2,1fr)}.report-subhead{align-items:flex-start;flex-direction:column}}
 @media(max-width:500px){.report-toolbar{grid-template-columns:1fr}.report-output-grid{grid-template-columns:1fr 1fr}}
+
+
+/* V1.4.1 — BRN municipal-logo palette: brighter brand purple + restrained gold */
+:root{
+  --ink:#241329;
+  --muted:#746879;
+  --purple:#9a00ba;
+  --purple-2:#7e168f;
+  --purple-3:#f6eafb;
+  --gold:#e0b33d;
+  --line:#eadfed;
+  --bg:#fbf8fc;
+  --surface:#fff;
+  --surface-2:#fdfafd;
+  --shadow:0 20px 56px rgba(115,0,137,.10);
+  --soft-shadow:0 10px 28px rgba(115,0,137,.07);
+}
+body{
+  background:
+    radial-gradient(circle at 10% 11%,rgba(154,0,186,.055),transparent 31%),
+    radial-gradient(circle at 90% 17%,rgba(224,179,61,.055),transparent 27%),
+    linear-gradient(180deg,#fcf9fd 0%,#f8f5fa 54%,#fbf8fc 100%);
+}
+.site-header{border-bottom-color:rgba(154,0,186,.10)}
+.brand img{box-shadow:0 8px 18px rgba(154,0,186,.14)}
+.brand strong{color:#8f00ad}
+nav a:hover,nav button:hover,nav .active{background:#f5e8f9;color:#8f00ad}
+nav .active{box-shadow:inset 0 -2px 0 rgba(224,179,61,.55)}
+.account-menu button{background:#f7ecfa;color:#8f00ad}
+
+.today-command{
+  background:
+    radial-gradient(circle at 84% 14%,rgba(247,219,137,.20) 0,rgba(247,219,137,0) 21%),
+    radial-gradient(circle at 25% 86%,rgba(226,158,236,.18) 0,rgba(226,158,236,0) 31%),
+    linear-gradient(135deg,#76008d 0%,#9a00ba 52%,#b844ca 100%);
+  box-shadow:0 25px 62px rgba(120,0,143,.22);
+}
+.today-command:before{background:#e0b33d;opacity:.13}
+.today-command:after{background:#d99ae5;opacity:.16}
+.eyebrow,.next-event-card .next-label{color:#f5d77d}
+.next-event-card{
+  background:linear-gradient(145deg,rgba(255,255,255,.24),rgba(255,255,255,.11));
+  border-color:rgba(255,255,255,.30);
+  box-shadow:0 18px 44px rgba(74,0,91,.18);
+}
+
+.metric-card:hover{box-shadow:0 16px 34px rgba(115,0,137,.10)}
+.metric-icon{background:#f5e8f9;color:#8f00ad}
+.metric-card strong{color:#8f00ad}
+.focus-board,.calendar-wrap,.important,.work-assistant{border-color:rgba(154,0,186,.08)}
+.focus-date{background:#f5e8f9;color:#8f00ad}
+.category-pill{background:#f5e8f9;color:#8f00ad}
+.round:hover{box-shadow:0 10px 22px rgba(154,0,186,.13)}
+.btn.primary{background:linear-gradient(135deg,#ad1bc3,#8f00ad);box-shadow:0 11px 24px rgba(154,0,186,.22)}
+.btn.primary:hover{box-shadow:0 14px 28px rgba(154,0,186,.27)}
+.view-switch{background:#f5eff7}
+.weekdays span{background:#f5e9f9;color:#82109a;border-right-color:#eadced}
+.list-day-head{background:#f7eef9;color:#8f00ad}
+
+.monthly-content-board{
+  background:
+    radial-gradient(circle at 92% 14%,rgba(224,179,61,.09),transparent 24%),
+    linear-gradient(135deg,#fbf4fd 0%,#fffaf4 100%);
+}
+.monthly-content-board .content-idea-card{border-color:#eadfed;background:linear-gradient(160deg,#fff,#fcf7fd)}
+.content-idea-card>span{background:#f5e8f9;color:#8f00ad}
+.content-idea-row>b{background:#f5e8f9;color:#8f00ad}
+
+.important{
+  background:
+    radial-gradient(circle at 10% 83%,rgba(154,0,186,.06),transparent 30%),
+    linear-gradient(135deg,#f7effa 0%,#fffaf2 100%);
+}
+.important-day.theme-municipal{--important-accent:#9a00ba;--important-accent-text:#7e168f;--important-soft:#f7ebfb;--important-card-soft:#f8effb}
+.important-day.theme-general{--important-accent:#a45ab3;--important-accent-text:#744180;--important-soft:#faf3fb;--important-card-soft:#faf4fb}
+
+.report-toolbar{background:#fdf9fd}
+.report-output-section{border-color:#eadfed;background:linear-gradient(145deg,#fdf9fe,#fbf8fc)}
+.report-stat,.report-output-stat{border-color:#eadfed}
+.report-stat{background:linear-gradient(160deg,#fff,#fcf7fd)}
+.report-breakdown span{background:#f5e9f9;color:#6f4078}
+.report-table th{background:#f4e6f8;color:#7e168f;border-bottom-color:#e5d4e9}
+.report-table td{border-bottom-color:#efe7f1}
+
+@media (prefers-reduced-motion:no-preference){
+  .btn.primary,nav a,nav button,.metric-card{transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease,color .18s ease}
+}
