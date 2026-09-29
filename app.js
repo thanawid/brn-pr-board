@@ -68,7 +68,7 @@
     teamFilter: 'active',
     metricRange: null,
     contentIdeaOffset: 0,
-    mainView: location.hash === '#dashboard' ? 'dashboard' : 'calendar',
+    mainView: 'calendar',
   };
 
   function startOfMonth(date) {
@@ -902,7 +902,7 @@
     const stamp = `${iso(now)}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
     const payload = {
       format: 'BRN_PR_BOARD_BACKUP',
-      schemaVersion: '1.3.2',
+      schemaVersion: '1.4.0',
       exportedAt: now.toISOString(),
       source: state.cloud ? 'firestore' : 'local',
       eventCount: state.events.length,
@@ -973,26 +973,48 @@
   function populateReportSelectors() {
     const yearSelect = $('report-year');
     const monthSelect = $('report-month');
+    const ownerSelect = $('report-owner');
+    const statusSelect = $('report-status');
     if (!yearSelect || !monthSelect) return;
     const prevYear = Number(yearSelect.value) || new Date().getFullYear();
     const prevMonth = monthSelect.value === '' ? new Date().getMonth() : Number(monthSelect.value);
+    const prevOwner = ownerSelect?.value || 'all';
+    const prevStatus = statusSelect?.value || 'all';
     yearSelect.innerHTML = reportAvailableYears().map((year) => `<option value="${year}">${year + 543}</option>`).join('');
     if ([...yearSelect.options].some((o) => Number(o.value) === prevYear)) yearSelect.value = String(prevYear);
     monthSelect.innerHTML = MONTHS.map((name,index) => `<option value="${index}">${name}</option>`).join('');
     monthSelect.value = String(Math.max(0, Math.min(11, prevMonth)));
+    if (ownerSelect) {
+      const owners = [...new Set(state.events.map((event) => String(event.owner || '').trim()).filter(Boolean))].sort((a,b) => a.localeCompare(b,'th'));
+      ownerSelect.innerHTML = `<option value="all">ทุกกอง / สำนัก</option><option value="__blank__">ไม่ระบุกอง / สำนัก</option>${owners.map((owner) => `<option value="${esc(owner)}">${esc(owner)}</option>`).join('')}`;
+      ownerSelect.value = [...ownerSelect.options].some((o) => o.value === prevOwner) ? prevOwner : 'all';
+    }
+    if (statusSelect) {
+      statusSelect.innerHTML = `<option value="all">ทุกสถานะ</option>${Object.entries(STATUSES).map(([key,label]) => `<option value="${key}">${esc(label)}</option>`).join('')}`;
+      statusSelect.value = [...statusSelect.options].some((o) => o.value === prevStatus) ? prevStatus : 'all';
+    }
   }
 
   function reportSelection() {
     const type = $('report-period-type')?.value || 'month';
     const year = Number($('report-year')?.value || new Date().getFullYear());
     const month = Number($('report-month')?.value || new Date().getMonth());
+    const owner = $('report-owner')?.value || 'all';
+    const status = $('report-status')?.value || 'all';
     const events = sortedEvents(state.events.filter((event) => {
       const d = parseDate(event.date);
       if (d.getFullYear() !== year) return false;
-      return type === 'year' || d.getMonth() === month;
+      if (type !== 'year' && d.getMonth() !== month) return false;
+      if (owner === '__blank__' && String(event.owner || '').trim()) return false;
+      if (owner !== 'all' && owner !== '__blank__' && String(event.owner || '').trim() !== owner) return false;
+      if (status !== 'all' && event.status !== status) return false;
+      return true;
     }));
     const label = type === 'year' ? `ประจำปี พ.ศ. ${year + 543}` : `ประจำเดือน${MONTHS[month]} พ.ศ. ${year + 543}`;
-    return { type, year, month, events, label };
+    const ownerLabel = owner === 'all' ? 'ทุกกอง / สำนัก' : owner === '__blank__' ? 'ไม่ระบุกอง / สำนัก' : owner;
+    const statusLabel = status === 'all' ? 'ทุกสถานะ' : (STATUSES[status] || status);
+    const filterLabel = `${ownerLabel} · ${statusLabel}`;
+    return { type, year, month, owner, status, events, label, ownerLabel, statusLabel, filterLabel };
   }
 
   function reportCounts(events) {
@@ -1003,6 +1025,17 @@
     return { total: events.length, finished, waiting, cancelled, published };
   }
 
+  function reportOutputStats(events) {
+    const byType = Object.entries(OUTPUTS).map(([key,label]) => ({
+      key,
+      label,
+      count: events.reduce((sum,event) => sum + ((event.outputs || []).includes(key) ? 1 : 0), 0),
+    }));
+    const totalPieces = byType.reduce((sum,item) => sum + item.count, 0);
+    const jobsWithOutputs = events.filter((event) => Array.isArray(event.outputs) && event.outputs.length).length;
+    return { byType, totalPieces, jobsWithOutputs };
+  }
+
   function categoryBreakdown(events) {
     return Object.entries(CATEGORIES).map(([key,label]) => ({ label, count: events.filter((e) => e.category === key).length })).filter((item) => item.count);
   }
@@ -1010,15 +1043,18 @@
   function renderReport() {
     if (!$('report-dialog')) return;
     $('report-month-field').hidden = $('report-period-type').value === 'year';
-    const { events, label } = reportSelection();
+    const { events, label, filterLabel } = reportSelection();
     const counts = reportCounts(events);
-    $('report-period-label').textContent = `${label} · ${events.length} งาน`;
+    const outputStats = reportOutputStats(events);
+    $('report-period-label').textContent = `${label} · ${filterLabel} · ${events.length} งาน`;
     $('report-summary').innerHTML = [
       ['งานทั้งหมด', counts.total, 'รายการ'],
       ['เผยแพร่/เสร็จสิ้น', counts.finished, 'งาน'],
       ['กำลังดำเนินการ', counts.waiting, 'งาน'],
       ['มีลิงก์ผลงาน', counts.published, 'งาน'],
     ].map(([label,value,unit]) => `<div class="report-stat"><span>${esc(label)}</span><strong>${value}</strong><small>${unit}</small></div>`).join('');
+    if ($('report-output-total')) $('report-output-total').textContent = `รวม ${outputStats.totalPieces} ชิ้น · จาก ${outputStats.jobsWithOutputs} งาน`;
+    if ($('report-output-stats')) $('report-output-stats').innerHTML = outputStats.byType.map((item) => `<div class="report-output-stat"><span>${esc(item.label)}</span><strong>${item.count}</strong><small>ชิ้น</small></div>`).join('');
     const cats = categoryBreakdown(events);
     $('report-breakdown').innerHTML = cats.length
       ? `<strong>สัดส่วนประเภทงาน</strong><div>${cats.map((item) => `<span>${esc(item.label)} <b>${item.count}</b></span>`).join('')}</div>`
@@ -1026,7 +1062,7 @@
     $('report-table-body').innerHTML = events.length ? events.map((event) => {
       const outputs = outputLabels(event).join(', ') || '-';
       return `<tr><td>${esc(thaiDate(event.date, false))}<small>${esc(displayTime(event))}</small></td><td><strong>${esc(event.title)}</strong><small>${esc(event.location || '')}</small></td><td>${esc(event.owner || '-')}</td><td>${esc(CATEGORIES[event.category] || 'อื่น ๆ')}</td><td>${esc(STATUSES[event.status] || 'รอข้อมูล')}</td><td>${esc(outputs)}</td></tr>`;
-    }).join('') : '<tr><td colspan="6" class="report-empty">ยังไม่มีงานในช่วงที่เลือก</td></tr>';
+    }).join('') : '<tr><td colspan="6" class="report-empty">ยังไม่มีงานในช่วงและตัวกรองที่เลือก</td></tr>';
   }
 
   function openReport() {
@@ -1035,26 +1071,31 @@
     $('report-period-type').value = 'month';
     $('report-year').value = String(now.getFullYear());
     $('report-month').value = String(now.getMonth());
+    if ($('report-owner')) $('report-owner').value = 'all';
+    if ($('report-status')) $('report-status').value = 'all';
     renderReport();
     $('report-dialog').showModal();
   }
 
   function printPeriodReport() {
-    const { events, label } = reportSelection();
+    const { events, label, ownerLabel, statusLabel } = reportSelection();
     const counts = reportCounts(events);
     const cats = categoryBreakdown(events);
+    const outputStats = reportOutputStats(events);
     const popup = window.open('', '_blank', 'width=1200,height=900');
     if (!popup) {
       toast('เบราว์เซอร์บล็อกหน้าพิมพ์ กรุณาอนุญาตป๊อปอัปสำหรับเว็บไซต์นี้');
       return;
     }
     const logoUrl = new URL('./assets/logo.png', location.href).href;
-    const rows = events.length ? events.map((event,index) => `<tr><td>${index+1}</td><td>${esc(thaiDate(event.date,false))}<br><small>${esc(displayTime(event))}</small></td><td><strong>${esc(event.title)}</strong>${event.location ? `<br><small>${esc(event.location)}</small>` : ''}</td><td>${esc(event.owner || '-')}</td><td>${esc(CATEGORIES[event.category] || 'อื่น ๆ')}</td><td>${esc(STATUSES[event.status] || 'รอข้อมูล')}</td><td>${esc(outputLabels(event).join(', ') || '-')}</td></tr>`).join('') : '<tr><td colspan="7" style="text-align:center;padding:18px">ไม่มีข้อมูลในช่วงที่เลือก</td></tr>';
+    const rows = events.length ? events.map((event,index) => `<tr><td>${index+1}</td><td>${esc(thaiDate(event.date,false))}<br><small>${esc(displayTime(event))}</small></td><td><strong>${esc(event.title)}</strong>${event.location ? `<br><small>${esc(event.location)}</small>` : ''}</td><td>${esc(event.owner || '-')}</td><td>${esc(CATEGORIES[event.category] || 'อื่น ๆ')}</td><td>${esc(STATUSES[event.status] || 'รอข้อมูล')}</td><td>${esc(outputLabels(event).join(', ') || '-')}</td></tr>`).join('') : '<tr><td colspan="7" style="text-align:center;padding:18px">ไม่มีข้อมูลในช่วงและตัวกรองที่เลือก</td></tr>';
+    const outputCards = outputStats.byType.map((item) => `<div class="media-stat"><span>${esc(item.label)}</span><strong>${item.count}</strong><small>ชิ้น</small></div>`).join('');
     popup.document.open();
     popup.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>รายงานสรุปงานประชาสัมพันธ์ ${esc(label)}</title><style>
-      @page{size:A4 landscape;margin:9mm}*{box-sizing:border-box}body{margin:0;color:#24192b;font-family:"Noto Sans Thai",Tahoma,sans-serif;font-size:10.5px;line-height:1.45}.sheet{max-width:277mm;margin:auto}.head{display:grid;grid-template-columns:18mm 1fr auto;gap:4mm;align-items:center;border-bottom:2px solid #5b207d;padding-bottom:3mm}.logo{width:17mm;height:17mm;object-fit:contain}.head h1{margin:0;color:#4a176d;font-size:19px}.head h2{margin:1mm 0 0;font-size:13px}.made{text-align:right;color:#756c7a;font-size:9px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:4mm 0}.stat{padding:2.5mm 3mm;background:#f7f1fa;border:1px solid #e2d6e8;border-radius:2mm}.stat span,.stat strong{display:block}.stat strong{font-size:17px;color:#4a176d}.break{display:flex;gap:2mm;flex-wrap:wrap;margin:0 0 3mm}.break span{border:1px solid #dfd3e5;border-radius:999px;padding:1mm 2.2mm}.tbl{width:100%;border-collapse:collapse;table-layout:fixed}.tbl th{background:#5b207d;color:#fff;padding:2mm 1.5mm;text-align:left;font-size:9.5px}.tbl td{padding:1.8mm 1.5mm;border:1px solid #ded8e2;vertical-align:top;word-break:break-word}.tbl th:nth-child(1){width:8mm}.tbl th:nth-child(2){width:31mm}.tbl th:nth-child(4){width:34mm}.tbl th:nth-child(5){width:27mm}.tbl th:nth-child(6){width:28mm}.tbl th:nth-child(7){width:47mm}.tbl small{color:#736a78}.signatures{display:flex;justify-content:flex-end;margin-top:12mm;page-break-inside:avoid}.sign{width:70mm;max-width:100%;text-align:center}.signature-space{height:18mm}.sign-line{border-top:1px dotted #777;padding-top:2.5mm}.sign small{display:block;margin-top:2mm}.foot{text-align:center;color:#817887;font-size:8.5px;margin-top:5mm}.no-print{position:fixed;right:18px;bottom:18px;border:0;border-radius:999px;background:#5b207d;color:#fff;padding:11px 16px;font-weight:700}@media print{.no-print{display:none}}
-    </style></head><body><main class="sheet"><header class="head"><img class="logo" src="${logoUrl}"><div><h1>รายงานสรุปงานประชาสัมพันธ์</h1><h2>เทศบาลเมืองบางรักน้อย · ${esc(label)}</h2></div><div class="made">จัดทำเมื่อ<br><strong>${esc(thaiDate(new Date(),false))}</strong></div></header>
+      @page{size:A4 landscape;margin:9mm}*{box-sizing:border-box}body{margin:0;color:#2b2030;font-family:"Noto Sans Thai",Tahoma,sans-serif;font-size:10.2px;line-height:1.45}.sheet{max-width:277mm;margin:auto}.head{display:grid;grid-template-columns:18mm 1fr auto;gap:4mm;align-items:center;border-bottom:2px solid #77508e;padding-bottom:3mm}.logo{width:17mm;height:17mm;object-fit:contain}.head h1{margin:0;color:#634078;font-size:19px}.head h2{margin:1mm 0 0;font-size:13px}.made{text-align:right;color:#756c7a;font-size:9px}.filter-note{margin-top:1mm;color:#766d7b;font-size:9.5px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:3mm;margin:4mm 0 3mm}.stat{padding:2.5mm 3mm;background:#faf7fc;border:1px solid #e7deeb;border-radius:2mm}.stat span,.stat strong{display:block}.stat strong{font-size:17px;color:#634078}.media-title{display:flex;align-items:end;justify-content:space-between;margin:2mm 0 1.5mm}.media-title strong{color:#634078;font-size:11.5px}.media-title span{color:#7b7180;font-size:9px}.media-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:2mm;margin-bottom:3mm}.media-stat{padding:1.8mm 2mm;border:1px solid #e6dde9;border-radius:2mm;background:#fff}.media-stat span,.media-stat strong,.media-stat small{display:block}.media-stat span{font-size:8.8px;color:#6f6575}.media-stat strong{font-size:14px;color:#634078}.media-stat small{font-size:8px;color:#8d8491}.break{display:flex;gap:2mm;flex-wrap:wrap;margin:0 0 3mm}.break span{border:1px solid #dfd7e3;border-radius:999px;padding:1mm 2.2mm}.tbl{width:100%;border-collapse:collapse;table-layout:fixed}.tbl th{background:#77508e;color:#fff;padding:2mm 1.5mm;text-align:left;font-size:9.5px}.tbl td{padding:1.8mm 1.5mm;border:1px solid #ded8e2;vertical-align:top;word-break:break-word}.tbl th:nth-child(1){width:8mm}.tbl th:nth-child(2){width:31mm}.tbl th:nth-child(4){width:34mm}.tbl th:nth-child(5){width:27mm}.tbl th:nth-child(6){width:28mm}.tbl th:nth-child(7){width:47mm}.tbl small{color:#736a78}.signatures{display:flex;justify-content:flex-end;margin-top:12mm;page-break-inside:avoid}.sign{width:70mm;max-width:100%;text-align:center}.signature-space{height:18mm}.sign-line{border-top:1px dotted #777;padding-top:2.5mm}.sign small{display:block;margin-top:2mm}.foot{text-align:center;color:#817887;font-size:8.5px;margin-top:5mm}.no-print{position:fixed;right:18px;bottom:18px;border:0;border-radius:999px;background:#77508e;color:#fff;padding:11px 16px;font-weight:700}@media print{.no-print{display:none}}
+    </style></head><body><main class="sheet"><header class="head"><img class="logo" src="${logoUrl}"><div><h1>รายงานสรุปงานประชาสัมพันธ์</h1><h2>เทศบาลเมืองบางรักน้อย · ${esc(label)}</h2><div class="filter-note">กอง / สำนัก: ${esc(ownerLabel)} · สถานะ: ${esc(statusLabel)}</div></div><div class="made">จัดทำเมื่อ<br><strong>${esc(thaiDate(new Date(),false))}</strong></div></header>
       <section class="stats"><div class="stat"><span>งานทั้งหมด</span><strong>${counts.total}</strong></div><div class="stat"><span>เผยแพร่/เสร็จสิ้น</span><strong>${counts.finished}</strong></div><div class="stat"><span>กำลังดำเนินการ</span><strong>${counts.waiting}</strong></div><div class="stat"><span>มีลิงก์ผลงาน</span><strong>${counts.published}</strong></div></section>
+      <div class="media-title"><strong>สถิติผลงานสื่อ</strong><span>รวม ${outputStats.totalPieces} ชิ้น · จาก ${outputStats.jobsWithOutputs} งาน</span></div><section class="media-stats">${outputCards}</section>
       <div class="break">${cats.map((item)=>`<span>${esc(item.label)} <b>${item.count}</b></span>`).join('')}</div>
       <table class="tbl"><thead><tr><th>#</th><th>วันที่/เวลา</th><th>งาน</th><th>กอง/สำนัก</th><th>ประเภท</th><th>สถานะ</th><th>ผลงานที่จัดทำ</th></tr></thead><tbody>${rows}</tbody></table>
       <div class="signatures"><div class="sign"><div class="signature-space"></div><div class="sign-line">ผู้จัดทำ</div><small>(........................................................)</small></div></div>
@@ -1286,6 +1327,8 @@
     $('report-period-type')?.addEventListener('change', renderReport);
     $('report-month')?.addEventListener('change', renderReport);
     $('report-year')?.addEventListener('change', renderReport);
+    $('report-owner')?.addEventListener('change', renderReport);
+    $('report-status')?.addEventListener('change', renderReport);
     $('report-refresh')?.addEventListener('click', renderReport);
     $('print-period-report')?.addEventListener('click', printPeriodReport);
     $('backup-data-button')?.addEventListener('click', exportBackup);
@@ -1304,10 +1347,10 @@
       openDetail(item.dataset.teamEventId);
     });
     qsa('[data-team-filter]').forEach((button) => button.addEventListener('click', () => { state.metricRange = null; state.teamFilter = button.dataset.teamFilter; renderTeamWork(); }));
-    $('nav-dashboard').addEventListener('click', (event) => { event.preventDefault(); setMainView('dashboard'); });
+    $('nav-dashboard')?.addEventListener('click', (event) => { event.preventDefault(); setMainView('dashboard'); });
     $('nav-calendar').addEventListener('click', (event) => { event.preventDefault(); setMainView('calendar'); });
     $('brand-home')?.addEventListener('click', (event) => { event.preventDefault(); setMainView('calendar'); });
-    window.addEventListener('popstate', () => setMainView(location.hash === '#dashboard' ? 'dashboard' : 'calendar', { updateHash: false }));
+    window.addEventListener('popstate', () => setMainView('calendar', { updateHash: false }));
 
     qsa('[data-close]').forEach((button) => button.addEventListener('click', () => button.closest('dialog').close()));
     qsa('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); }));
